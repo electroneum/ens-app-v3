@@ -1,3 +1,4 @@
+import { Address } from 'viem'
 import { describe, expect, it } from 'vitest'
 
 import { getEditAbilities } from './getEditAbilities'
@@ -13,6 +14,7 @@ describe('getEditAbilities', () => {
     const result = getEditAbilities({
       address: '0x123',
       basicNameData,
+      nameWrapperAddress: '0xNameWrapperAddress0000000000000000000' as Address,
       hasAuthorisedResolver: true,
     })
 
@@ -41,6 +43,7 @@ describe('getEditAbilities', () => {
     const result = getEditAbilities({
       address: '0x123',
       basicNameData,
+      nameWrapperAddress: '0xNameWrapperAddress0000000000000000000' as Address,
       hasAuthorisedResolver: true,
     })
 
@@ -69,6 +72,7 @@ describe('getEditAbilities', () => {
     const result = getEditAbilities({
       address: '0x123',
       basicNameData,
+      nameWrapperAddress: '0xNameWrapperAddress0000000000000000000' as Address,
       hasAuthorisedResolver: false,
     })
 
@@ -97,6 +101,7 @@ describe('getEditAbilities', () => {
     const result = getEditAbilities({
       address: '0x123',
       basicNameData,
+      nameWrapperAddress: '0xNameWrapperAddress0000000000000000000' as Address,
       hasAuthorisedResolver: false,
     })
 
@@ -130,6 +135,7 @@ describe('getEditAbilities', () => {
     const result = getEditAbilities({
       address: '0x123',
       basicNameData,
+      nameWrapperAddress: '0xNameWrapperAddress0000000000000000000' as Address,
       hasAuthorisedResolver: false,
     })
 
@@ -163,6 +169,7 @@ describe('getEditAbilities', () => {
     const result = getEditAbilities({
       address: '0x123',
       basicNameData,
+      nameWrapperAddress: '0xNameWrapperAddress0000000000000000000' as Address,
       hasAuthorisedResolver: true,
     })
 

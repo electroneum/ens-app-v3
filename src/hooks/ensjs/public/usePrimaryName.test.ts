@@ -17,7 +17,7 @@ const mockGetAddressRecord = mockFunction(getAddressRecord)
 const mockReadContract = mockFunction(readContract)
 
 const address = '0xaddress'
-const chainId = 1
+const chainId = 5201420
 
 const mockClient = {
   chain: {

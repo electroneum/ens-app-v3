@@ -451,6 +451,16 @@
       "title": "Switch to Sepolia?",
       "description": "You've selected Sepolia (testnet) in your wallet.",
       "action": "Go to sepolia.app.ens.domains"
+    },
+    "Electroneum": {
+      "title": "Switch to Electroneum?",
+      "description": "You've selected Electroneum (mainnet) in your wallet.",
+      "action": "Go to ens.electroneum.com"
+    },
+    "Electroneum Testnet": {
+      "title": "Switch to Electroneum Testnet?",
+      "description": "You've selected Electroneum (testnet) in your wallet.",
+      "action": "Go to ens.electroneum.com"
     }
   },
   "para": {

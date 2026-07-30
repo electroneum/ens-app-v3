@@ -140,7 +140,7 @@ const ProfileTab = ({ nameDetails, name }: Props) => {
             />
           </Helper>
         )}
-        {isWrapped && !normalisedName.endsWith('.eth') && (
+        {isWrapped && !normalisedName.endsWith('.etn') && (
           <Helper alert="warning" alignment="horizontal">
             {t('tabs.profile.warnings.wrappedDNS')}
           </Helper>

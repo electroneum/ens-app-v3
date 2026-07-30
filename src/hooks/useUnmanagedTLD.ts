@@ -15,5 +15,9 @@ export const useUnmanagedTLD = (name = '') => {
   if (isCustomized) return true
 
   if (isLoading || error || !ownerData) return false
-  if (ownerData.owner !== DNS_REGISTRAR_ADDRESSES[chainId]) return true
+  if (
+    ownerData.owner !==
+    DNS_REGISTRAR_ADDRESSES[String(chainId) as keyof typeof DNS_REGISTRAR_ADDRESSES]
+  )
+    return true
 }

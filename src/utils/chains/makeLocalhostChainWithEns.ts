@@ -7,6 +7,7 @@ import type { Register } from '@app/local-contracts'
 export const makeLocalhostChainWithEns = <T extends Chain>(
   localhost: T,
   deploymentAddresses_: Register['deploymentAddresses'],
+  subgraphUrl?: string,
 ): ChainWithEns<T> => {
   return {
     ...localhost,
@@ -72,7 +73,7 @@ export const makeLocalhostChainWithEns = <T extends Chain>(
     },
     subgraphs: {
       ens: {
-        url: 'http://localhost:42069/subgraph',
+        url: subgraphUrl ?? 'http://localhost:42069/subgraph',
       },
     },
   }

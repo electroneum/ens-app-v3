@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { useAccount, useSwitchChain } from 'wagmi'
 
 import ErrorScreen from '@app/components/@atoms/ErrorScreen'
-import { getSupportedChainById } from '@app/constants/chains'
+import { getChainsFromUrl, getSupportedChainById } from '@app/constants/chains'
 import { useSetupIntercom } from '@app/hooks/useSetupIntercom'
 
 import { Navigation } from './Navigation'
@@ -87,7 +87,7 @@ export const Basic = withErrorBoundary(({ children }: { children: React.ReactNod
     if (
       shouldSwitchChain({ isConnected, hasProgrammaticChainSwitching, isPending, isError, chainId })
     ) {
-      switchChain({ chainId: 1 })
+      switchChain({ chainId: getChainsFromUrl()[0].id })
     }
   }, [isConnected, hasProgrammaticChainSwitching, isPending, isError, chainId, switchChain])
 

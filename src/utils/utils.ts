@@ -46,7 +46,7 @@ export const formatDateTime = (date: Date) => {
     hour: 'numeric',
     minute: 'numeric',
     second: 'numeric',
-    hour12: false,
+    hourCycle: 'h24',
     timeZoneName: 'short',
   })
   return `${baseFormatted}`

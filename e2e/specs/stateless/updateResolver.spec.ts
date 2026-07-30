@@ -3,10 +3,9 @@ import { expect } from '@playwright/test'
 import { test } from '../../../playwright'
 import { testClient } from '../../../playwright/fixtures/contracts/utils/addTestContracts'
 
-// const newResolver = '0x0E801D84Fa97b50751Dbf25036d067dCf18858bF'
-// const oldResolver = '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB'
+const contractAddresses = JSON.parse(process.env.NEXT_PUBLIC_DEPLOYMENT_ADDRESSES || '{}')
 
-const oldResolver = testClient.chain.contracts.legacyPublicResolver.address
+const oldResolver = contractAddresses.OwnedResolver as `0x${string}`
 const newResolver = testClient.chain.contracts.ensPublicResolver.address
 
 test.describe('Happy', () => {

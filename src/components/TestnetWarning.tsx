@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { getChainsFromUrl } from '@app/constants/chains'
+import { electroneumTestnet } from '@app/utils/chains/electroneumChains'
 
 const Container = styled.div(
   ({ theme }) => css`
@@ -22,7 +23,7 @@ export const TestnetWarning = () => {
     setIsClient(true)
   }, [])
 
-  if (isClient && chains && chains[0].id !== 1)
+  if (isClient && chains && chains[0].id === electroneumTestnet.id)
     return <Container>You are viewing the ENS app on {chains[0].name} testnet.</Container>
   return null
 }

@@ -5,7 +5,18 @@ import type { useBasicName } from '@app/hooks/useBasicName'
 
 import { createAccounts } from '../../../../playwright/fixtures/accounts'
 import { makeMockUseAbilitiesData } from '../../../../test/mock/makeMockUseAbilitiesData'
-import { makeMockUseBasicName } from '../../../../test/mock/makeMockUseBasicName'
+import {
+  makeMockUseBasicName as makeMockUseBasicName_,
+  MockUseBasicNameType,
+} from '../../../../test/mock/makeMockUseBasicName'
+
+// getSendAbilities expects the real useBasicName shape, which includes
+// refetchIfEnabled; the shared fixture omits it so it can be diffed directly
+// against a hook result elsewhere (see useBasicName.test.ts).
+const makeMockUseBasicName = (type: MockUseBasicNameType) => ({
+  ...makeMockUseBasicName_(type),
+  refetchIfEnabled: () => {},
+})
 import { getSendAbilities } from './getSendAbilities'
 
 type DeepPartial<T> = {

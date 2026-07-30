@@ -3,20 +3,7 @@ import { Accounts } from '../accounts.js'
 import { testClient, waitForTransaction } from '../contracts/utils/addTestContracts'
 import { Subgraph } from '../subgraph.js'
 import { Time } from '../time.js'
-import {
-  isLegacyName,
-  LegacyName,
-  makeLegacyNameGenerator,
-} from './generators/legacyNameGenerator.js'
-import {
-  LegacyName as LegacyNameWithConfig,
-  makeLegacyWithConfigNameGenerator,
-} from './generators/legacyWithConfigNameGenerator.js'
-import {
-  isWrappendName,
-  makeWrappedNameGenerator,
-  WrappedName,
-} from './generators/wrappedNameGenerator.js'
+import { makeWrappedNameGenerator, WrappedName } from './generators/wrappedNameGenerator.js'
 import { adjustName } from './utils/adjustName.js'
 import { getTimeOffset } from './utils/getTimeOffset.js'
 
@@ -26,7 +13,7 @@ type Dependencies = {
   subgraph: Subgraph
 }
 
-export type Name = LegacyName | LegacyNameWithConfig | WrappedName
+export type Name = WrappedName
 
 type Options = {
   timeOffset?: number
@@ -49,8 +36,6 @@ export function createMakeNames({ accounts, time, subgraph }: Dependencies) {
 
     // Create generators
     const wrappedNameGenerator = makeWrappedNameGenerator({ accounts })
-    const legacyNameGenerator = makeLegacyWithConfigNameGenerator({ accounts })
-    const legacyRegisterNameGenerator = makeLegacyNameGenerator({ accounts })
 
     // Set automine to false put all transactions on the same block
     await testClient.setAutomine(false)
@@ -59,15 +44,7 @@ export function createMakeNames({ accounts, time, subgraph }: Dependencies) {
     await testClient.mine({ blocks: 1 })
 
     const commitTxs = await Promise.all(
-      adjustedNames.map((name) => {
-        if (isWrappendName(name)) {
-          return wrappedNameGenerator.commit(name)
-        } else if (isLegacyName(name)) {
-          return legacyRegisterNameGenerator.commit(name)
-        } else {
-          return legacyNameGenerator.commit(name)
-        }
-      }),
+      adjustedNames.map((name) => wrappedNameGenerator.commit(name)),
     )
     await testClient.mine({ blocks: 1 })
     await Promise.all(commitTxs.map((tx) => waitForTransaction(tx)))
@@ -76,15 +53,7 @@ export function createMakeNames({ accounts, time, subgraph }: Dependencies) {
     await testClient.mine({ blocks: 1 })
 
     const registerTxs = await Promise.all(
-      adjustedNames.map((name) => {
-        if (isWrappendName(name)) {
-          return wrappedNameGenerator.register(name)
-        } else if (isLegacyName(name)) {
-          return legacyRegisterNameGenerator.register(name)
-        } else {
-          return legacyNameGenerator.register(name)
-        }
-      }),
+      adjustedNames.map((name) => wrappedNameGenerator.register(name)),
     )
     await testClient.mine({ blocks: 1 })
     await Promise.all(registerTxs.map((tx) => waitForTransaction(tx)))
@@ -95,16 +64,9 @@ export function createMakeNames({ accounts, time, subgraph }: Dependencies) {
     // RegisterName and TransferName event having the same event ids.
     await testClient.mine({ blocks: 1 })
 
-    // Finish setting up names 
+    // Finish setting up names
     for (const name of adjustedNames) {
-        if (isWrappendName(name)) {
-          await wrappedNameGenerator.configure(name)
-        } else if (isLegacyName(name)) {
-          console.log('registering legacy name:', name)
-          await legacyRegisterNameGenerator.configure(name)
-        } else {
-          await legacyNameGenerator.configure(name)
-        }
+      await wrappedNameGenerator.configure(name)
     }
 
     if (offset > 0) {

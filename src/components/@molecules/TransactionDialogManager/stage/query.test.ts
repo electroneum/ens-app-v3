@@ -1,7 +1,13 @@
 import { getFeeHistory } from '@wagmi/core'
 import { describe, expect, it, vi } from 'vitest'
 
+import { mockFunction } from '@app/test-utils'
+
 import { getLargestMedianGasFee } from './query'
+
+// getFeeHistory is overloaded; mockFunction can only infer a single overload,
+// so cast through `any` to get a permissive, fully-mockable type.
+const mockGetFeeHistory = mockFunction(getFeeHistory as any)
 
 vi.mock('@getpara/rainbowkit', () => ({
   useConnectModal: () => ({
@@ -20,7 +26,7 @@ vi.mock('@wagmi/core', async () => {
 
 describe('getLargestMedianGasFee', () => {
   it('should return the largest median gas fee from the reward array', async () => {
-    getFeeHistory.mockReturnValue({
+    mockGetFeeHistory.mockReturnValue({
       baseFeePerGas: [],
       gasUsedRatio: [],
       oldestBlock: 0n,
@@ -42,13 +48,13 @@ describe('getLargestMedianGasFee', () => {
   })
 
   it('should return the default max priority fee per gas if getFeeHistory fails', async () => {
-    getFeeHistory.mockRejectedValue(new Error('Failed to get fee history'))
+    mockGetFeeHistory.mockRejectedValue(new Error('Failed to get fee history'))
     const result = await getLargestMedianGasFee()
     expect(result).toBe(5000000000n)
   })
 
   it('should return the default max priority fee per gas if getFeeHistory returns an empty reward array', async () => {
-    getFeeHistory.mockResolvedValue({
+    mockGetFeeHistory.mockResolvedValue({
       baseFeePerGas: [],
       gasUsedRatio: [],
       oldestBlock: 0n,

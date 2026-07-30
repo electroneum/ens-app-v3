@@ -20,13 +20,13 @@ export type WrappedSubname = {
   name: string
   nameOwner: User
   label: string
-  owner: User
+  owner?: User
   resolver?: `0x${string}`
   records?: RecordOptions
   fuses?: EncodeFusesInputObject
   duration?: number
   type?: 'wrapped' | 'legacy'
-  subnames?: Omit<WrappedSubname, 'name' | 'nameOwner '>[]
+  subnames?: Omit<WrappedSubname, 'name' | 'nameOwner'>[]
 }
 
 type Dependencies = {
@@ -41,7 +41,7 @@ export const generateWrappedSubname =
     name,
     nameOwner,
     label,
-    owner,
+    owner = nameOwner,
     resolver = DEFAULT_RESOLVER,
     records,
     fuses,

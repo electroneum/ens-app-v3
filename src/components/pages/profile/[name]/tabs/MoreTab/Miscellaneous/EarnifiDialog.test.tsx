@@ -2,6 +2,8 @@ import { render, screen, userEvent, waitFor } from '@app/test-utils'
 
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest'
 
+import { electroneumWithEns } from '@app/constants/chains'
+
 import { makeMockIntersectionObserver } from '../../../../../../../../test/mock/makeMockIntersectionObserver'
 import { EarnifiDialog } from './EarnifiDialog'
 import { useSubscribeToEarnifi } from './useSubscribeToEarnifi'
@@ -79,7 +81,7 @@ describe('EarnifiDialog', () => {
 
     expect(subscribeMock).toHaveBeenCalledWith({
       address: 'name',
-      chainId: 1,
+      chainId: electroneumWithEns.id,
       email: 'validemail@example.com',
     })
   })

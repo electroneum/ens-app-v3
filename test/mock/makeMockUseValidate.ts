@@ -4,12 +4,12 @@ import { match } from 'ts-pattern'
 import { ValidationResult } from '@app/hooks/useValidate'
 
 export const mockUseValidateConfig = {
-  eth: { input: 'eth' },
+  eth: { input: 'etn' },
   dns: { input: 'com' },
-  'valid-2ld': { input: 'name.eth' },
+  'valid-2ld': { input: 'name.etn' },
   'valid-2ld:dns': { input: 'name.com' },
-  'invalid-2ld': { input: 'name❤️.eth' },
-  'valid-subname': { input: 'subname.name.eth' },
+  'invalid-2ld': { input: 'name❤️.etn' },
+  'valid-subname': { input: 'subname.name.etn' },
 } as const
 export type MockUseValidateType = keyof typeof mockUseValidateConfig
 export const mockUseValidateTypes = Object.keys(mockUseValidateConfig) as MockUseValidateType[]
@@ -24,15 +24,15 @@ export const makeMockUseValidate = (type: MockUseValidateType): ValidationResult
       isETH: true,
       labelDataArray: [
         {
-          input: [101, 116, 104],
+          input: [101, 116, 110],
           offset: 0,
-          tokens: [[101, 116, 104]],
+          tokens: [[101, 116, 110]],
           type: 'ASCII',
-          output: [101, 116, 104],
+          output: [101, 116, 110],
         },
       ],
-      name: 'eth',
-      beautifiedName: 'eth',
+      name: 'etn',
+      beautifiedName: 'etn',
       isNonASCII: false,
       labelCount: 1,
     }))
@@ -71,15 +71,15 @@ export const makeMockUseValidate = (type: MockUseValidateType): ValidationResult
           output: [110, 97, 109, 101],
         },
         {
-          input: [101, 116, 104],
+          input: [101, 116, 110],
           offset: 5,
-          tokens: [[101, 116, 104]],
+          tokens: [[101, 116, 110]],
           type: 'ASCII',
-          output: [101, 116, 104],
+          output: [101, 116, 110],
         },
       ],
-      name: 'name.eth',
-      beautifiedName: 'name.eth',
+      name: 'name.etn',
+      beautifiedName: 'name.etn',
       isNonASCII: false,
       labelCount: 2,
     }))
@@ -126,22 +126,22 @@ export const makeMockUseValidate = (type: MockUseValidateType): ValidationResult
           output: [110, 97, 109, 101, 10084],
         },
         {
-          input: [101, 116, 104],
+          input: [101, 116, 110],
           offset: 6,
-          tokens: [[101, 116, 104]],
+          tokens: [[101, 116, 110]],
           type: 'ASCII',
           emoji: undefined,
-          output: [101, 116, 104],
+          output: [101, 116, 110],
         },
       ],
-      name: 'name❤.eth',
-      beautifiedName: 'name❤️.eth',
+      name: 'name❤.etn',
+      beautifiedName: 'name❤️.etn',
       isNonASCII: true,
       labelCount: 2,
     }))
     .with('valid-subname', () => ({
       type: 'name' as const,
-      name: 'subname.name.eth',
+      name: 'subname.name.etn',
       isShort: false,
       isValid: true,
       is2LD: false,
@@ -162,14 +162,14 @@ export const makeMockUseValidate = (type: MockUseValidateType): ValidationResult
           output: [110, 97, 109, 101],
         },
         {
-          input: [101, 116, 104],
+          input: [101, 116, 110],
           offset: 13,
-          tokens: [[101, 116, 104]],
+          tokens: [[101, 116, 110]],
           type: 'ASCII',
-          output: [101, 116, 104],
+          output: [101, 116, 110],
         },
       ],
-      beautifiedName: 'subname.name.eth',
+      beautifiedName: 'subname.name.etn',
       isNonASCII: false,
       labelCount: 3,
     }))

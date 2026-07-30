@@ -1,23 +1,17 @@
 import { render, screen } from '@app/test-utils'
-
 import { describe, expect, it } from 'vitest'
 
 import { yearsToSeconds } from '@app/utils/utils'
 
-import { PaymentMethod } from '../../types'
 import { ActionButton, ActionButtonProps } from './Pricing'
+
+import { BreakpointProvider } from '@app/utils/BreakpointProvider'
 
 describe('ActionButton', () => {
   const baseMockData: ActionButtonProps = {
     address: '0x123',
-    hasPendingMoonpayTransaction: false,
-    hasFailedMoonpayTransaction: false,
-    paymentMethodChoice: '',
     reverseRecord: false,
     callback: () => null,
-    initiateMoonpayRegistrationMutation: {
-      mutate: () => null,
-    } as any,
     seconds: yearsToSeconds(1),
     balance: { value: 100n } as any,
     totalRequiredBalance: 1n,
@@ -25,32 +19,54 @@ describe('ActionButton', () => {
     ethPrice: 1n,
     durationType: 'years',
   }
-  it('should have disabled "Next" button if no choice has been made', () => {
+
+  it('should show "Next" if balance is sufficient', () => {
     render(<ActionButton {...baseMockData} />)
     expect(screen.getByText('action.next')).toBeInTheDocument()
   })
-  it('should show "Insufficient balance" if balance is too low and etehreum has been chosen', () => {
+
+  it('should show "Insufficient balance" if balance is too low', () => {
     render(
       <ActionButton
         {...{
           ...baseMockData,
-          paymentMethodChoice: PaymentMethod.ethereum,
           balance: { value: 0n } as any,
         }}
       />,
     )
     expect(screen.getByText('steps.pricing.insufficientBalance')).toBeInTheDocument()
   })
-  it('should show "Next" if balance is too low and moonopay has been chosen', () => {
+
+  it('should show loading state if balance data is not yet available', () => {
     render(
       <ActionButton
         {...{
           ...baseMockData,
-          paymentMethodChoice: PaymentMethod.moonpay,
-          balance: { value: 0n } as any,
+          balance: undefined,
         }}
       />,
     )
-    expect(screen.getByText('action.next')).toBeInTheDocument()
+    expect(screen.getByText('steps.info.processing')).toBeInTheDocument()
+  })
+
+it('should not show "Next" if address is not connected', () => {
+    const breakpoints = {
+      xs: '(min-width: 360px)',
+      sm: '(min-width: 640px)',
+      md: '(min-width: 768px)',
+      lg: '(min-width: 1024px)',
+      xl: '(min-width: 1280px)',
+    }
+    render(
+      <BreakpointProvider queries={breakpoints}>
+        <ActionButton
+          {...{
+            ...baseMockData,
+            address: undefined,
+          }}
+        />
+      </BreakpointProvider>,
+    )
+    expect(screen.queryByText('action.next')).not.toBeInTheDocument()
   })
 })

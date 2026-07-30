@@ -1,9 +1,9 @@
 import { createWalletClient, createPublicClient, http, parseAbi } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
-const electroneumTestnet = {
-  id: 5201420,
-  name: 'Electroneum Testnet',
+const electroneumMainnet = {
+  id: 52014,
+  name: 'Electroneum Mainnet',
   nativeCurrency: { name: 'Electroneum', symbol: 'ETN', decimals: 18 },
   rpcUrls: { default: { http: [process.env.RPC_URL] } },
 }
@@ -34,7 +34,7 @@ async function fetchEtnPriceUsd() {
 async function main() {
   console.log(isDryRun ? '--- DRY RUN (no on-chain write) ---' : '--- LIVE RUN ---')
 
-  const publicClient = createPublicClient({ chain: electroneumTestnet, transport: http() })
+  const publicClient = createPublicClient({ chain: electroneumMainnet, transport: http() })
 
   const priceUsd = await fetchEtnPriceUsd()
   console.log(`Fetched ETN price: $${priceUsd}`)
@@ -77,7 +77,7 @@ async function main() {
   const account = privateKeyToAccount(process.env.ORACLE_OWNER_PRIVATE_KEY)
   const walletClient = createWalletClient({
     account,
-    chain: electroneumTestnet,
+    chain: electroneumMainnet,
     transport: http(),
   })
 

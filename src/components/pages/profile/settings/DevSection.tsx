@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import type { TestClient } from 'viem'
 import {
   revert as evmRevert,
   snapshot as evmSnapshot,
@@ -40,7 +41,12 @@ type TestConfig = Config<[typeof localhostWithEns]>
 
 export const DevSection = () => {
   const client = useClient<TestConfig>()
-  const testClient = useMemo(() => ({ ...client, mode: 'anvil' }) as const, [client])
+  // Dev-only tooling, only rendered/used when connected to the local anvil
+  // chain, so `client` is guaranteed to be defined at call time.
+  const testClient = useMemo(
+    () => ({ ...client, mode: 'anvil' }) as unknown as TestClient,
+    [client],
+  )
 
   const addTransaction = useAddRecentTransaction()
   const { createTransactionFlow } = useTransactionFlow()
@@ -84,10 +90,10 @@ export const DevSection = () => {
   const stopAutoMine = async () => setAutomine(testClient, false)
 
   const revert = async () => {
-    const currBlock = await getBlockNumber(client)
+    const currBlock = await getBlockNumber(client!)
     await evmRevert(testClient, { id: '0x1' })
     await evmSnapshot(testClient)
-    const revertBlock = await getBlockNumber(client)
+    const revertBlock = await getBlockNumber(client!)
     const blocksToMine = currBlock - revertBlock
     await rpcSendBatch(
       Array.from({ length: Number(blocksToMine) + 1 }, () => ({ method: 'evm_mine', params: [] })),

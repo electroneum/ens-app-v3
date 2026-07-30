@@ -1,13 +1,12 @@
-import { localhost, mainnet, sepolia } from 'viem/chains'
+import { localhost } from 'viem/chains'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
+  electroneumWithEns,
   getChainsFromUrl,
   getNetworkFromUrl,
   getSupportedChainById,
   localhostWithEns,
-  mainnetWithEns,
-  sepoliaWithEns,
 } from './chains'
 
 // Store original values
@@ -49,14 +48,9 @@ describe('chains', () => {
   })
 
   describe('getSupportedChainById', () => {
-    it('should return mainnet chain for mainnet id', () => {
-      const result = getSupportedChainById(mainnet.id)
-      expect(result).toBe(mainnetWithEns)
-    })
-
-    it('should return sepolia chain for sepolia id', () => {
-      const result = getSupportedChainById(sepolia.id)
-      expect(result).toBe(sepoliaWithEns)
+    it('should return electroneum chain for electroneum id', () => {
+      const result = getSupportedChainById(electroneumWithEns.id)
+      expect(result).toBe(electroneumWithEns)
     })
 
     it('should return localhost chain for localhost id', () => {
@@ -185,18 +179,19 @@ describe('chains', () => {
   })
 
   describe('getChainsFromUrl', () => {
-    it('should return mainnet chains for mainnet network', () => {
+    it('should return electroneum chains as fallback for mainnet-labeled network', () => {
+      // mainnet/sepolia support has been dropped; getChainsFromUrl falls back to electroneum
       // @ts-ignore
       global.window.location = createMockLocation('app.ens.domains')
       const result = getChainsFromUrl()
-      expect(result).toEqual([mainnetWithEns])
+      expect(result).toEqual([electroneumWithEns])
     })
 
-    it('should return sepolia chains for sepolia network', () => {
+    it('should return electroneum chains as fallback for sepolia-labeled network', () => {
       // @ts-ignore
       global.window.location = createMockLocation('sepolia.ens.domains')
       const result = getChainsFromUrl()
-      expect(result).toEqual([sepoliaWithEns])
+      expect(result).toEqual([electroneumWithEns])
     })
 
     it('should return localhost chains for localhost network', async () => {
@@ -210,32 +205,18 @@ describe('chains', () => {
       expect(result).toEqual([localhostWithEnsFresh])
     })
 
-    it('should return mainnet for undefined network', () => {
+    it('should return electroneum for undefined network', () => {
       Object.defineProperty(global, 'window', {
         value: undefined,
         writable: true,
       })
       const result = getChainsFromUrl()
-      expect(result).toMatchObject([mainnetWithEns])
+      expect(result).toMatchObject([electroneumWithEns])
     })
   })
 
   describe('chain configurations', () => {
-    it('should have correct contract addresses for sepolia', () => {
-      expect(sepoliaWithEns.contracts.ensEthRegistrarController?.address).toBe(
-        '0xfb3cE5D01e0f33f41DbB39035dB9745962F1f968',      
-      )
-      expect(sepoliaWithEns.contracts.ensPublicResolver?.address).toBe(
-        '0xE99638b40E4Fff0129D56f03b55b6bbC4BBE49b5',
-      )
-      expect(sepoliaWithEns.contracts.ensReverseRegistrar?.address).toBe(
-        '0xA0a1AbcDAe1a2a4A2EF8e9113Ff0e02DD81DC0C6',
-      )
-    })
-
     it('should have correct chain ids', () => {
-      expect(mainnetWithEns.id).toBe(mainnet.id)
-      expect(sepoliaWithEns.id).toBe(sepolia.id)
       expect(localhostWithEns.id).toBe(localhost.id)
     })
   })
