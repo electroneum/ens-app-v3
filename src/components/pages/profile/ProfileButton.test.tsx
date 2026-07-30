@@ -227,7 +227,7 @@ describe('<AddressProfileButton/>', () => {
       const viewBlockExplorerBtn = screen.getAllByText((content, element) => {
         return (
           element?.tagName?.toLowerCase() === 'button' &&
-          content?.toLowerCase() === 'view on electroneum testnet explorer'
+          content?.toLowerCase() === 'view on electroneum explorer'
         )
       })
 

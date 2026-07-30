@@ -17,17 +17,19 @@ export const localhostWithEns = makeLocalhostChainWithEnsAndOverrides<typeof loc
   deploymentAddresses,
 )
 
+const isElectroneumMainnet = process.env.NEXT_PUBLIC_ETN_NETWORK === 'mainnet'
+
 export const electroneumDeploymentAddresses = JSON.parse(
-  process.env.NEXT_PUBLIC_ETN_DEPLOYMENT_ADDRESSES || '{}',
+  (isElectroneumMainnet
+    ? process.env.NEXT_PUBLIC_ETN_MAINNET_DEPLOYMENT_ADDRESSES
+    : process.env.NEXT_PUBLIC_ETN_TESTNET_DEPLOYMENT_ADDRESSES) || '{}',
 ) as Register['deploymentAddresses']
 
-const activeElectroneumChain =
-  process.env.NEXT_PUBLIC_ETN_NETWORK === 'mainnet' ? electroneumMainnet : electroneumTestnet
+const activeElectroneumChain = isElectroneumMainnet ? electroneumMainnet : electroneumTestnet
 
-const activeSubgraphUrl =
-  process.env.NEXT_PUBLIC_ETN_NETWORK === 'mainnet'
-    ? process.env.NEXT_PUBLIC_ETN_MAINNET_SUBGRAPH_URL
-    : process.env.NEXT_PUBLIC_ETN_TESTNET_SUBGRAPH_URL
+const activeSubgraphUrl = isElectroneumMainnet
+  ? process.env.NEXT_PUBLIC_ETN_MAINNET_SUBGRAPH_URL
+  : process.env.NEXT_PUBLIC_ETN_TESTNET_SUBGRAPH_URL
 
 export const electroneumWithEns = makeLocalhostChainWithEnsAndOverrides<typeof activeElectroneumChain>(
   activeElectroneumChain,
