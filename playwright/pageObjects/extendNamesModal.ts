@@ -14,8 +14,6 @@ export class ExtendNamesModal {
 
   readonly getCounterPlusButton: Locator
 
-  readonly getCurrencyToggle: Locator
-
   readonly getExtendButton: Locator
 
   constructor(page: Page) {
@@ -25,7 +23,6 @@ export class ExtendNamesModal {
     this.getInvoiceTotal = this.page.getByTestId('invoice-total')
     this.getCounterMinusButton = this.page.getByTestId('plus-minus-control-minus')
     this.getCounterPlusButton = this.page.getByTestId('plus-minus-control-plus')
-    this.getCurrencyToggle = this.page.getByTestId('extend-names-currency-toggle')
     this.getExtendButton = this.page.getByTestId('extend-names-confirm')
   }
 }

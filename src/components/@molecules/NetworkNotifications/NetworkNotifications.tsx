@@ -12,6 +12,8 @@ const appLinks = {
   Ethereum: 'app.ens.domains',
   Sepolia: 'sepolia.app.ens.domains',
   Localhost: '',
+  Electroneum: 'ens.electroneum.com',
+  'Electroneum Testnet': 'ens.electroneum.com',
 }
 
 export const NetworkNotifications = () => {

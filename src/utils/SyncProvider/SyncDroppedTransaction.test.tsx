@@ -112,7 +112,7 @@ describe('findDroppedTransactions', () => {
 
   describe('searchingTransactions', () => {
     it('should exit early if there is no connected account', async () => {
-      const mockClient = { chain: { id: 1 } } as ClientWithEns
+      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
       const mockTransactions: any[] = []
       const mockAddress = undefined
       const mockStore = undefined
@@ -138,7 +138,7 @@ describe('findDroppedTransactions', () => {
 
       const mockAddress = '0x1234567890abcdef'
       const mockStore = {} as any
-      const mockClient = { chain: { id: 1 } } as ClientWithEns
+      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
 
       const result = await findDroppedTransactions(mockClient, {
         address: mockAddress,
@@ -158,7 +158,7 @@ describe('findDroppedTransactions', () => {
       ] as any
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { foundMinedTransaction: vi.fn() } as any
-      const mockClient = { chain: { id: 1 } } as ClientWithEns
+      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
 
       await findDroppedTransactions(mockClient, {
         address: mockAddress,
@@ -196,7 +196,7 @@ describe('findDroppedTransactions', () => {
       ] as any
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { setReplacedTransaction: vi.fn() } as any
-      const mockClient = { chain: { id: 1 } } as ClientWithEns
+      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
 
       await findDroppedTransactions(mockClient, {
         address: mockAddress,
@@ -215,7 +215,7 @@ describe('findDroppedTransactions', () => {
       ] as any
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { setReplacedTransaction: vi.fn() } as any
-      const mockClient = { chain: { id: 1 } } as ClientWithEns
+      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
 
       await findDroppedTransactions(mockClient, {
         address: mockAddress,
@@ -236,7 +236,7 @@ describe('findDroppedTransactions', () => {
       const mockStore = { foundTransaction: vi.fn() } as any
       const mockClient = {
         chain: { id: 1 },
-      } as ClientWithEns
+      } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve({}))
 
       await findDroppedTransactions(mockClient, {
@@ -258,7 +258,7 @@ describe('findDroppedTransactions', () => {
       const mockStore = { setFailedTransaction: vi.fn() } as any
       const mockClient = {
         chain: { id: 1 },
-      } as ClientWithEns
+      } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
 
       await findDroppedTransactions(mockClient, {
@@ -280,7 +280,7 @@ describe('findDroppedTransactions', () => {
       const mockStore = { updateRetries: vi.fn() } as any
       const mockClient = {
         chain: { id: 1 },
-      } as ClientWithEns
+      } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
 
       await findDroppedTransactions(mockClient, {
@@ -307,7 +307,7 @@ describe('findDroppedTransactions', () => {
       const mockStore = { setReplacedTransactionByNonce: vi.fn() } as any
       const mockClient = {
         chain: { id: 1 },
-      } as ClientWithEns
+      } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
       mockGetTransactionCount.mockImplementation(() => Promise.resolve(1))
 
@@ -363,7 +363,7 @@ describe('findDroppedTransactions', () => {
       const mockStore = { setFailedTransaction: vi.fn() } as any
       const mockClient = {
         chain: { id: 1 },
-      } as ClientWithEns
+      } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
       mockGetTransactionCount.mockImplementation(() => Promise.resolve(1))
 
@@ -390,7 +390,7 @@ describe('findDroppedTransactions', () => {
     const mockStore = { setFailedTransaction: vi.fn() } as any
     const mockClient = {
       chain: { id: 1 },
-    } as ClientWithEns
+    } as unknown as ClientWithEns
     mockGetTransaction.mockImplementation(() => Promise.resolve(null))
     mockGetTransactionCount.mockImplementation(() => Promise.resolve(1))
 

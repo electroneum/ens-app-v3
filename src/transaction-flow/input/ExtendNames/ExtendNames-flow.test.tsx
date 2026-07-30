@@ -7,7 +7,6 @@ import { useEstimateGasWithStateOverride } from '@app/hooks/chain/useEstimateGas
 import { useExpiry } from '@app/hooks/ensjs/public/useExpiry'
 import { usePrice } from '@app/hooks/ensjs/public/usePrice'
 import { useIsEthRegistrarControllerActive } from '@app/hooks/registration/useIsEthRegistrarControllerActive'
-import { useEthPrice } from '@app/hooks/useEthPrice'
 import { useReferrer } from '@app/hooks/useReferrer'
 
 import { makeMockIntersectionObserver } from '../../../../test/mock/makeMockIntersectionObserver'
@@ -17,7 +16,6 @@ vi.mock('@app/hooks/chain/useEstimateGasWithStateOverride')
 vi.mock('@app/hooks/ensjs/public/usePrice')
 vi.mock('wagmi')
 vi.mock('@app/hooks/ensjs/public/useExpiry')
-vi.mock('@app/hooks/useEthPrice')
 vi.mock('@app/hooks/useReferrer')
 vi.mock('@app/hooks/registration/useIsEthRegistrarControllerActive')
 
@@ -25,7 +23,6 @@ const mockUseEstimateGasWithStateOverride = mockFunction(useEstimateGasWithState
 const mockUsePrice = mockFunction(usePrice)
 const mockUseAccount = mockFunction(useAccount)
 const mockUseBalance = mockFunction(useBalance)
-const mockUseEthPrice = mockFunction(useEthPrice)
 const mockUseExpiry = mockFunction(useExpiry)
 const mockUseReferrer = mockFunction(useReferrer)
 const mockUseIsEthRegistrarControllerActive = mockFunction(useIsEthRegistrarControllerActive)
@@ -63,7 +60,6 @@ describe('Extendnames', () => {
   })
   mockUseAccount.mockReturnValue({ address: '0x1234', isConnected: true })
   mockUseBalance.mockReturnValue({ data: { balance: 100n }, isLoading: false })
-  mockUseEthPrice.mockReturnValue({ data: 100n, isLoading: false })
   mockUseExpiry.mockReturnValue({ data: { expiry: { date: new Date() } }, isLoading: false })
   mockUseReferrer.mockReturnValue(undefined)
   mockUseIsEthRegistrarControllerActive.mockReturnValue({ data: true, isLoading: false } as any)

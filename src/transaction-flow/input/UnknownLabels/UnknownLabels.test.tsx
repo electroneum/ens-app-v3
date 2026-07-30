@@ -1,4 +1,4 @@
-import { render, screen, userEvent } from '@app/test-utils'
+import { fireEvent, render, screen, userEvent } from '@app/test-utils'
 
 import { ComponentProps } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -94,8 +94,8 @@ describe('UnknownLabels', () => {
       expect(screen.getByText('Label is required')).toBeVisible()
     })
     it('label input is too long', async () => {
-      await userEvent.type(input, 'a'.repeat(512))
-      expect(screen.getByText('Label is too long')).toBeVisible()
+      fireEvent.change(input, { target: { value: 'a'.repeat(512) } })
+      expect(await screen.findByText('Label is too long')).toBeVisible()
     })
     it('label input is invalid', async () => {
       await userEvent.type(input, '.')

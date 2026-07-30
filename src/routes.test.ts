@@ -160,6 +160,7 @@ describe('getDestination', () => {
         pathname: '/profile/test.eth',
         query: { referrer: 'test', from: '/home' },
       })
+      if (typeof result === 'string') throw new Error('expected an object result')
 
       // This is the key regression test - query should be an object
       expect(typeof result.query).toBe('object')
@@ -173,6 +174,7 @@ describe('getDestination', () => {
         pathname: '/profile/test.eth',
         query: { referrer: 'test' },
       })
+      if (typeof result === 'string') throw new Error('expected an object result')
 
       // Ensure it's not in "referrer=test" format
       expect(result.query).not.toBe('referrer=test')

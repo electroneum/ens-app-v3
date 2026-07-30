@@ -19,11 +19,14 @@ import { emptyAddress } from '../../../src/utils/constants'
 
 dotenv.config({ path: '.env.local' })
 
-const legacyResolver = testClient.chain.contracts.legacyPublicResolver.address
 const latestResolver = testClient.chain.contracts.ensPublicResolver.address
 
 const contractAddresses = JSON.parse(process.env.NEXT_PUBLIC_DEPLOYMENT_ADDRESSES || '{}')
 const ownedResolverAddress = contractAddresses.OwnedResolver || ''
+// Standing in for the pre-wrapper "legacy resolver" concept, which doesn't
+// apply here - this deployment has no legacy contracts. Just needs to be a
+// valid, deployed resolver distinct from the default.
+const legacyResolver = ownedResolverAddress
 const invalidResolverAddress = contractAddresses.NameWrapper || ''
 const outdatedResolver = contractAddresses.OutdatedResolver || ''
 const customLegacyResolver = contractAddresses.CustomLegacyResolver || ''

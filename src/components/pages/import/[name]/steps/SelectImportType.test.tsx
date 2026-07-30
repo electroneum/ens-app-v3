@@ -201,8 +201,8 @@ describe('SelectImportType component', () => {
           <I18nextProvider i18n={i18n}>
             <SelectImportType
               dispatch={() => {}}
-              item={{ type: null }}
-              selected={{ name: 'test.club' }}
+              item={{ type: null } as any}
+              selected={{ name: 'test.club' } as any}
             />
           </I18nextProvider>
         </ThemeProvider>
@@ -218,17 +218,17 @@ describe('SelectImportType component', () => {
   it('should show customized TLD message for TLDs not managed by DNSRegistrar', () => {
     vi.mocked(useUnmanagedTLD).mockReturnValue(true)
     vi.mocked(useDnsOffchainStatus).mockReturnValue({
-      data: { resolver: { status: 'mismatching' } },
+      data: { resolver: { status: 'mismatching', value: undefined }, address: null },
       isLoading: false,
-    })
+    } as any)
     render(
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={lightTheme}>
           <I18nextProvider i18n={i18n}>
             <SelectImportType
               dispatch={() => {}}
-              item={{ type: null }}
-              selected={{ name: 'test.xyz' }}
+              item={{ type: null } as any}
+              selected={{ name: 'test.xyz' } as any}
             />
           </I18nextProvider>
         </ThemeProvider>
@@ -249,8 +249,8 @@ describe('SelectImportType component', () => {
           <I18nextProvider i18n={i18n}>
             <SelectImportType
               dispatch={() => {}}
-              item={{ type: null }}
-              selected={{ name: 'test.com' }}
+              item={{ type: null } as any}
+              selected={{ name: 'test.com' } as any}
             />
           </I18nextProvider>
         </ThemeProvider>

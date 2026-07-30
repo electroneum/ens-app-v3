@@ -1,15 +1,7 @@
-import { mockFunction, render, screen } from '@app/test-utils'
-
-import { describe, expect, it, vi } from 'vitest'
-
-import { useEthPrice } from '@app/hooks/useEthPrice'
+import { render, screen } from '@app/test-utils'
+import { describe, expect, it } from 'vitest'
 
 import { Invoice } from './Invoice'
-
-vi.mock('@app/hooks/useEthPrice')
-
-const mockUseEthPrice = mockFunction(useEthPrice)
-mockUseEthPrice.mockReturnValue({ data: BigInt(1e8), isLoading: false })
 
 const items = [
   {
@@ -23,23 +15,13 @@ const items = [
 ]
 
 describe('Invoice', () => {
-  it('should render correctly in eth mode', async () => {
-    render(<Invoice items={items} totalLabel="total" unit="eth" />)
+  it('should render correctly', async () => {
+    render(<Invoice items={items} totalLabel="total" />)
     expect(screen.getByText('line 1')).toBeVisible()
-    expect(screen.getByText('1.0000 ETH')).toBeVisible()
+    expect(screen.getByText('1.0000 ETN')).toBeVisible()
     expect(screen.getByText('line 2')).toBeVisible()
-    expect(screen.getByText('2.0000 ETH')).toBeVisible()
+    expect(screen.getByText('2.0000 ETN')).toBeVisible()
     expect(screen.getByText('total')).toBeVisible()
-    expect(screen.getByText('3.0000 ETH')).toBeVisible()
-  })
-
-  it('should render correctly in usd mode', async () => {
-    render(<Invoice items={items} totalLabel="total" unit="usd" />)
-    expect(screen.getByText('line 1')).toBeVisible()
-    expect(screen.getByText('$1.00')).toBeVisible()
-    expect(screen.getByText('line 2')).toBeVisible()
-    expect(screen.getByText('$2.00')).toBeVisible()
-    expect(screen.getByText('total')).toBeVisible()
-    expect(screen.getByText('$3.00')).toBeVisible()
+    expect(screen.getByText('3.0000 ETN')).toBeVisible()
   })
 })

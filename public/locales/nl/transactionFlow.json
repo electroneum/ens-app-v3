@@ -138,8 +138,8 @@
       "bannerMsg": "Verlengen voor meerdere jaren scheelt netwerk kosten door jaarlijke transacties te voorkomen.",
       "gasLimitError": "Onvoldoende balans",
       "disabled": {
-        "title": "ENS v2 beta is nu gelanceerd op Sepolia",
-        "banner": "Toekomstige verlengingen verlopen via de nieuwe Manager app. Klik <ManagerLink>hier</ManagerLink> om je naam daar te verlengen."
+        "title": "Verlengingen zijn tijdelijk niet beschikbaar",
+        "banner": "De registrarcontroller van deze naam is bijgewerkt. Kom later terug of neem contact op met support om deze naam te verlengen."
       }
     },
     "transferProfile": {

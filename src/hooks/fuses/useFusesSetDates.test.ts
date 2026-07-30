@@ -177,7 +177,7 @@ describe('generateFuseSetBlocks', () => {
 describe('generateGetBlockQueryArray', () => {
   const client = {
     chain: {
-      id: 1,
+      id: 5201420,
     },
   } as ClientWithEns
 
@@ -189,13 +189,13 @@ describe('generateGetBlockQueryArray', () => {
     })
     expect(queryArray).toEqual([
       expect.objectContaining({
-        queryKey: [{ blockNumber: 1123n }, 1, '0x123', undefined, 'getBlock'],
+        queryKey: [{ blockNumber: 1123n }, 5201420, '0x123', undefined, 'getBlock'],
       }),
       expect.objectContaining({
-        queryKey: [{ blockNumber: 1124n }, 1, '0x123', undefined, 'getBlock'],
+        queryKey: [{ blockNumber: 1124n }, 5201420, '0x123', undefined, 'getBlock'],
       }),
       expect.objectContaining({
-        queryKey: [{ blockNumber: 1125n }, 1, '0x123', undefined, 'getBlock'],
+        queryKey: [{ blockNumber: 1125n }, 5201420, '0x123', undefined, 'getBlock'],
       }),
     ])
   })

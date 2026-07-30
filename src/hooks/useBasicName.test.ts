@@ -78,12 +78,12 @@ describe('useBasicName', () => {
         is2LD: true,
         isETH: true,
         isShort: false,
-        name: 'test.eth',
+        name: 'test.etn',
         labelCount: 2,
       })
     })
     it('should query for the owner', () => {
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseOwner).toHaveBeenCalledWith(
         expect.objectContaining({
           enabled: true,
@@ -91,7 +91,7 @@ describe('useBasicName', () => {
       )
     })
     it('should query for the wrapper data', () => {
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseWrapperData).toHaveBeenCalledWith(
         expect.objectContaining({
           enabled: true,
@@ -99,7 +99,7 @@ describe('useBasicName', () => {
       )
     })
     it('should query for the expiry', () => {
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseExpiry).toHaveBeenCalledWith(
         expect.objectContaining({
           enabled: true,
@@ -107,7 +107,7 @@ describe('useBasicName', () => {
       )
     })
     it('should query for the price', () => {
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUsePrice).toHaveBeenCalledWith(
         expect.objectContaining({
           enabled: true,
@@ -127,7 +127,7 @@ describe('useBasicName', () => {
       })
     })
     it('should query for the owner', () => {
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseOwner).toHaveBeenCalledWith(
         expect.objectContaining({
           enabled: true,
@@ -135,7 +135,7 @@ describe('useBasicName', () => {
       )
     })
     it('should query for the wrapper data', () => {
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseWrapperData).toHaveBeenCalledWith(
         expect.objectContaining({
           enabled: true,
@@ -237,7 +237,7 @@ describe('useBasicName', () => {
         is2LD: true,
         isETH: true,
         isShort: false,
-        name: 'test.eth',
+        name: 'test.etn',
         labelCount: 2,
       })
       mockUseOwner.mockReturnValue({
@@ -268,7 +268,7 @@ describe('useBasicName', () => {
         },
         isLoading: false,
       })
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseCurrentBlockTimestamp).toHaveBeenCalledWith({ enabled: true })
     })
     it('should enable useCurrentBlockTimestamp when a grace period ended less than 5 minutes ago', () => {
@@ -277,7 +277,7 @@ describe('useBasicName', () => {
         is2LD: true,
         isETH: true,
         isShort: false,
-        name: 'test.eth',
+        name: 'test.etn',
         labelCount: 2,
       })
       mockUseOwner.mockReturnValue({
@@ -308,7 +308,7 @@ describe('useBasicName', () => {
         },
         isLoading: false,
       })
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseCurrentBlockTimestamp).toHaveBeenCalledWith({ enabled: true })
     })
     it('should not enable useCurrentBlockTimestamp when a grace period ends in more than 5 minutes', () => {
@@ -317,7 +317,7 @@ describe('useBasicName', () => {
         is2LD: true,
         isETH: true,
         isShort: false,
-        name: 'test.eth',
+        name: 'test.etn',
         labelCount: 2,
       })
       mockUseOwner.mockReturnValue({
@@ -346,7 +346,7 @@ describe('useBasicName', () => {
         },
         isLoading: false,
       })
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseCurrentBlockTimestamp).toHaveBeenCalledWith({ enabled: false })
     })
     it('should not enable useCurrentBlockTimestamp when a grace period ended more than 5 minutes ago', () => {
@@ -355,7 +355,7 @@ describe('useBasicName', () => {
         is2LD: true,
         isETH: true,
         isShort: false,
-        name: 'test.eth',
+        name: 'test.etn',
         labelCount: 2,
       })
       mockUseOwner.mockReturnValue({
@@ -384,7 +384,7 @@ describe('useBasicName', () => {
         },
         isLoading: false,
       })
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockUseCurrentBlockTimestamp).toHaveBeenCalledWith({ enabled: false })
     })
     it('should not enable useCurrentBlockTimestamp when name does not have a grace period (not 2ld .eth)', () => {
@@ -393,7 +393,7 @@ describe('useBasicName', () => {
         is2LD: false,
         isETH: true,
         isShort: false,
-        name: 'abc.test.eth',
+        name: 'abc.test.etn',
         labelCount: 3,
       })
       mockUseOwner.mockReturnValue({
@@ -418,7 +418,7 @@ describe('useBasicName', () => {
         data: undefined,
         isLoading: false,
       })
-      renderHook(() => useBasicName({ name: 'abc.test.eth' }))
+      renderHook(() => useBasicName({ name: 'abc.test.etn' }))
       expect(mockUseCurrentBlockTimestamp).toHaveBeenCalledWith({ enabled: false })
     })
     it('should pass browser timestamp to getRegistrationStatus when isTempPremiumDesynced is false', () => {
@@ -427,7 +427,7 @@ describe('useBasicName', () => {
         is2LD: false,
         isETH: true,
         isShort: false,
-        name: 'abc123.test.eth',
+        name: 'abc123.test.etn',
         labelCount: 3,
       })
       mockUseOwner.mockReturnValue({
@@ -453,7 +453,7 @@ describe('useBasicName', () => {
         isLoading: false,
       })
       vi.spyOn(Date, 'now').mockReturnValue(1234567890)
-      renderHook(() => useBasicName({ name: 'abc123.test.eth' }))
+      renderHook(() => useBasicName({ name: 'abc123.test.etn' }))
       expect(mockGetRegistrationStatus).toHaveBeenCalledWith(
         expect.objectContaining({ timestamp: 1234567890 }),
       )
@@ -464,7 +464,7 @@ describe('useBasicName', () => {
         is2LD: true,
         isETH: true,
         isShort: false,
-        name: 'test.eth',
+        name: 'test.etn',
         labelCount: 2,
       })
       mockUseOwner.mockReturnValue({
@@ -496,7 +496,7 @@ describe('useBasicName', () => {
         isLoading: false,
       })
       mockUseCurrentBlockTimestamp.mockReturnValue(1n)
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockGetRegistrationStatus).toHaveBeenCalledWith(
         expect.objectContaining({ timestamp: 1000 }),
       )
@@ -507,7 +507,7 @@ describe('useBasicName', () => {
         is2LD: true,
         isETH: true,
         isShort: false,
-        name: 'test.eth',
+        name: 'test.etn',
         labelCount: 2,
       })
       mockUseOwner.mockReturnValue({
@@ -540,7 +540,7 @@ describe('useBasicName', () => {
       })
       vi.spyOn(Date, 'now').mockReturnValue(1234567890)
       mockUseCurrentBlockTimestamp.mockReturnValue(undefined)
-      renderHook(() => useBasicName({ name: 'test.eth' }))
+      renderHook(() => useBasicName({ name: 'test.etn' }))
       expect(mockGetRegistrationStatus).toHaveBeenCalledWith(
         expect.objectContaining({ timestamp: 1234567890 - ms5Minutes }),
       )
@@ -593,7 +593,7 @@ describe('useBasicName', () => {
         '@app/utils/registrationStatus',
       )
       mockGetRegistrationStatus.mockImplementation((args) => test.getRegistrationStatus(args))
-      const { result } = renderHook(() => useBasicName({ name: 'name.eth' }))
+      const { result } = renderHook(() => useBasicName({ name: 'name.etn' }))
       const expected = makeMockUseBasicName(type)
       const { refetchIfEnabled, ...resultData } = result.current
       expect(expected).toEqual(resultData)

@@ -258,8 +258,8 @@ describe('metadataCache', () => {
   describe('bustMediaCache', () => {
     it('should bust avatar cache when mediaKey is avatar', () => {
       const mockClient = {
-        chain: { id: 1, name: 'Mainnet' },
-      } as ClientWithEns
+        chain: { id: 5201420, name: 'Mainnet' },
+      } as unknown as ClientWithEns
 
       bustMediaCache('test.eth', mockClient, 'avatar')
 
@@ -269,8 +269,8 @@ describe('metadataCache', () => {
 
     it('should bust header cache when mediaKey is header', () => {
       const mockClient = {
-        chain: { id: 1, name: 'Mainnet' },
-      } as ClientWithEns
+        chain: { id: 5201420, name: 'Mainnet' },
+      } as unknown as ClientWithEns
 
       bustMediaCache('test.eth', mockClient, 'header')
 
@@ -280,8 +280,8 @@ describe('metadataCache', () => {
 
     it('should bust both avatar and header when mediaKey is omitted', () => {
       const mockClient = {
-        chain: { id: 1, name: 'Mainnet' },
-      } as ClientWithEns
+        chain: { id: 5201420, name: 'Mainnet' },
+      } as unknown as ClientWithEns
 
       bustMediaCache('test.eth', mockClient)
 

@@ -233,8 +233,8 @@
       "bannerMsg": "Extender por varios años ahorra dinero en costos de red al evitar transacciones anuales.",
       "gasLimitError": "No hay suficiente ETH en la billetera",
       "disabled": {
-        "title": "La beta de ENS v2 ya está desplegada en Sepolia",
-        "banner": "Las renovaciones futuras se realizarán en la nueva aplicación Manager. Haz clic <ManagerLink>aquí</ManagerLink> para renovar tu nombre allí."
+        "title": "Las renovaciones no están disponibles temporalmente",
+        "banner": "El controlador de registro de este nombre ha sido actualizado. Por favor, vuelve más tarde o contacta con soporte para renovar este nombre."
       }
     },
     "transferProfile": {

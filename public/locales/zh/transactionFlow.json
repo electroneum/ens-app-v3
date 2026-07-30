@@ -233,8 +233,8 @@
       "bannerMsg": "一次续期数年可以避免每年进行交易，从而节省网络成本。",
       "gasLimitError": "资金不足",
       "disabled": {
-        "title": "ENS v2 测试版已部署在 Sepolia",
-        "banner": "未来的续费将在新的 Manager 应用中进行。点击<ManagerLink>此处</ManagerLink>在该应用中续费您的名字。"
+        "title": "续费暂时不可用",
+        "banner": "此名称的注册控制器已更新。请稍后再试或联系支持以续费此名称。"
       }
     },
     "transferProfile": {

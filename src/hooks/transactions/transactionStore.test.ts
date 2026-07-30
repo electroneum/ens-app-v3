@@ -66,11 +66,13 @@ describe('transactionStore', () => {
       }
     })
 
-    store.addTransaction('account', 1, transaction)
+    store.addTransaction('account', client.chain.id, transaction)
 
-    await waitFor(() => expect(store.getTransactions('account', 1)).toHaveLength(2))
+    await waitFor(() =>
+      expect(store.getTransactions('account', client.chain.id)).toHaveLength(2),
+    )
 
-    const transactions = store.getTransactions('account', 1)
+    const transactions = store.getTransactions('account', client.chain.id)
 
     expect(mockGetBlock).toHaveBeenCalledWith(client, { blockHash: '0xblockHash' })
 
@@ -110,13 +112,13 @@ describe('transactionStore', () => {
       }
     })
 
-    store.addTransaction('account', 1, transaction)
+    store.addTransaction('account', client.chain.id, transaction)
 
     await waitFor(() =>
       expect(mockGetBlock).toHaveBeenCalledWith(client, { blockHash: '0xblockHash' }),
     )
 
-    const transactions = store.getTransactions('account', 1)
+    const transactions = store.getTransactions('account', client.chain.id)
 
     expect(transactions[0]).toStrictEqual({
       ...transaction,
@@ -137,7 +139,7 @@ describe('foundTransaction', () => {
   it('should update found transaction correctly', () => {
     const transactionHash = 'hash'
     const account = 'account'
-    const chainId = 1
+    const chainId = 5201420
     const nonce = 1
 
     const mockTransactions = [
@@ -213,7 +215,7 @@ describe('setReplacedTransaction', () => {
   it('should set replaced transaction correctly', () => {
     const transactionHash = 'hash'
     const account = 'account'
-    const chainId = 1
+    const chainId = 5201420
     const transactionInput = 'transactionInput'
     const mockMinedData: EtherscanMinedData = {
       blockHash: '0x1234567890abcdef',
@@ -271,7 +273,7 @@ describe('setReaplcedTransactionByNonce', () => {
   it('should set replaced transaction by nonce correctly', () => {
     const transactionHash = 'hash'
     const account = 'account'
-    const chainId = 1
+    const chainId = 5201420
     const transactionInput = 'transactionInput'
     const mockMinedData: EtherscanMinedData = {
       blockHash: '0x1234567890abcdef',
@@ -330,7 +332,7 @@ describe('foundMinedTranasction', () => {
   it('should update found mined transaction correctly and update the transaction status to confirmed', () => {
     const transactionHash = 'hash'
     const account = 'account'
-    const chainId = 1
+    const chainId = 5201420
     const transactionInput = 'transactionInput'
     const mockMinedData: EtherscanMinedData = {
       blockHash: '0x1234567890abcdef',
@@ -384,7 +386,7 @@ describe('updateRetries', () => {
   it('should update retries correctly', () => {
     const transactionHash = 'hash'
     const account = 'account'
-    const chainId = 1
+    const chainId = 5201420
 
     const mockTransactions = [
       {
@@ -413,7 +415,7 @@ describe('setFailedTransaction', () => {
   it('should set failed transaction correctly', () => {
     const transactionHash = 'hash'
     const account = 'account'
-    const chainId = 1
+    const chainId = 5201420
 
     const mockTransactions = [
       {

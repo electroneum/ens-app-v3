@@ -18,14 +18,14 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         name: 'test',
       },
       address: '0x123',
-      chainId: 1,
+      chainId: 5201420,
       scopeKey: undefined,
     } as const
     const matchKey = [
       {
         name: 'test',
       },
-      1,
+      5201420,
       '0x123',
       undefined,
       'getRecords',
@@ -44,7 +44,7 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         resolver: { address: '0x123' },
       },
       address: '0x123',
-      chainId: 1,
+      chainId: 5201420,
       scopeKey: undefined,
     } as const
     const matchKey = [
@@ -52,7 +52,7 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         name: 'test',
         resolver: { address: '0x123' },
       },
-      1,
+      5201420,
       '0x123',
       undefined,
       'getRecords',
@@ -71,7 +71,7 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         gatewayUrls: ['test'] as string[],
       },
       address: '0x123',
-      chainId: 1,
+      chainId: 5201420,
       scopeKey: undefined,
     } as const
     const matchKey = [
@@ -79,7 +79,7 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         name: 'test',
         gatewayUrls: ['test'],
       },
-      1,
+      5201420,
       '0x123',
       undefined,
       'getRecords',
@@ -97,14 +97,14 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         name: 'test',
       },
       address: '0x123',
-      chainId: 1,
+      chainId: 5201420,
       scopeKey: undefined,
     } as const
     const matchKey = [
       {
         name: 'test2',
       },
-      1,
+      5201420,
       '0x123',
       undefined,
       'getRecords',
@@ -123,7 +123,7 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         resolver: { address: '0x123' },
       },
       address: '0x123',
-      chainId: 1,
+      chainId: 5201420,
       scopeKey: undefined,
     } as const
     const matchKey = [
@@ -131,7 +131,7 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         name: 'test',
         resolver: { address: '0x124' },
       },
-      1,
+      5201420,
       '0x123',
       undefined,
       'getRecords',
@@ -150,7 +150,7 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         gatewayUrls: ['test'] as string[],
       },
       address: '0x123',
-      chainId: 1,
+      chainId: 5201420,
       scopeKey: undefined,
     } as const
     const matchKey = [
@@ -158,7 +158,7 @@ describe('matchGetRecordsQueryKeyWithInternalParams', () => {
         name: 'test',
         gatewayUrls: ['test2'],
       },
-      1,
+      5201420,
       '0x123',
       undefined,
       'getRecords',
@@ -194,7 +194,7 @@ const mockUseQueryOptions = vi.mocked(useQueryOptions).mockImplementation(
   }) => {
     return {
       queryKey: createQueryKey({
-        chainId: 1,
+        chainId: 5201420,
         address: '0x123',
         params,
         scopeKey,
@@ -280,7 +280,7 @@ describe('useRecords', () => {
 
     queryClient.setQueryData(
       createQueryKey({
-        chainId: 1,
+        chainId: 5201420,
         address: '0x123',
         params: {
           name: 'test',
@@ -314,7 +314,7 @@ describe('useRecords', () => {
 
     queryClient.setQueryData(
       createQueryKey({
-        chainId: 1,
+        chainId: 5201420,
         address: '0x123',
         params: {
           name: 'test',
@@ -368,7 +368,7 @@ describe('useRecords', () => {
 
     queryClient.setQueryData(
       createQueryKey({
-        chainId: 1,
+        chainId: 5201420,
         address: '0x123',
         params: {
           name: 'test',
@@ -402,7 +402,7 @@ describe('useRecords', () => {
 
     queryClient.setQueryData(
       createQueryKey({
-        chainId: 1,
+        chainId: 5201420,
         address: '0x123',
         params: {
           name: 'test',

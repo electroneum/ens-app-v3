@@ -1,7 +1,15 @@
 import { Address } from 'viem'
 import { describe, expect, it, vi } from 'vitest'
 
-import { getDropdownItems } from './utils'
+import type { DropdownItemObject } from '@ensdomains/thorin/dist/types/components/molecules/Dropdown/Dropdown'
+
+import { getDropdownItems as getDropdownItems_ } from './utils'
+
+// getDropdownItems only ever returns plain item objects (never JSX elements),
+// but its return type also allows for elements, since it's typed as Thorin's
+// generic DropdownItem[] union.
+const getDropdownItems = (...args: Parameters<typeof getDropdownItems_>) =>
+  getDropdownItems_(...args) as DropdownItemObject[]
 
 describe('getDropdownItems', () => {
   const mockT = (key: string) => key

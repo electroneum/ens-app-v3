@@ -1,72 +1,48 @@
 import { match } from 'ts-pattern'
-import { localhost, mainnet, sepolia } from 'viem/chains'
+import { localhost } from 'viem/chains'
 import type { Chain } from 'viem'
 
 import type { Register } from '@app/local-contracts'
-import { addEnsContractsWithSubgraphAndOverrides } from '@app/overrides/addEnsContractsWithSubgraphAndOverrides'
 import { makeLocalhostChainWithEnsAndOverrides } from '@app/overrides/makeLocalhostChainWithEnsAndOverrides'
 import { electroneumMainnet, electroneumTestnet } from '@app/utils/chains/electroneumChains'
-
-const tryAddEnsContracts = <T,>(fn: () => T): T | undefined => {
-  try {
-    return fn()
-  } catch {
-    return undefined
-  }
-}
 
 export const deploymentAddresses = JSON.parse(
   process.env.NEXT_PUBLIC_DEPLOYMENT_ADDRESSES || '{}',
 ) as Register['deploymentAddresses']
 
-const localhostChain = { ...localhost, formatters: undefined } as Chain
+const localhostChain = { ...localhost, formatters: undefined } satisfies Chain
 
-export const localhostWithEns = makeLocalhostChainWithEnsAndOverrides<Chain>(
+export const localhostWithEns = makeLocalhostChainWithEnsAndOverrides<typeof localhostChain>(
   localhostChain,
   deploymentAddresses,
 )
 
+const isElectroneumMainnet = process.env.NEXT_PUBLIC_ETN_NETWORK === 'mainnet'
+
 export const electroneumDeploymentAddresses = JSON.parse(
-  process.env.NEXT_PUBLIC_ETN_DEPLOYMENT_ADDRESSES || '{}',
+  (isElectroneumMainnet
+    ? process.env.NEXT_PUBLIC_ETN_MAINNET_DEPLOYMENT_ADDRESSES
+    : process.env.NEXT_PUBLIC_ETN_TESTNET_DEPLOYMENT_ADDRESSES) || '{}',
 ) as Register['deploymentAddresses']
 
-const activeElectroneumChain =
-  process.env.NEXT_PUBLIC_ETN_NETWORK === 'mainnet' ? electroneumMainnet : electroneumTestnet
+const activeElectroneumChain = isElectroneumMainnet ? electroneumMainnet : electroneumTestnet
+
+const activeSubgraphUrl = isElectroneumMainnet
+  ? process.env.NEXT_PUBLIC_ETN_MAINNET_SUBGRAPH_URL
+  : process.env.NEXT_PUBLIC_ETN_TESTNET_SUBGRAPH_URL
 
 export const electroneumWithEns = makeLocalhostChainWithEnsAndOverrides<typeof activeElectroneumChain>(
   activeElectroneumChain,
   electroneumDeploymentAddresses,
+  activeSubgraphUrl,
 )
 
-const ENS_SUBGRAPH_API_KEY = '9ad5cff64d93ed2c33d1a57b3ec03ea9'
-
-export const mainnetWithEns = tryAddEnsContracts(() =>
-  addEnsContractsWithSubgraphAndOverrides({
-    chain: mainnet,
-    subgraphId: '5XqPmWe6gjyrJtFn9cLy237i4cWw2j9HcUJEXsP5qGtH',
-    apiKey: ENS_SUBGRAPH_API_KEY,
-  }),
-)
-
-export const sepoliaWithEns = tryAddEnsContracts(() =>
-  addEnsContractsWithSubgraphAndOverrides({
-    chain: sepolia,
-    subgraphId: 'G1SxZs317YUb9nQX3CC98hDyvxfMJNZH5pPRGpNrtvwN',
-    apiKey: ENS_SUBGRAPH_API_KEY,
-  }),
-)
-
-export const chainsWithEns = [
-  mainnetWithEns,
-  sepoliaWithEns,
-  localhostWithEns,
-  electroneumWithEns,
-].filter((chain): chain is NonNullable<typeof chain> => !!chain)
+export const chainsWithEns = [localhostWithEns, electroneumWithEns]
 
 export const getSupportedChainById = (chainId: number | undefined) =>
   chainId ? chainsWithEns.find((c) => c.id === chainId) : undefined
 
-export type SupportedChain = typeof mainnetWithEns | typeof sepoliaWithEns | typeof localhostWithEns
+export type SupportedChain = typeof localhostWithEns | typeof electroneumWithEns
 
 export const getNetworkFromUrl = ():
   | 'mainnet'
@@ -111,9 +87,7 @@ export const getNetworkFromUrl = ():
 export const getChainsFromUrl = () => {
   const network = getNetworkFromUrl()
   return match(network)
-    .with('mainnet', () => [mainnetWithEns])
-    .with('sepolia', () => [sepoliaWithEns])
     .with('localhost', () => [localhostWithEns])
     .with('electroneum', () => [electroneumWithEns])
-    .otherwise(() => [mainnetWithEns])
+    .otherwise(() => [electroneumWithEns])
 }

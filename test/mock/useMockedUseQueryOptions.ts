@@ -5,6 +5,7 @@ import { useAccount, useChainId, useConfig } from 'wagmi'
 
 import { SupportedChain } from '@app/constants/chains'
 import { ClientWithEns } from '@app/types'
+import { electroneumTestnet } from '@app/utils/chains/electroneumChains'
 
 const mockUseChainId = mockFunction(useChainId)
 const mockUseAccount = mockFunction(useAccount)
@@ -14,7 +15,7 @@ const mockUseConfig = mockFunction(useConfig)
  * @dev This function assumes `wagmi` is already mocked.
  */
 export const useMockedUseQueryOptions = ({
-  chainId = 1,
+  chainId = electroneumTestnet.id,
   address = '0x1234',
   client = {},
 }: {

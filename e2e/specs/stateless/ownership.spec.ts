@@ -1160,15 +1160,8 @@ test.describe('Extend name', () => {
       await expect(page.getByText('2 years extension', { exact: true })).toBeVisible()
     })
 
-    await test.step('should show correct fiat values', async () => {
-      await extendNamesModal.getCurrencyToggle.click({ force: true })
-      await expect(extendNamesModal.getInvoiceExtensionFee).toContainText(/\$10\.0/)
-      await expect(extendNamesModal.getInvoiceTransactionFee).toContainText(/\$0\.1[23]/)
-      await expect(extendNamesModal.getInvoiceTotal).toContainText(/\$10\.1/)
+    await test.step('should reduce number of years', async () => {
       await extendNamesModal.getCounterMinusButton.click()
-      await expect(extendNamesModal.getInvoiceExtensionFee).toContainText(/\$5\.0/)
-      await expect(extendNamesModal.getInvoiceTransactionFee).toContainText(/\$0.1[23]/)
-      await expect(extendNamesModal.getInvoiceTotal).toContainText(/\$5\.1/)
     })
 
     await test.step('should extend', async () => {

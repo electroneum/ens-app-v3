@@ -226,7 +226,8 @@ describe('<AddressProfileButton/>', () => {
 
       const viewBlockExplorerBtn = screen.getAllByText((content, element) => {
         return (
-          element?.tagName?.toLowerCase() === 'button' && content?.toLowerCase() === 'view on etherscan'
+          element?.tagName?.toLowerCase() === 'button' &&
+          content?.toLowerCase() === 'view on electroneum explorer'
         )
       })
 
