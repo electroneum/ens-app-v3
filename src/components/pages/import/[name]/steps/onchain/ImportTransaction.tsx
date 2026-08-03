@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 import { Address } from 'viem'
 
-import { CurrencyToggle, Helper, Typography } from '@ensdomains/thorin'
+import { Helper, Typography } from '@ensdomains/thorin'
 
 import { CurrencyText } from '@app/components/@atoms/CurrencyText/CurrencyText'
 import GasDisplay from '@app/components/@atoms/GasDisplay'
@@ -19,7 +19,6 @@ import { useApprovedForAll } from '@app/hooks/useApprovedForAll'
 import { useTransactionFlow } from '@app/transaction-flow/TransactionFlowProvider'
 import { sendEvent } from '@app/utils/analytics/events'
 import { UpdateCallback, useCallbackOnTransaction } from '@app/utils/SyncProvider/SyncProvider'
-import useUserConfig from '@app/utils/useUserConfig'
 import { shortenAddress } from '@app/utils/utils'
 
 import {
@@ -107,8 +106,6 @@ export const ImportTransaction = ({
   const { t: tc } = useTranslation('common')
 
   const { data: gasPrice } = useGasPrice()
-  const { userConfig, setCurrency } = useUserConfig()
-  const currencyDisplay = userConfig.currency === 'fiat' ? userConfig.fiat : 'eth'
 
   const {
     data: dnsOwner,
@@ -253,16 +250,11 @@ export const ImportTransaction = ({
       <InvoiceContainer>
         <OptionBar>
           <GasDisplay gasPrice={gasPrice} />
-          <CurrencyToggle
-            size="small"
-            checked={userConfig.currency === 'fiat'}
-            onChange={(e) => setCurrency(e.target.checked ? 'fiat' : 'eth')}
-          />
         </OptionBar>
         <InvoiceItemBox>
           <Typography>{t('estimatedNetworkCost')}</Typography>
           <Typography data-testid="import-cost">
-            <CurrencyText eth={gasCost} currency={currencyDisplay} />
+            <CurrencyText eth={gasCost} />
           </Typography>
         </InvoiceItemBox>
         <InvoiceItemBox>

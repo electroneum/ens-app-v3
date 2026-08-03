@@ -1,9 +1,6 @@
 import { match, P } from 'ts-pattern'
-import { formatUnits } from 'viem'
 
-import { PaymentMethod } from '@app/components/pages/profile/[name]/registration/types'
 import { trackEvent as sendTrackEvent } from '@app/utils/analytics'
-import useUserConfig from '@app/utils/useUserConfig'
 
 import { useChainName } from './chain/useChainName'
 
@@ -11,18 +8,6 @@ type SearchSelectEvent = {
   eventName: 'search_selected_eth' | 'search_selected_dns'
   customProperties: { name: string }
 }
-
-type PaymentEvent = {
-  eventName: 'payment_selected'
-  customProperties: {
-    ethPrice: bigint
-    duration: number
-    durationType: 'date' | 'years'
-    estimatedTotal: bigint
-    paymentMethod: PaymentMethod | ''
-  }
-}
-
 type DNSImportTypeSelectedEvent = {
   eventName:
     | 'dns_selected_import_type'
@@ -35,7 +20,6 @@ type DNSImportTypeSelectedEvent = {
     name: string
   }
 }
-
 type DefaultEvent = {
   eventName:
     | 'commit_started'
@@ -52,17 +36,12 @@ type DefaultEvent = {
     | 'dns_claim_wallet_opened'
   customProperties?: never
 }
-
 export type TrackEventParameters =
   | SearchSelectEvent
-  | PaymentEvent
   | DefaultEvent
   | DNSImportTypeSelectedEvent
-
 export const useEventTracker = () => {
   const chain = useChainName()
-  const { userConfig } = useUserConfig()
-
   const trackEvent = (props: TrackEventParameters) => {
     match(props)
       .with(
@@ -93,19 +72,6 @@ export const useEventTracker = () => {
         },
         ({ eventName }) => sendTrackEvent(eventName, chain),
       )
-      .with({ eventName: 'payment_selected' }, ({ eventName, customProperties }) => {
-        const { duration, ethPrice, estimatedTotal, paymentMethod } = customProperties
-        const paymentAmount = formatUnits((estimatedTotal * ethPrice) / BigInt(1e8), 18)
-        const currencyUnit = userConfig.currency === 'fiat' ? userConfig.fiat : 'eth'
-        const paymentType = paymentMethod === PaymentMethod.ethereum ? 'eth' : 'fiat'
-
-        sendTrackEvent(eventName, chain, {
-          duration,
-          currencyUnit,
-          paymentType,
-          paymentAmount,
-        })
-      })
       .with(
         {
           eventName: P.union(
@@ -123,7 +89,6 @@ export const useEventTracker = () => {
       )
       .exhaustive()
   }
-
   return {
     trackEvent,
   }

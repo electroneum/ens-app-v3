@@ -2,8 +2,6 @@ import styled, { css } from 'styled-components'
 
 import { Colors, Skeleton } from '@ensdomains/thorin'
 
-import { CurrencyDisplay } from '@app/types'
-
 import { CurrencyText } from '../CurrencyText/CurrencyText'
 
 const Container = styled.div(
@@ -36,7 +34,7 @@ const Total = styled(LineItem)(
 export type InvoiceItem = {
   label: string
   value?: bigint
-  /* Percentage buffer to multiply value by when displaying in ETH, defaults to 100 */
+  /* Percentage buffer to multiply value by when displaying, defaults to 100 */
   bufferPercentage?: bigint
   color?: Colors
 }
@@ -44,18 +42,16 @@ export type InvoiceItem = {
 type Props = {
   items: InvoiceItem[]
   totalLabel: string
-  unit?: CurrencyDisplay
 }
 
-export const Invoice = ({ totalLabel = 'Estimated total', unit = 'eth', items }: Props) => {
+export const Invoice = ({ totalLabel = 'Estimated total', items }: Props) => {
   const filteredItems = items
     .map(({ value, bufferPercentage }) =>
-      value && unit === 'eth' && bufferPercentage ? (value * bufferPercentage) / 100n : value,
+      value && bufferPercentage ? (value * bufferPercentage) / 100n : value,
     )
     .filter((x): x is bigint => !!x)
   const total = filteredItems.reduce((a, b) => a + b, 0n)
   const hasEmptyItems = filteredItems.length !== items.length
-
   return (
     <Container>
       {items.map(({ label, value, bufferPercentage, color }, inx) => (
@@ -63,7 +59,7 @@ export const Invoice = ({ totalLabel = 'Estimated total', unit = 'eth', items }:
           <div>{label}</div>
           <Skeleton loading={!value}>
             <div data-testid={`invoice-item-${inx}-amount`}>
-              <CurrencyText bufferPercentage={bufferPercentage} eth={value || 0n} currency={unit} />
+              <CurrencyText bufferPercentage={bufferPercentage} eth={value || 0n} />
             </div>
           </Skeleton>
         </LineItem>
@@ -72,7 +68,7 @@ export const Invoice = ({ totalLabel = 'Estimated total', unit = 'eth', items }:
         <div>{totalLabel}</div>
         <Skeleton loading={hasEmptyItems}>
           <div data-testid="invoice-total">
-            <CurrencyText eth={hasEmptyItems ? 0n : total} currency={unit} />
+            <CurrencyText eth={hasEmptyItems ? 0n : total} />
           </div>
         </Skeleton>
       </Total>

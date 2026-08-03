@@ -7,10 +7,11 @@ import type { Register } from '@app/local-contracts'
 export const makeLocalhostChainWithEns = <T extends Chain>(
   localhost: T,
   deploymentAddresses_: Register['deploymentAddresses'],
+  subgraphUrl?: string,
 ): ChainWithEns<T> => {
   return {
     ...localhost,
-    blockExplorers: {
+    blockExplorers: localhost.blockExplorers ?? {
       default: {
         name: 'Etherscan',
         url: 'https://localhost.etherscan.io',
@@ -72,7 +73,7 @@ export const makeLocalhostChainWithEns = <T extends Chain>(
     },
     subgraphs: {
       ens: {
-        url: 'http://localhost:42069/subgraph',
+        url: subgraphUrl ?? 'http://localhost:42069/subgraph',
       },
     },
   }

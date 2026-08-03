@@ -27,7 +27,7 @@ const createTransactionData = ({
 let queryClient = new QueryClient()
 const createTestQueryKey = (name: string, override: object = {}) =>
   createQueryKey({
-    chainId: 1,
+    chainId: 5201420,
     address: '0x1234',
     queryDependencyType: 'standard',
     functionName: 'unknown',
@@ -44,7 +44,7 @@ describe('clearRelevantNameQueriesFromRegisterOrImport', () => {
     queryClient.setQueryData(queryKey, 'initial')
     clearRelevantNameQueriesFromRegisterOrImport({
       queryClient,
-      chainId: 1,
+      chainId: 5201420,
       updatedTransactions: [
         createTransactionData({ name: 'test.eth', status: 'confirmed', action: 'registerName' }),
       ],
@@ -58,7 +58,7 @@ describe('clearRelevantNameQueriesFromRegisterOrImport', () => {
     queryClient.setQueryData(queryKey, 'initial')
     clearRelevantNameQueriesFromRegisterOrImport({
       queryClient,
-      chainId: 1,
+      chainId: 5201420,
       updatedTransactions: [
         {
           action: 'importDnsName',
@@ -78,7 +78,7 @@ describe('clearRelevantNameQueriesFromRegisterOrImport', () => {
     queryClient.setQueryData(queryKey, 'initial')
     clearRelevantNameQueriesFromRegisterOrImport({
       queryClient,
-      chainId: 1,
+      chainId: 5201420,
       updatedTransactions: [
         createTransactionData({ name: 'test.eth', status: 'confirmed', action: 'claimDnsName' }),
       ],
@@ -91,7 +91,7 @@ describe('clearRelevantNameQueriesFromRegisterOrImport', () => {
     queryClient.setQueryData(queryKey, 'initial')
     clearRelevantNameQueriesFromRegisterOrImport({
       queryClient,
-      chainId: 1,
+      chainId: 5201420,
       updatedTransactions: [
         createTransactionData({
           name: '-test-test-test-test-.eth',
@@ -109,7 +109,7 @@ describe('clearRelevantNameQueriesFromRegisterOrImport', () => {
     queryClient.setQueryData(queryKey, 'initial')
     clearRelevantNameQueriesFromRegisterOrImport({
       queryClient,
-      chainId: 1,
+      chainId: 5201420,
       updatedTransactions: [
         createTransactionData({ name: 'test.eth', status: 'pending', action: 'registerName' }),
         createTransactionData({ name: 'test.eth', status: 'confirmed', action: 'commitName' }),
@@ -126,7 +126,7 @@ describe('clearRelevantNameQueriesFromRegisterOrImport', () => {
     queryClient.setQueryData(queryKey2, 'initial')
     clearRelevantNameQueriesFromRegisterOrImport({
       queryClient,
-      chainId: 1,
+      chainId: 5201420,
       updatedTransactions: [
         createTransactionData({ name: 'test.eth', status: 'confirmed', action: 'registerName' }),
       ],

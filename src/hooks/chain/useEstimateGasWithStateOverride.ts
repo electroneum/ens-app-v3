@@ -30,10 +30,9 @@ import {
   Prettify,
   QueryConfig,
 } from '@app/types'
-import { DISCONNECTED_PLACEHOLDER_ADDRESS, emptyAddress } from '@app/utils/constants'
+import { DISCONNECTED_PLACEHOLDER_ADDRESS } from '@app/utils/constants'
 import { getIsCachedData } from '@app/utils/getIsCachedData'
 import { prepareQueryOptions } from '@app/utils/prepareQueryOptions'
-import { createAccessList } from '@app/utils/query/createAccessList'
 import { useQuery } from '@app/utils/query/useQuery'
 
 import { useGasPrice } from './useGasPrice'
@@ -112,6 +111,15 @@ type QueryKey<
   TParams extends UseEstimateGasWithStateOverrideParameters<TransactionItems>,
 > = CreateQueryKey<TParams, 'estimateGasWithStateOverride', 'standard'>
 
+// Ankr's Electroneum RPC node doesn't support the stateOverride parameter on
+// eth_estimateGas, so simulated gas estimates aren't possible for transactions
+// that rely on it (e.g. registerName's commit-maturity time-travel trick).
+// These are conservative static approximations used as a fallback in that case.
+const FALLBACK_GAS_ESTIMATES: Partial<Record<TransactionName, bigint>> = {
+  commitName: 80_000n,
+  registerName: 300_000n,
+}
+
 const leftPadBytes32 = (hex: Hex) => padHex(hex, { dir: 'left', size: 32 })
 
 const concatKey = (existing: Hex, key: Hex) => keccak256(concatHex([leftPadBytes32(key), existing]))
@@ -158,36 +166,21 @@ const estimateIndividualGas = async <TName extends TransactionName>({
   connectorClient,
   client,
 }: { name: TName; stateOverride?: UserStateOverrides } & TransactionParameters<TName>) => {
-  const generatedRequest = await createTransactionRequest({
+const generatedRequest = await createTransactionRequest({
     client,
     connectorClient,
     data,
     name,
   })
 
-  // SCAs use >21k gas to execute a transfer (most of the time, but depends on implementation)
-  // For any SCA transaction involving a transfer, the transaction will probably fail by default due to the extra gas.
-  // To fix this, we can use an access list of what storage slots are accessed in a transfer to pre-pay the cold gas,
-  // then when the transfer is done, only warm gas is used and the transfer is under the limit.
-  // Normally, you can just pull the estimated gas via `eth_getAccessList`, since it returns the access list + gas used,
-  // but since we're using a state override and that method doesn't support it, we have to do it manually.
-  // (Technically geth now has an implementation, but it's very new and only in geth, see https://github.com/ethereum/go-ethereum/issues/27630)
-  //
-  // To get the access list, we're executing the bytecode of this Yul code: https://gist.github.com/TateB/777287c9a63d5f02fcd905232ce5748a
-  // (note: 0xed3869F3020315C839b2f4E9a73bEbE9a9670534 is replaced with `connectorClient.account.address`)
-  // It does a simple transfer, and accesses any storage slot that would be accessed by any other transfer.
-  const accessList = await createAccessList(client, {
-    from: emptyAddress,
-    data: concatHex(['0x5f808080600173', connectorClient.account.address, '0x5af100']),
-    value: '0x1',
-  })
-
+  // Note: this doesn't use an access-list optimization for smart-contract-account
+  // transfers, since that requires Shanghai (PUSH0) support, which isn't guaranteed
+  // on all chains. This means SCA wallets may see a slightly higher gas estimate
+  // than strictly necessary, but the estimate remains correct for all wallet types.
   const formattedRequest = formatTransactionRequest({
     ...generatedRequest,
     from: connectorClient.account.address,
-    accessList: accessList.accessList,
   })
-
   const stateOverrideWithBalance = stateOverride?.find(
     (s) => s.address === connectorClient.account.address,
   )
@@ -215,8 +208,8 @@ const estimateIndividualGas = async <TName extends TransactionName>({
     ]),
   )
 
-  return client
-    .request<{
+try {
+    const gas = await client.request<{
       Method: 'eth_estimateGas'
       Parameters:
         | [transaction: RpcTransactionRequest]
@@ -231,7 +224,14 @@ const estimateIndividualGas = async <TName extends TransactionName>({
       method: 'eth_estimateGas',
       params: [formattedRequest, 'latest', formattedOverrides],
     })
-    .then((g) => hexToBigInt(g))
+    return hexToBigInt(gas)
+  } catch (error) {
+    const isUnsupportedParamsError =
+      (error as { code?: number })?.code === -32602 ||
+      /too many arguments/i.test((error as { details?: string })?.details || '')
+    if (!isUnsupportedParamsError) throw error
+    return FALLBACK_GAS_ESTIMATES[name] ?? 150_000n
+  }
 }
 
 export const estimateGasWithStateOverrideQueryFn =

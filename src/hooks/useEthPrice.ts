@@ -3,7 +3,7 @@ import { useReadContract } from 'wagmi'
 
 import { useAddressRecord } from './ensjs/public/useAddressRecord'
 
-const ORACLE_ENS = 'eth-usd.data.eth'
+const ORACLE_ENS = 'etn-usd.resolver.etn'
 
 export const useEthPrice = () => {
   const { data: address_ } = useAddressRecord({

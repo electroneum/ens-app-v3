@@ -1,10 +1,19 @@
-import { renderHook, waitFor } from '@app/test-utils'
+import { mockFunction, renderHook, waitFor } from '@app/test-utils'
 
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { useChainId } from 'wagmi'
 
 import { KNOWN_RESOLVER_DATA } from '@app/constants/resolverAddressData'
 import { RESOLVER_INTERFACE_IDS, ResolverInterfaceName } from '@app/constants/resolverInterfaceIds'
 import { useResolverHasInterfaces } from '@app/hooks/useResolverHasInterfaces'
+
+// These fixtures are keyed off the mainnet (chainId 1) KNOWN_RESOLVER_DATA table, so
+// useChainId must report mainnet here regardless of the app's active chain elsewhere.
+vi.mock('wagmi', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('wagmi')>()),
+  useChainId: vi.fn(),
+}))
+mockFunction(useChainId).mockReturnValue(1)
 
 const ResolverAddresses = KNOWN_RESOLVER_DATA[1]!
 

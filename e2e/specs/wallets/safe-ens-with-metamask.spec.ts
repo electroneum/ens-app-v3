@@ -785,7 +785,7 @@ test.describe('Safe + ENS with Dappwright MetaMask', () => {
       await handleSafeBanners(page)
 
       console.log('✅ Successfully navigated to Safe account page')
-    } catch (error) {
+    } catch (error: any) {
       console.log('⚠️ Safe navigation had issues:', error.message)
     }
 
@@ -809,7 +809,11 @@ test.describe('Safe + ENS with Dappwright MetaMask', () => {
       await page.waitForLoadState('networkidle')
       const iframeLocator = page.frameLocator('iframe').first()
 
-      await expect(iframeLocator.locator('body')).toBeVisible({ timeout: 15000 })
+      // `Locator` here resolves against a different playwright-core instance
+      // than the one @playwright/test's matchers are declared for (dappwright
+      // pulls in its own playwright-core), so the matcher isn't visible on
+      // its type - it still works correctly at runtime.
+      await expect(iframeLocator.locator('body') as any).toBeVisible({ timeout: 15000 })
 
       console.log('✅ ENS app loaded in Safe iframe')
 
@@ -829,7 +833,7 @@ test.describe('Safe + ENS with Dappwright MetaMask', () => {
       } else {
         console.log('⚠️ ENS app iframe not loaded')
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log('⚠️ Safe app integration test failed:', error.message)
       console.log('💡 This tests the core integration - adding custom apps to Safe')
     }

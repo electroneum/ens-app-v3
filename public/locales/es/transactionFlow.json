@@ -195,7 +195,7 @@
     "editResolver": {
       "title": "Editar Resolver",
       "latestLabel": "Usar el resolver más reciente",
-      "etherscan": "Etherscan",
+      "etherscan": "Explorador de bloques",
       "latestMessage": "Estás en el resolver más reciente",
       "customLabel": "Resolver personalizado",
       "customPlaceholder": "Ingresa la dirección de tu resolver personalizado"
@@ -233,8 +233,8 @@
       "bannerMsg": "Extender por varios años ahorra dinero en costos de red al evitar transacciones anuales.",
       "gasLimitError": "No hay suficiente ETH en la billetera",
       "disabled": {
-        "title": "La beta de ENS v2 ya está desplegada en Sepolia",
-        "banner": "Las renovaciones futuras se realizarán en la nueva aplicación Manager. Haz clic <ManagerLink>aquí</ManagerLink> para renovar tu nombre allí."
+        "title": "Las renovaciones no están disponibles temporalmente",
+        "banner": "El controlador de registro de este nombre ha sido actualizado. Por favor, vuelve más tarde o contacta con soporte para renovar este nombre."
       }
     },
     "transferProfile": {
@@ -383,7 +383,7 @@
               "title": "Resumen de cambios",
               "updates": {
                 "role": "Actualizar rol {{role}} a {{address}}",
-                "eth-record": "Actualizar registro ETH a {{address}}"
+                "eth-record": "Actualizar registro ETN a {{address}}"
               },
               "remove": {
                 "profile": "Eliminar registros de perfil"

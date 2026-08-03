@@ -41,7 +41,7 @@ describe('useRoleActions', () => {
     mockCheckCanSend.mockReturnValueOnce(true)
     const { result } = renderHook(() =>
       useRoleActions({
-        name: 'test.eth',
+        name: 'test.etn',
         roles: [],
         details: {
           ownerData: {
@@ -106,7 +106,7 @@ describe('useRoleActions', () => {
     )
   })
 
-  it('should include the ability to refresh dns name if user is logged in and name is not .eth', async () => {
+  it('should include the ability to refresh dns name if user is logged in and name is not .etn', async () => {
     const { result } = renderHook(() =>
       useRoleActions({
         name: 'test.com',
@@ -125,10 +125,10 @@ describe('useRoleActions', () => {
     )
   })
 
-  it('should not include the ability to refresh dns name if user is logged in and name is .eth', async () => {
+  it('should not include the ability to refresh dns name if user is logged in and name is .etn', async () => {
     const { result } = renderHook(() =>
       useRoleActions({
-        name: 'test.eth',
+        name: 'test.etn',
         roles: [],
         details: {
           isLoading: false,

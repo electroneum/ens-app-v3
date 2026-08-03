@@ -1,0 +1,16 @@
+diff --git a/dist/index.js b/dist/index.js
+index 8461aba416ad0b83daa49f3ad8211da2c3675b08..e135d767e70a511e9e384ae5b7b2136d5f37e44e 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -4083,9 +4083,9 @@ const CurrencyToggle = React.forwardRef(
+         $size: size,
+         className: labelEth,
+         htmlFor: id2,
+-        id: "eth"
++        id: "etn"
+       },
+-      "ETH"
++      "ETN"
+     ), /* @__PURE__ */ React.createElement(
+       Label$1,
+       {

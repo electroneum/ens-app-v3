@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "{{name}} en ENS",
-    "description": "Perfil de {{name}} en el Ethereum Name Service"
+    "title": "{{name}} en Electroneum",
+    "description": "Perfil de {{name}} en Electroneum"
   },
   "title": "Perfil",
   "yourWallet": "Tu billetera",
@@ -107,7 +107,7 @@
         "manager": "La dirección que puede cambiar el perfil, la configuración y los editores del perfil.",
         "profile-editor": "Una dirección que solo puede cambiar el perfil.",
         "subname-manager": "Una dirección o contrato responsable de las renovaciones de subnombres.",
-        "eth-record": "La dirección que recibirá fondos enviados a este nombre en mainnet.",
+        "eth-record": "La dirección que recibirá fondos enviados a este nombre en Electroneum.",
         "grace-period": "Un periodo de gracia de 90 días tras la expiración, durante el cual el nombre aún puede extenderse pero no volver a registrarse.",
         "contract-address": "La dirección del contrato que habilita los nombres ENS envueltos (Wrapped).",
         "namewrapper": "El contrato que habilita los nombres ENS envueltos (Wrapped)."

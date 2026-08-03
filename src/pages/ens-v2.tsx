@@ -118,21 +118,21 @@ const Main = styled.main(
   `,
 ) */
 
-const AnnouncementBanner = styled.div(
-  ({ theme }) => css`
-    width: 312px;
-    height: 182px;
-    text-align: center;
-    & > a {
-      height: ${theme.space.full};
-      justify-content: flex-start;
-      & > div {
-        height: ${theme.space.full};
-        justify-content: flex-start;
-      }
-    }
-  `,
-)
+//const AnnouncementBanner = styled.div(
+//  ({ theme }) => css`
+//    width: 312px;
+//    height: 182px;
+//    text-align: center;
+//    & > a {
+//      height: ${theme.space.full};
+//      justify-content: flex-start;
+//      & > div {
+//        height: ${theme.space.full};
+//        justify-content: flex-start;
+//      }
+//    }
+//  `,
+//)
 
 /* const TopNav = styled.div(
   ({ theme }) => css`
@@ -204,31 +204,31 @@ const CardHeader = styled.h3(
 //   </AnnouncementBanner>
 // )
 
-const AnnouncementSlideTemp = ({
-  title,
-  text,
-  href = '#',
-}: {
-  title: string
-  text: string
-  href?: string
-}) => (
-  <AnnouncementBanner>
-    <Banner as="a" alert="info" target="_blank" rel="noopener noreferrer" href={href} title={title}>
-      {text}
-    </Banner>
-  </AnnouncementBanner>
-)
+//const AnnouncementSlideTemp = ({
+//  title,
+//  text,
+//  href = '#',
+//}: {
+//  title: string
+//  text: string
+//  href?: string
+//}) => (
+//  <AnnouncementBanner>
+//    <Banner as="a" alert="info" target="_blank" rel="noopener noreferrer" href={href} title={title}>
+//      {text}
+//    </Banner>
+//  </AnnouncementBanner>
+//)
 
-const AnnouncementContainer = styled.div(
-  ({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: ${theme.space['4']};
-    flex-flow: row wrap;
-  `,
-)
+//const AnnouncementContainer = styled.div(
+//  ({ theme }) => css`
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+//    gap: ${theme.space['4']};
+//    flex-flow: row wrap;
+//  `,
+//)
 
 const SlideshowContainer = styled.div(
   ({ theme }) => css`
@@ -311,7 +311,6 @@ export default function ENSv2() {
           {t('accessible.multichain.text')}
         </Card>
       </GridOneToThree>
-      <SlideshowContainer>
         <Typography as="h3" fontVariant="headingThree">
           {t('announcement.title')}
         </Typography>
@@ -331,19 +330,6 @@ export default function ENSv2() {
             href="https://blog.ens.domains/post/ensv2"
           />
         </Carousel> */}
-        <AnnouncementContainer>
-          <AnnouncementSlideTemp
-            title={t('announcement.ensv2.title')}
-            text={t('announcement.ensv2.caption')}
-            href="https://blog.ens.domains/post/ensv2-update"
-          />
-          <AnnouncementSlideTemp
-            title={t('announcement.nextgen.title')}
-            text={t('announcement.nextgen.caption')}
-            href="https://blog.ens.domains/post/ensv2"
-          />
-        </AnnouncementContainer>
-      </SlideshowContainer>
       {/* <Footer as="footer">
         <Typography asProp="h3" fontVariant="headingThree">
           {t('footer.title')}

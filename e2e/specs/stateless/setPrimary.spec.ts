@@ -535,7 +535,7 @@ test.describe('profile', () => {
           value: user2Address,
         },
       ],
-      resolverAddress: walletClient.chain.contracts.legacyPublicResolver.address,
+      resolverAddress: walletClient.chain.contracts.ensPublicResolver.address,
       account: accounts.getAddress('user') as `0x${string}`,
     })
     await waitForTransaction(tx2)
@@ -567,7 +567,7 @@ test.describe('profile', () => {
       label: 'primary-mismatch',
       type: 'wrapped',
       owner: 'user',
-      addr: accounts.getAddress('user') as `0x${string}`,
+      addr: 'user',
     })
 
     const userAddress = accounts.getAddress('user')

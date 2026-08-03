@@ -102,8 +102,6 @@ describe('useRegistrationReducer - referrer storage', () => {
       resolverAddress: EMPTY_BYTES32,
       secret: EMPTY_BYTES32,
       started: false,
-      isMoonpayFlow: false,
-      externalTransactionId: '',
       version: 4,
       durationType: 'years' as const,
       clearRecords: false,

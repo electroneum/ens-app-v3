@@ -9,8 +9,7 @@ import { useInitial } from '@app/hooks/useInitial'
 import { legacyFavouritesRoute, routes } from '@app/routes'
 import { useBreakpoint } from '@app/utils/BreakpointProvider'
 
-import ENSFull from '../assets/ENSFull.svg'
-import ENSWithGradient from '../assets/ENSWithGradient.svg'
+import ElectroneumFull from '../assets/electroneum-logo-inline-inverse2.svg'
 import BaseLink from './@atoms/BaseLink'
 import { RouteItem } from './@atoms/RouteItem/RouteItem'
 import { HeaderConnect } from './@molecules/ConnectButton/ConnectButton'
@@ -202,11 +201,7 @@ export const Header = () => {
             </BaseLink>
           )}
         >
-          {pathnameWithoutQuery === '/' ? (
-            <ENSFull height={space['12']} />
-          ) : (
-            <ENSWithGradient height={space['12']} />
-          )}
+          <ElectroneumFull height={space['12']} />
         </ConditionalWrapper>
         {pathnameWithoutQuery !== '/' && breakpoints.sm && (
           <>

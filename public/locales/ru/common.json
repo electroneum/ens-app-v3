@@ -4,7 +4,7 @@
   "loading": "Загрузка",
   "unsupportedNetwork": "Неподдерживаемая сеть",
   "notFound": "404 Не Найдено",
-  "etherscan": "Etherscan",
+  "etherscan": "Обозреватель блоков",
   "upgradeBanner": {
     "title": "Новое приложение ENS уже здесь!",
     "subtitle": "Полностью переработано для ENSv2.",
@@ -340,7 +340,7 @@
     "error": {
       "unknown": "Произошла неизвестная ошибка"
     },
-    "viewEtherscan": "Посмотреть на Etherscan",
+    "viewEtherscan": "Посмотреть в обозревателе блоков",
     "viewMore": "Посмотреть больше"
   },
   "search": {
@@ -398,7 +398,7 @@
       "description": "Адрес, который может изменять профиль."
     },
     "eth-record": {
-      "title": "ETH запись",
+      "title": "ETN запись",
       "description": "Адрес, на который указывает это имя."
     }
   },

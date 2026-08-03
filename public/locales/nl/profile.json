@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "{{name}} op ENS",
-    "description": "{{name}}'s profiel op de Ethereum Name Service"
+    "title": "{{name}} op Electroneum",
+    "description": "{{name}}'s profiel op Electroneum"
   },
   "title": "Profiel",
   "yourWallet": "Jouw wallet",

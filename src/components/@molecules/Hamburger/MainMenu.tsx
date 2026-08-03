@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components'
 import { match } from 'ts-pattern'
 
 import {
-  CurrencyToggle,
   LanguageSVG,
   MoonSVG,
   RightChevronSVG,
@@ -13,15 +12,15 @@ import {
   ThemeSVG,
   Typography,
   useTheme,
-  WalletSVG,
 } from '@ensdomains/thorin'
 
 import SocialDiscord from '@app/assets/social/SocialDiscord.svg'
-import SocialDiscourse from '@app/assets/social/SocialDiscourse.svg'
-import SocialDiscourseColour from '@app/assets/social/SocialDiscourseColour.svg'
+//import SocialDiscourse from '@app/assets/social/SocialDiscourse.svg'
+//import SocialDiscourseColour from '@app/assets/social/SocialDiscourseColour.svg'
 import SocialGithub from '@app/assets/social/SocialGithub.svg'
-import SocialMirror from '@app/assets/social/SocialMirror.svg'
-import SocialMirrorColour from '@app/assets/social/SocialMirrorColour.svg'
+//import SocialMirror from '@app/assets/social/SocialMirror.svg'
+//import SocialMirrorColour from '@app/assets/social/SocialMirrorColour.svg'
+import SocialTelegram from '@app/assets/social/SocialTelegram.svg'
 import SocialX from '@app/assets/social/SocialX.svg'
 import SocialYoutube from '@app/assets/social/SocialYoutube.svg'
 import BaseLink from '@app/components/@atoms/BaseLink'
@@ -33,7 +32,6 @@ import { routes } from '@app/routes'
 import { ENS_LINKS } from '@app/utils/constants'
 import { makeDisplay } from '@app/utils/currency'
 import { useGraphOutOfSync } from '@app/utils/SyncProvider/SyncProvider'
-import useUserConfig from '@app/utils/useUserConfig'
 
 import type { HamburgerView } from './Hamburger'
 
@@ -260,7 +258,6 @@ const disconnectedRoutes = routes.filter(
 const MainMenu = ({ setCurrentView }: { setCurrentView: (view: HamburgerView) => void }) => {
   const { t, i18n } = useTranslation('common')
   const language = i18n.resolvedLanguage || 'en'
-  const { userConfig, setCurrency } = useUserConfig()
 
   const { mode: theme } = useTheme()
 
@@ -301,20 +298,6 @@ const MainMenu = ({ setCurrentView }: { setCurrentView: (view: HamburgerView) =>
             <RightChevronSVG height={16} width={16} />
           </div>
         </HoverableSettingsItem>
-        <SettingsItem>
-          <div>
-            <WalletSVG height={16} width={16} />
-            <Typography weight="bold">{t('navigation.currency')}</Typography>
-          </div>
-          <div>
-            <CurrencyToggle
-              size="extraSmall"
-              fiat={userConfig.fiat}
-              checked={userConfig.currency === 'fiat'}
-              onChange={(e) => setCurrency(e.target.checked ? 'fiat' : 'eth')}
-            />
-          </div>
-        </SettingsItem>
       </SettingsSection>
       <RoutesSection>
         {disconnectedRoutes.map((route) => (
@@ -329,12 +312,7 @@ const MainMenu = ({ setCurrentView }: { setCurrentView: (view: HamburgerView) =>
         <SocialIcon Icon={SocialX} color="black" href={ENS_LINKS.X} />
         <SocialIcon Icon={SocialGithub} color="#0F0F0F" href={ENS_LINKS.GITHUB} />
         <SocialIcon Icon={SocialDiscord} color="#7F83FF" href={ENS_LINKS.DISCORD} />
-        <SocialIcon Icon={SocialMirror} ColoredIcon={SocialMirrorColour} href={ENS_LINKS.MIRROR} />
-        <SocialIcon
-          Icon={SocialDiscourse}
-          ColoredIcon={SocialDiscourseColour}
-          href={ENS_LINKS.DISCOURSE}
-        />
+        <SocialIcon Icon={SocialTelegram} href={ENS_LINKS.TELEGRAM} />
         <SocialIcon Icon={SocialYoutube} color="#EE1919" href={ENS_LINKS.YOUTUBE} />
       </SocialSection>
       <NetworkSection />

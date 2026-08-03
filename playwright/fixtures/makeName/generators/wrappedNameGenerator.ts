@@ -8,7 +8,7 @@ import {
   EncodeChildFusesInputObject,
   RecordOptions,
 } from '@ensdomains/ensjs/utils'
-import { setFuses, setResolver } from '@ensdomains/ensjs/wallet'
+import { setFuses, setResolver, transferName, unwrapName } from '@ensdomains/ensjs/wallet'
 import { commitName, registerName, RegistrationParameters } from './utils/registerWrappeName'
 
 import { Accounts, User } from '../../accounts'
@@ -24,15 +24,20 @@ import { generateWrappedSubname, WrappedSubname } from './generateWrappedSubname
 const DEFAULT_RESOLVER = testClient.chain.contracts.ensPublicResolver.address
 
 export type WrappedName = {
-  type: 'wrapped'
+  // 'legacy' registers the name through the wrapper like 'wrapped', then
+  // unwraps it immediately afterwards - reproducing the "unwrapped name"
+  // state without depending on the pre-wrapper legacy contracts, which
+  // don't exist on this deployment.
+  type: 'wrapped' | 'legacy'
   label: string
   owner?: User
+  manager?: User
   duration?: number
   secret?: Hash
   resolver?: Hash
   reverseRecord?: boolean
   fuses?: EncodeChildFusesInputObject
-  addr?: Hash
+  addr?: User
   records?: RecordOptions
   subnames?: Omit<WrappedSubname, 'name' | 'nameOwner'>[]
   offset?: number
@@ -42,7 +47,8 @@ type Dependencies = {
   accounts: Accounts
 }
 
-export const isWrappendName = (name: Name): name is WrappedName => name.type === 'wrapped'
+export const isWrappendName = (name: Name): name is WrappedName =>
+  name.type === 'wrapped' || name.type === 'legacy'
 
 const nameWithDefaults = (name: WrappedName) => ({
   ...name,
@@ -50,6 +56,7 @@ const nameWithDefaults = (name: WrappedName) => ({
   secret: name.secret ?? '0x0000000000000000000000000000000000000000000000000000000000000000',
   resolver: name.resolver ?? DEFAULT_RESOLVER,
   owner: name.owner ?? 'user',
+  manager: name.manager ?? name.owner ?? 'user',
 })
 
 const getParentFuses = (
@@ -141,7 +148,8 @@ export const makeWrappedNameGenerator = ({ accounts }: Dependencies) => ({
     return walletClient.sendTransaction(prepared)
   },
   configure: async (nameConfig: WrappedName) => {
-    const { label, owner, resolver, records, subnames = [], fuses } = nameWithDefaults(nameConfig)
+    const { label, owner, manager, addr, resolver, records, subnames = [], fuses, type } =
+      nameWithDefaults(nameConfig)
     const name = `${label}.eth`
     const childFuses = getChildFuses(fuses)
     const ownerAddress = accounts.getAddress(owner) as `0x${string}`
@@ -150,12 +158,22 @@ export const makeWrappedNameGenerator = ({ accounts }: Dependencies) => ({
       testClient.chain.contracts.ensPublicResolver.address.toLowerCase()
     const _resolver = hasValidResolver ? resolver : DEFAULT_RESOLVER
 
-    if (records) {
+    const recordsWithAddr = addr
+      ? {
+          ...records,
+          coins: [
+            ...(records?.coins ?? []),
+            { coin: 60, value: accounts.getAddress(addr) },
+          ],
+        }
+      : records
+
+    if (recordsWithAddr) {
       await generateRecords({ accounts })({
         name,
         owner,
         resolver: _resolver as `0x${string}`,
-        records,
+        records: recordsWithAddr,
       })
     }
 
@@ -178,11 +196,11 @@ export const makeWrappedNameGenerator = ({ accounts }: Dependencies) => ({
       })
       await waitForTransaction(resolverTx)
 
-      if (records) await generateRecords({ accounts })({
+      if (recordsWithAddr) await generateRecords({ accounts })({
         name,
         owner,
         resolver: resolver as `0x${string}`,
-        records,
+        records: recordsWithAddr,
       })
     }
 
@@ -194,6 +212,34 @@ export const makeWrappedNameGenerator = ({ accounts }: Dependencies) => ({
         account: accounts.getAccountForUser(owner),
       })
       await waitForTransaction(fusesTx)
+    }
+
+    if (manager !== owner) {
+      console.log('setting manager:', name, manager)
+      const managerTx = await transferName(walletClient, {
+        name,
+        newOwnerAddress: accounts.getAddress(manager) as `0x${string}`,
+        contract: 'nameWrapper',
+        account: ownerAddress,
+      })
+      await waitForTransaction(managerTx)
+    }
+
+    // 'legacy' reproduces the "unwrapped name" state (achievable today via
+    // the wrapper's own unwrap function) without the pre-wrapper legacy
+    // contracts this deployment never had.
+    if (type === 'legacy') {
+      console.log('unwrapping name:', name)
+      // `name` is a runtime-built eth-2ld string; TS can't narrow a generic
+      // template literal to the Eth2ldName type GetNameType relies on to
+      // allow `newRegistrantAddress`, so the params are asserted here.
+      const unwrapTx = await unwrapName(walletClient, {
+        name,
+        newOwnerAddress: accounts.getAddress(manager) as `0x${string}`,
+        newRegistrantAddress: accounts.getAddress(owner) as `0x${string}`,
+        account: accounts.getAccountForUser(owner),
+      } as unknown as Parameters<typeof unwrapName>[1])
+      await waitForTransaction(unwrapTx)
     }
   },
 })

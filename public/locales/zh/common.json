@@ -3,7 +3,7 @@
   "description": "您在 web3 上的身份，一个名称就能解析到您所有的加密地址和您的去中心化网站。",
   "loading": "加载中",
   "notFound": "404 未找到",
-  "etherscan": "Etherscan",
+  "etherscan": "区块浏览器",
   "upgradeBanner": {
     "title": "全新的 ENS 应用来了！",
     "subtitle": "为 ENSv2 从头重新设计。",
@@ -345,7 +345,7 @@
     "error": {
       "unknown": "发生未知错误"
     },
-    "viewEtherscan": "在 Etherscan 上查看",
+    "viewEtherscan": "在区块浏览器上查看",
     "viewMore": "查看详情"
   },
   "search": {
@@ -404,7 +404,7 @@
       "description": "可以修改个人资料的地址。"
     },
     "eth-record": {
-      "title": "ETH 记录",
+      "title": "ETN 记录",
       "description": "这个名称指向的地址。"
     }
   },

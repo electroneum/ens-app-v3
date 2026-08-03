@@ -6,15 +6,7 @@ import { match, P } from 'ts-pattern'
 import { parseEther } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
 
-import {
-  Avatar,
-  Banner,
-  Button,
-  CurrencyToggle,
-  Dialog,
-  Helper,
-  Typography,
-} from '@ensdomains/thorin'
+import { Avatar, Banner, Button, Dialog, Helper, Typography } from '@ensdomains/thorin'
 
 import { CacheableComponent } from '@app/components/@atoms/CacheableComponent'
 import { makeCurrencyDisplay } from '@app/components/@atoms/CurrencyText/CurrencyText'
@@ -27,7 +19,6 @@ import { useExpiry } from '@app/hooks/ensjs/public/useExpiry'
 import { usePrice } from '@app/hooks/ensjs/public/usePrice'
 import { useIsEthRegistrarControllerActive } from '@app/hooks/registration/useIsEthRegistrarControllerActive'
 import { useEnsAvatar } from '@app/hooks/useEnsAvatar'
-import { useEthPrice } from '@app/hooks/useEthPrice'
 import { useReferrer } from '@app/hooks/useReferrer'
 import { useZorb } from '@app/hooks/useZorb'
 import { createTransactionItem } from '@app/transaction-flow/transaction'
@@ -35,13 +26,11 @@ import { TransactionDialogPassthrough } from '@app/transaction-flow/types'
 import { CURRENCY_FLUCTUATION_BUFFER_PERCENTAGE } from '@app/utils/constants'
 import { getReferrerHex } from '@app/utils/referrer'
 import { ONE_DAY, ONE_YEAR, secondsToYears, yearsToSeconds } from '@app/utils/time'
-import useUserConfig from '@app/utils/useUserConfig'
 import { deriveYearlyFee, formatDurationOfDates } from '@app/utils/utils'
 
 import { ShortExpiry } from '../../../components/@atoms/ExpiryComponents/ExpiryComponents'
 import GasDisplay from '../../../components/@atoms/GasDisplay'
 import { SearchViewLoadingView } from '../SendName/views/SearchView/views/SearchViewLoadingView'
-import { getManagerRenewUrl } from './utils/getManagerRenewUrl'
 import { validateExtendNamesDuration } from './utils/validateExtendNamesDuration'
 
 type View = 'name-list' | 'no-ownership-warning' | 'registration' | 'disabled'
@@ -51,21 +40,6 @@ const DisabledContainer = styled.div(
     display: flex;
     justify-content: center;
     padding: ${theme.space['2']} 0;
-  `,
-)
-
-// The global stylesheet resets anchors to `color: inherit; text-decoration:
-// none`, which makes a bare <a> inside the banner look like plain text. Style
-// it explicitly so the "here" link reads as a clickable link.
-const ManagerLink = styled.a(
-  ({ theme }) => css`
-    color: ${theme.colors.accent};
-    text-decoration: underline;
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: none;
-    }
   `,
 )
 
@@ -227,14 +201,10 @@ const ExtendNames = ({
     useIsEthRegistrarControllerActive()
   const isRenewalDisabled = isControllerActive === false
 
-  const { data: ethPrice, isLoading: isEthPriceLoading } = useEthPrice()
   const { address, isConnected: isAccountConnected } = useAccount()
   const { data: balance, isLoading: isBalanceLoading } = useBalance({
     address,
   })
-
-  const { userConfig, setCurrency } = useUserConfig()
-  const currencyDisplay = userConfig.currency === 'fiat' ? userConfig.fiat : 'eth'
 
   const { data: priceData, isLoading: isPriceLoading } = usePrice({
     nameOrNames: names,
@@ -333,7 +303,6 @@ const ExtendNames = ({
     !isAccountConnected ||
     isBalanceLoading ||
     isExpiryEnabledAndLoading ||
-    isEthPriceLoading ||
     isControllerActiveLoading
   const isRegisterLoading = isPriceLoading || (isEstimateGasLoading && !estimateGasLimitError)
 
@@ -378,9 +347,7 @@ const ExtendNames = ({
             startDateTimestamp: expiryDate?.getTime(),
             displayPrice: makeCurrencyDisplay({
               eth: totalRentFee,
-              ethPrice,
               bufferPercentage: CURRENCY_FLUCTUATION_BUFFER_PERCENTAGE,
-              currency: userConfig.currency === 'fiat' ? 'usd' : 'eth',
             }),
             referrer: referrerHex,
             hasWrapped,
@@ -399,23 +366,10 @@ const ExtendNames = ({
       <Dialog.Content data-testid="extend-names-modal">
         {match([view, isBaseDataLoading])
           .with([P._, true], () => <SearchViewLoadingView />)
-          .with(['disabled', false], () => (
+.with(['disabled', false], () => (
             <DisabledContainer>
               <Banner alert="warning" title={t('input.extendNames.disabled.title')}>
-                <Trans
-                  t={t}
-                  i18nKey="input.extendNames.disabled.banner"
-                  components={{
-                    // eslint-disable-next-line jsx-a11y/anchor-has-content, jsx-a11y/control-has-associated-label
-                    ManagerLink: (
-                      <ManagerLink
-                        href={getManagerRenewUrl(names)}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                      />
-                    ),
-                  }}
-                />
+                {t('input.extendNames.disabled.banner')}
               </Banner>
             </DisabledContainer>
           ))
@@ -453,12 +407,6 @@ const ExtendNames = ({
               </PlusMinusWrapper>
               <OptionBar $isCached={isPriceLoading}>
                 <GasDisplay gasPrice={gasPrice} />
-                <CurrencyToggle
-                  size="small"
-                  checked={userConfig.currency === 'fiat'}
-                  onChange={(e) => setCurrency(e.target.checked ? 'fiat' : 'eth')}
-                  data-testid="extend-names-currency-toggle"
-                />
               </OptionBar>
               <GasEstimationCacheableComponent
                 $isCached={
@@ -467,7 +415,7 @@ const ExtendNames = ({
                   isShowingPreviousYearlyFee
                 }
               >
-                <Invoice items={items} unit={currencyDisplay} totalLabel="Estimated total" />
+                <Invoice items={items} totalLabel="Estimated total" />
                 {(!!estimateGasLimitError ||
                   (!!estimatedGasLimit &&
                     !!balance?.value &&

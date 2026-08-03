@@ -1,6 +1,7 @@
 import { expectEnabledHook, mockFunction, renderHook } from '@app/test-utils'
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { useChainId } from 'wagmi'
 
 import { KNOWN_RESOLVER_DATA } from '@app/constants/resolverAddressData'
 import { useContractAddress } from '@app/hooks/chain/useContractAddress'
@@ -17,6 +18,14 @@ vi.mock('@app/hooks/useProfile')
 vi.mock('@app/hooks/resolver/useResolverType')
 vi.mock('@app/hooks/resolver/useResolverIsAuthorised')
 vi.mock('@app/hooks/chain/useContractAddress')
+
+// Fixtures below are keyed off the mainnet (chainId 1) KNOWN_RESOLVER_DATA table, so
+// useChainId must report mainnet here regardless of the app's active chain elsewhere.
+vi.mock('wagmi', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('wagmi')>()),
+  useChainId: vi.fn(),
+}))
+mockFunction(useChainId).mockReturnValue(1)
 
 const mockUseProfileBase = mockFunction(useProfile)
 const mockUseProfile = mockFunction<typeof useProfile>(vi.fn())

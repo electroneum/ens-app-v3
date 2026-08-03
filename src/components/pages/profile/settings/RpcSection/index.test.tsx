@@ -2,6 +2,7 @@ import { fireEvent, mockFunction, render, screen, waitFor } from '@app/test-util
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import { electroneumWithEns } from '@app/constants/chains'
 import { useLocalStorage } from '@app/hooks/useLocalStorage'
 import { probeRpcUrl } from '@app/utils/query/probeRpcUrl'
 import type { CustomRpcUrls } from '@app/utils/query/customRpc'
@@ -21,8 +22,8 @@ const mockUseLocalStorage = mockFunction(useLocalStorage)
 // mockResolvedValue — mockFunction DeepPartials the Promise and breaks the typing.
 const mockProbeRpcUrl = vi.mocked(probeRpcUrl)
 
-// test-utils mocks the wagmi config to a single mainnet chain, so useChainId() === 1.
-const CHAIN_ID = 1
+// test-utils mocks the wagmi config to a single electroneum chain, so useChainId() === electroneumWithEns.id.
+const CHAIN_ID = electroneumWithEns.id
 
 const typeUrl = (value: string) =>
   fireEvent.change(screen.getByTestId('rpc-url-input'), { target: { value } })

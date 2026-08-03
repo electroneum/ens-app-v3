@@ -1,6 +1,7 @@
 import { mockFunction, PartialMockedFunction, renderHook } from '@app/test-utils'
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { useChainId } from 'wagmi'
 
 import { KNOWN_RESOLVER_DATA } from '@app/constants/resolverAddressData'
 import { emptyAddress } from '@app/utils/constants'
@@ -13,6 +14,14 @@ import { isWildcardCalc, useResolverType } from './useResolverType'
 vi.mock('@app/hooks/useIsWrapped')
 vi.mock('@app/hooks/useProfile')
 vi.mock('@app/hooks/resolver/useRegistryResolver')
+
+// Fixtures below are keyed off the mainnet (chainId 1) KNOWN_RESOLVER_DATA table, so
+// useChainId must report mainnet here regardless of the app's active chain elsewhere.
+vi.mock('wagmi', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('wagmi')>()),
+  useChainId: vi.fn(),
+}))
+mockFunction(useChainId).mockReturnValue(1)
 
 const mockUseIsWrapped = mockFunction(useIsWrapped)
 const mockUseProfile = mockFunction(useProfile)

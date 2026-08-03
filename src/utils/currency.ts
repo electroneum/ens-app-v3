@@ -24,7 +24,7 @@ export const makeDisplay = ({
     options.roundingPriority = 'lessPrecision'
     options.currency = undefined
     customSymbol = ` ${symbol}`
-  } else if (symbol === 'eth') {
+  } else if (symbol === 'etn') {
     if (number < 0.00001) {
       options.maximumSignificantDigits = 1
     }

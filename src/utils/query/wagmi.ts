@@ -16,6 +16,7 @@ import { localhost, mainnet, sepolia } from 'wagmi/chains'
 import { ccipRequest } from '@ensdomains/ensjs/utils'
 
 import { getChainsFromUrl, SupportedChain } from '@app/constants/chains'
+import { electroneumMainnet, electroneumTestnet } from '@app/utils/chains/electroneumChains'
 
 import { isInsideSafe } from '../safe'
 import { getCustomRpcForChain } from './customRpc'
@@ -102,6 +103,12 @@ export const transports = {
     chainName: 'sepolia',
     customRpc: getCustomRpcForChain(sepolia.id),
   }),
+  [electroneumTestnet.id]: http(
+    getCustomRpcForChain(electroneumTestnet.id)?.url ?? process.env.NEXT_PUBLIC_ETN_TESTNET_RPC_URL,
+  ),
+  [electroneumMainnet.id]: http(
+    getCustomRpcForChain(electroneumMainnet.id)?.url ?? process.env.NEXT_PUBLIC_ETN_MAINNET_RPC_URL,
+  ),
 } as const
 
 // This is a workaround to fix MetaMask defaulting to the wrong transaction type

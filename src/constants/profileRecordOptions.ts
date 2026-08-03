@@ -45,7 +45,12 @@ const social: ProfileRecord[] = supportedSocialRecordKeys.map((key) => ({
   type: 'text',
 }))
 
+const coinLongNameOverrides: Record<string, string> = {
+  eth: 'Electroneum',
+}
+
 const coinShortNameToLongName = (coin: string) => {
+  if (coinLongNameOverrides[coin]) return coinLongNameOverrides[coin]
   const coinType = coinNameToTypeMap[coin as CoinName]
   const coinLongName = coinTypeToNameMap[coinType]?.[1] ?? coin
   return coinLongName

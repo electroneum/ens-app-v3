@@ -244,7 +244,7 @@ describe('SearchInput', () => {
     await userEvent.type(screen.getByTestId('search-input-box'), address)
 
     await waitFor(() =>
-      expect(screen.queryByText(`${address.toLowerCase()}.eth`)).toBeInTheDocument(),
+      expect(screen.queryByText(`${address.toLowerCase()}.etn`)).toBeInTheDocument(),
     )
   })
   it('should show invalid search as invalid', async () => {
@@ -290,7 +290,7 @@ describe('SearchInput', () => {
       () => {
         const results = screen.getByTestId('search-input-results')
         expect(results).toBeInTheDocument()
-        expect(results).toHaveTextContent('test.eth')
+        expect(results).toHaveTextContent('test.etn')
       },
       {
         timeout: 300,
@@ -325,7 +325,7 @@ describe('SearchInput', () => {
       () => {
         const results = screen.getByTestId('search-input-results')
         expect(results).toBeInTheDocument()
-        expect(results).toHaveTextContent('test.eth')
+        expect(results).toHaveTextContent('test.etn')
       },
       {
         timeout: 300,

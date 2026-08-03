@@ -3,7 +3,7 @@
   "description": "Sua identidade em toda a Web3, um nome para todos os seus endereços de criptomoedas e seu site descentralizado.",
   "loading": "Carregando",
   "notFound": "404 Não encontrado",
-  "etherscan": "Etherscan",
+  "etherscan": "Explorador de blocos",
   "upgradeBanner": {
     "title": "Um novo app ENS chegou!",
     "subtitle": "Redesenhado do zero para o ENSv2.",
@@ -345,7 +345,7 @@
     "error": {
       "unknown": "Ocorreu um erro desconhecido"
     },
-    "viewEtherscan": "Ver no Etherscan",
+    "viewEtherscan": "Ver no explorador de blocos",
     "viewMore": "Ver mais"
   },
   "search": {

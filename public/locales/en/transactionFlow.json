@@ -204,7 +204,7 @@
     "editResolver": {
       "title": "Edit Resolver",
       "latestLabel": "Use latest resolver",
-      "etherscan": "Etherscan",
+      "etherscan": "Block Explorer",
       "latestMessage": "You are on the latest resolver",
       "customLabel": "Custom resolver",
       "customPlaceholder": "Enter custom resolver address"
@@ -242,10 +242,9 @@
       "bannerMsg": "Extending for multiple years will save money on network costs by avoiding yearly transactions.",
       "gasLimitError": "Not enough ETH in wallet",
       "disabled": {
-        "title": "ENS v2 beta is now deployed on Sepolia",
-        "banner": "Future renewals will be in the new Manager app. Click <ManagerLink>here</ManagerLink> to renew your name there."
-      }
-    },
+        "title": "Renewals are temporarily unavailable",
+        "banner": "This name's registrar controller has been updated. Please check back later or contact support to renew this name."
+      }    },
     "transferProfile": {
       "title": "Transfer Profile",
       "message1": "Before upgrading, you can transfer your current profile if you'd like, otherwise it will be reset when you upgrade.",
@@ -392,7 +391,7 @@
               "title": "Summary of changes",
               "updates": {
                 "role": "Update {{role}} role to {{address}}",
-                "eth-record": "Update ETH record to {{address}}"
+                "eth-record": "Update ETN record to {{address}}"
               },
               "remove": {
                 "profile": "Remove profile records"

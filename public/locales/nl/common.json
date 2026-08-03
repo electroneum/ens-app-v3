@@ -227,7 +227,7 @@
         "gasLimit": "Het gas limiet op je transactie was niet hoog genoeg, probeer aub opnieuw."
       }
     },
-    "viewEtherscan": "Bekijk op Etherscan",
+    "viewEtherscan": "Bekijk op Block Explorer",
     "viewMore": "Bekijk meer"
   },
   "search": {

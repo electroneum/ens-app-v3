@@ -1,50 +1,66 @@
 import { match } from 'ts-pattern'
-import { localhost, mainnet, sepolia } from 'viem/chains'
+import { localhost } from 'viem/chains'
+import type { Chain } from 'viem'
 
 import type { Register } from '@app/local-contracts'
-import { addEnsContractsWithSubgraphAndOverrides } from '@app/overrides/addEnsContractsWithSubgraphAndOverrides'
 import { makeLocalhostChainWithEnsAndOverrides } from '@app/overrides/makeLocalhostChainWithEnsAndOverrides'
+import { electroneumMainnet, electroneumTestnet } from '@app/utils/chains/electroneumChains'
 
 export const deploymentAddresses = JSON.parse(
   process.env.NEXT_PUBLIC_DEPLOYMENT_ADDRESSES || '{}',
 ) as Register['deploymentAddresses']
 
-export const localhostWithEns = makeLocalhostChainWithEnsAndOverrides<typeof localhost>(
-  localhost,
+const localhostChain = { ...localhost, formatters: undefined } satisfies Chain
+
+export const localhostWithEns = makeLocalhostChainWithEnsAndOverrides<typeof localhostChain>(
+  localhostChain,
   deploymentAddresses,
 )
 
-const ENS_SUBGRAPH_API_KEY = '9ad5cff64d93ed2c33d1a57b3ec03ea9'
+const isElectroneumMainnet = process.env.NEXT_PUBLIC_ETN_NETWORK === 'mainnet'
 
-export const mainnetWithEns = addEnsContractsWithSubgraphAndOverrides({
-  chain: mainnet,
-  subgraphId: '5XqPmWe6gjyrJtFn9cLy237i4cWw2j9HcUJEXsP5qGtH',
-  apiKey: ENS_SUBGRAPH_API_KEY,
-})
+export const electroneumDeploymentAddresses = JSON.parse(
+  (isElectroneumMainnet
+    ? process.env.NEXT_PUBLIC_ETN_MAINNET_DEPLOYMENT_ADDRESSES
+    : process.env.NEXT_PUBLIC_ETN_TESTNET_DEPLOYMENT_ADDRESSES) || '{}',
+) as Register['deploymentAddresses']
 
-export const sepoliaWithEns = addEnsContractsWithSubgraphAndOverrides({
-  chain: sepolia,
-  subgraphId: 'G1SxZs317YUb9nQX3CC98hDyvxfMJNZH5pPRGpNrtvwN',
-  apiKey: ENS_SUBGRAPH_API_KEY,
-})
+const activeElectroneumChain = isElectroneumMainnet ? electroneumMainnet : electroneumTestnet
 
-export const chainsWithEns = [mainnetWithEns, sepoliaWithEns, localhostWithEns] as const
+const activeSubgraphUrl = isElectroneumMainnet
+  ? process.env.NEXT_PUBLIC_ETN_MAINNET_SUBGRAPH_URL
+  : process.env.NEXT_PUBLIC_ETN_TESTNET_SUBGRAPH_URL
+
+export const electroneumWithEns = makeLocalhostChainWithEnsAndOverrides<typeof activeElectroneumChain>(
+  activeElectroneumChain,
+  electroneumDeploymentAddresses,
+  activeSubgraphUrl,
+)
+
+export const chainsWithEns = [localhostWithEns, electroneumWithEns]
 
 export const getSupportedChainById = (chainId: number | undefined) =>
   chainId ? chainsWithEns.find((c) => c.id === chainId) : undefined
 
-export type SupportedChain = typeof mainnetWithEns | typeof sepoliaWithEns | typeof localhostWithEns
+export type SupportedChain = typeof localhostWithEns | typeof electroneumWithEns
 
-export const getNetworkFromUrl = (): 'mainnet' | 'sepolia' | 'localhost' | undefined => {
+export const getNetworkFromUrl = ():
+  | 'mainnet'
+  | 'sepolia'
+  | 'localhost'
+  | 'electroneum'
+  | undefined => {
+  // Chain override — checked first since it doesn't depend on `window`,
+  // so server and client agree even during SSR.
+  const chain = process.env.NEXT_PUBLIC_CHAIN_NAME
+  if (chain === 'sepolia') return 'sepolia' as const
+  if (chain === 'mainnet') return 'mainnet' as const
+  if (chain === 'electroneum') return 'electroneum' as const
+
   if (typeof window === 'undefined') return undefined
 
   const { hostname } = window.location
   const segments = hostname.split('.')
-
-  // Chain override
-  const chain = process.env.NEXT_PUBLIC_CHAIN_NAME
-  if (chain === 'sepolia') return 'sepolia' as const
-  if (chain === 'mainnet') return 'mainnet' as const
 
   // Previews
   if (segments.length === 4) {
@@ -71,8 +87,7 @@ export const getNetworkFromUrl = (): 'mainnet' | 'sepolia' | 'localhost' | undef
 export const getChainsFromUrl = () => {
   const network = getNetworkFromUrl()
   return match(network)
-    .with('mainnet', () => [mainnetWithEns])
-    .with('sepolia', () => [sepoliaWithEns])
     .with('localhost', () => [localhostWithEns])
-    .otherwise(() => [mainnetWithEns])
+    .with('electroneum', () => [electroneumWithEns])
+    .otherwise(() => [electroneumWithEns])
 }

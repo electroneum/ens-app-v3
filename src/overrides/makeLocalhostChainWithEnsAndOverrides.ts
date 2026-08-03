@@ -10,8 +10,9 @@ import { makeLocalhostChainWithEns } from '@app/utils/chains/makeLocalhostChainW
 export const makeLocalhostChainWithEnsAndOverrides = <const T extends Chain>(
   localhost: T,
   deploymentAddresses: Register['deploymentAddresses'],
+  subgraphUrl?: string,
 ): LocalhostChainWithEnsAndContracts<T, AdditionalContracts> => {
-  const chainWithEns = makeLocalhostChainWithEns(localhost, deploymentAddresses)
+  const chainWithEns = makeLocalhostChainWithEns(localhost, deploymentAddresses, subgraphUrl)
 
   return {
     ...chainWithEns,

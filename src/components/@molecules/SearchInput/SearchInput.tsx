@@ -419,7 +419,7 @@ const formatEthText = ({ name, isETH }: { name: string; isETH: boolean | undefin
   if (isETH) return name
   if (name.includes('.')) return ''
   if (name === '[root]') return ''
-  return `${name}.eth`
+  return `${name}.etn`
 }
 const addEthDropdownItem =
   ({ name, isETH }: { name: string; isETH: boolean | undefined }) =>

@@ -137,7 +137,7 @@ export const useBasicName = ({
       !!(
         nameWrapperAddress &&
         !isWrapped &&
-        normalisedName?.endsWith('.eth') &&
+        normalisedName?.endsWith('.etn') &&
         !isLabelTooLong(normalisedName) &&
         !!registrationStatus &&
         ['registered', 'imported', 'owned'].includes(registrationStatus)

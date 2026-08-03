@@ -195,7 +195,7 @@
     "editResolver": {
       "title": "编辑解析器",
       "latestLabel": "使用最新的解析器",
-      "etherscan": "Etherscan",
+      "etherscan": "区块浏览器",
       "latestMessage": "您已经在使用最新的解析器",
       "customLabel": "自定义解析器",
       "customPlaceholder": "输入自定义解析器地址"
@@ -233,8 +233,8 @@
       "bannerMsg": "一次续期数年可以避免每年进行交易，从而节省网络成本。",
       "gasLimitError": "资金不足",
       "disabled": {
-        "title": "ENS v2 测试版已部署在 Sepolia",
-        "banner": "未来的续费将在新的 Manager 应用中进行。点击<ManagerLink>此处</ManagerLink>在该应用中续费您的名字。"
+        "title": "续费暂时不可用",
+        "banner": "此名称的注册控制器已更新。请稍后再试或联系支持以续费此名称。"
       }
     },
     "transferProfile": {
@@ -383,7 +383,7 @@
               "title": "更改摘要",
               "updates": {
                 "role": "更新 {{role}} 角色为 {{address}}",
-                "eth-record": "更新 ETH 记录为 {{address}}"
+                "eth-record": "更新 ETN 记录为 {{address}}"
               },
               "remove": {
                 "profile": "删除个人资料记录"

@@ -194,7 +194,7 @@ export const RecordsTab = ({
               <RecordItem
                 type="address"
                 key={address.id}
-                itemKey={address.name}
+                itemKey={address.name === 'eth' ? 'etn' : address.name}
                 value={address.value}
                 showLegacy={address.name.endsWith('_LEGACY')}
               />

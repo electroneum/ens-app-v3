@@ -95,14 +95,7 @@ export const Invoice = ({ name, expiryTitle, expiryDate, items }: Props) => {
           </Typography>
           <Skeleton loading={!value}>
             <Typography color="textPrimary" data-testid={`invoice-item-${inx}-amount`}>
-              <CurrencyText bufferPercentage={bufferPercentage} eth={value || 0n} currency="eth" />
-            </Typography>
-            <Typography
-              fontVariant="small"
-              color="grey"
-              data-testid={`invoice-item-${inx}-amount-usd`}
-            >
-              <CurrencyText bufferPercentage={bufferPercentage} eth={value || 0n} currency="usd" />
+              <CurrencyText bufferPercentage={bufferPercentage} eth={value || 0n} />
             </Typography>
           </Skeleton>
         </LineItem>

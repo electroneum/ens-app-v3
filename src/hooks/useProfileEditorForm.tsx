@@ -10,13 +10,16 @@ import { ProfileRecord, ProfileRecordGroup } from '@app/constants/profileRecordO
 import { supportedAddresses } from '@app/constants/supportedAddresses'
 import { AvatarEditorType } from '@app/types'
 import { normalizeCoinAddress } from '@app/utils/coin'
+import { validateUrl } from '@app/validators/validateUrl'
 import { validateAccount } from '@app/validators/validateAccount'
 import { validateCryptoAddress } from '@app/validators/validateAddress'
 import { validateContentHash } from '@app/validators/validateContentHash'
-import { validateUrl } from '@app/validators/validateUrl'
-
 import { ContentHashProvider } from '../utils/contenthash'
 import { validateAbi } from '../validators/validateAbi'
+
+const addressCoinLabelOverrides: Record<string, string> = {
+  eth: 'ETN',
+}
 
 const SINGLE_VALUE_RECORD_TYPES = ['contenthash']
 
@@ -69,7 +72,7 @@ export const useProfileEditorForm = (existingRecords: ProfileRecord[]) => {
       return t(`steps.profile.options.groups.social.items.${record.key}`)
     if (record.group === 'address')
       return t('steps.profile.options.groups.address.itemLabel', {
-        coin: record.key,
+        coin: addressCoinLabelOverrides[record.key] ?? record.key,
       })
     if (record.group === 'other') return t(`steps.profile.options.groups.other.items.${record.key}`)
     if (record.group === 'website')
@@ -80,7 +83,7 @@ export const useProfileEditorForm = (existingRecords: ProfileRecord[]) => {
   const secondaryLabelForRecord = (record: ProfileRecord) => {
     if (record.group === 'website') return 'contenthash'
     if (record.key === 'contentHash') return 'contenthash'
-    if (record.group !== 'custom') return record.key
+    if (record.group !== 'custom') return addressCoinLabelOverrides[record.key] ?? record.key
     return ''
   }
 

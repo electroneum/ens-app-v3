@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import { mainnetWithEns, sepoliaWithEns } from '@app/constants/chains'
+import { electroneumWithEns } from '@app/constants/chains'
 
 import { dateFromDateDiff } from './date'
 import {
@@ -161,29 +161,21 @@ describe('formatDurationOfDates', () => {
 })
 
 describe('makeEtherscanLink', () => {
-  it('should use mainnet and /tx if no network/route is defined', () => {
+  it('should use the configured Electroneum explorer and default tx route', () => {
     const data = 'test'
     const result = makeEtherscanLink(data)
-    expect(result).toEqual(`https://etherscan.io/tx/${data}`)
+    expect(result).toEqual(`${electroneumWithEns.blockExplorers.default.url}/tx/${data}`)
   })
-  it('should not use subdomain if network is mainnet', () => {
+  it('should ignore the network parameter and always use the configured Electroneum explorer', () => {
     const data = 'test'
-    const network = 'mainnet'
-    const result = makeEtherscanLink(data, network)
-    expect(result).toEqual(`https://etherscan.io/tx/${data}`)
-  })
-  it('should use subdomain if network is not mainnet', () => {
-    const data = 'test'
-    const network = 'sepolia'
-    const result = makeEtherscanLink(data, network)
-    expect(result).toEqual(`https://${network}.etherscan.io/tx/${data}`)
+    const result = makeEtherscanLink(data, 'sepolia')
+    expect(result).toEqual(`${electroneumWithEns.blockExplorers.default.url}/tx/${data}`)
   })
   it('should allow custom route', () => {
     const data = 'test'
-    const network = 'sepolia'
     const route = 'address'
-    const result = makeEtherscanLink(data, network, route)
-    expect(result).toEqual(`https://${network}.etherscan.io/address/${data}`)
+    const result = makeEtherscanLink(data, undefined, route)
+    expect(result).toEqual(`${electroneumWithEns.blockExplorers.default.url}/${route}/${data}`)
   })
 })
 

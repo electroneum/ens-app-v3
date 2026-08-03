@@ -23,12 +23,7 @@ export const TTL_MS = 60 * 60 * 1000 // 1 hour
  * @param client - Viem client with chain information
  * @returns Normalized chain name (e.g., 'mainnet', 'sepolia')
  */
-const getChainName = (client: ClientWithEns): string => {
-  const chainId = client.chain.id
-  if (chainId === 1 || !chainId) return 'mainnet'
-  // Client is already from config.getClient(), so this is consistent
-  return client.chain.name.toLowerCase()
-}
+const getChainName = (client: ClientWithEns): string => client.chain.name.toLowerCase()
 
 /**
  * Loads cache-bust expiry timestamps from localStorage

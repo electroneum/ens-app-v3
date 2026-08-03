@@ -1,5 +1,5 @@
 {
-  "title": "Register {{name}} on ENS",
+  "title": "Register {{name}} on Electroneum ENS",
   "subtitle": "Register",
   "heading": "Register {{name}}",
   "invoice": {
@@ -15,8 +15,8 @@
     "nameTooLong": "The name you want to register is too long. Please choose a shorter name."
   },
   "disabled": {
-    "title": "ENS v2 beta is now deployed on Sepolia",
-    "banner": "Future registration will be in the new Manager app. You'll be redirected there in 1 second. Click <ManagerLink>here</ManagerLink> to proceed now."
+    "title": "Registration temporarily unavailable",
+    "banner": "Registration is not currently available. Please try again shortly."
   },
   "steps": {
     "pricing": {
@@ -157,8 +157,8 @@
           "decline": "Back"
         },
         "clearEth": {
-          "title": "Clear ETH address?",
-          "description": "Without an ETH address set people will not be able to send money to this name. This can be updated later.",
+          "title": "Clear ETN address?",
+          "description": "Without an ETN address set people will not be able to send money to this name. This can be updated later.",
           "confirm": "Clear",
           "decline": "Cancel"
         }
@@ -181,22 +181,12 @@
         "Wait 60 seconds for the timer to complete",
         "Complete a second transaction to secure your name"
       ],
-      "moonpayItems": [
-        "Create or login to an existing MoonPay account",
-        "Use your credit or debit card to complete a single transaction"
-      ],
       "setupProfile": "I'd like to set up my profile first",
       "paymentMethod": "Payment method",
-      "notEnoughEth": "Not enough ETH in wallet",
-      "creditOrDebit": "Credit or debit card",
-      "additionalFee": "Additional processing fee",
-      "pendingMoonpayTransaction": "Your MoonPay transaction is processing. This may take up to two minutes. You can check your progress from the confirmation email you recieved.",
-      "failedMoonpayTransaction": "Your MoonPay transaction has failed. Please try again or choose the 'Ethereum' payment method.",
-      "ethereum": "Ethereum",
+      "notEnoughEth": "Not enough ETN in wallet",
+      "ethereum": "Electroneum",
       "processing": "Processing",
-      "poweredBy": "Powered by",
-      "moonpayModalHeader": "MoonPay Checkout",
-      "moonpayTestCard": "Test card details"
+      "poweredBy": "Powered by"
     },
     "transactions": {
       "heading": "Almost there",

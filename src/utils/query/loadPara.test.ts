@@ -3,7 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { loadPara } from './loadPara'
 import { paraClient, paraModalProps, paraWalletConnectorFn } from './paraWallet'
-import { prefix, wagmiConfig } from './wagmi'
+import { prefix, wagmiConfig as wagmiConfigTyped } from './wagmi'
+
+// `./wagmi` is mocked below with a plain object of vi.fn()s, which doesn't
+// match wagmiConfig's real type - cast to work with the mock shape directly.
+const wagmiConfig = wagmiConfigTyped as any
 
 // Mock the external dependencies
 vi.mock('@wagmi/core', () => ({
@@ -71,8 +75,8 @@ describe('loadPara', () => {
     localStorage.setItem(`${prefix}.para-integrated.connected`, 'true')
     wagmiConfig.state.status = 'disconnected'
 
-    let subscriberCallback: (state: string) => void
-    wagmiConfig.subscribe.mockImplementation((_, callback) => {
+    let subscriberCallback!: (state: string) => void
+    wagmiConfig.subscribe.mockImplementation((_: unknown, callback: (state: string) => void) => {
       subscriberCallback = callback
       return vi.fn() // Return a mock unsubscribe function
     })
