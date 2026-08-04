@@ -57,7 +57,9 @@ const makeDefaultData = (selected: SelectedItemProperties): RegistrationReducerD
   reverseRecord: false,
   records: [],
   resolverAddress: EMPTY_ADDRESS,
-  secret: randomSecret({ platformDomain: 'enslabs.eth', campaign: 3 }),
+  // the platform domain is hashed into the commitment secret for on-chain
+  // attribution of registrations made through this app
+  secret: randomSecret({ platformDomain: 'electroneum.etn', campaign: 1 }),
   started: false,
   version: REGISTRATION_REDUCER_DATA_ITEM_VERSION,
   durationType: 'years',

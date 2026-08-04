@@ -20,6 +20,10 @@ import useCurrentBlockTimestamp from '@app/hooks/chain/useCurrentBlockTimestamp'
 import { makeDisplay } from '@app/utils/currency'
 
 const VAR_PREFIX = '--premium-chart-'
+// These mirror the deployed Electroneum ExponentialPremiumPriceOracle
+// (0x1f5a4178f3b1088e76eb82dc7a3cb861e3864de5): startPremium = $100M (USD,
+// via OwnedUsdOracle), totalDays = 21, halving daily — verified against the
+// constructor args on-chain. Update here if the oracle is ever redeployed.
 const startPrice = 100000000.0
 const offset = 47.6837158203125
 const duration = 21 * 24 * 60 * 60 * 1000

@@ -13,6 +13,10 @@ import { TextWithTooltip } from '@app/components/@atoms/TextWithTooltip/TextWith
 import { Card } from '@app/components/Card'
 import { useCheckRegistered } from '@app/hooks/registration/useCheckRegistered'
 import { useExistingCommitment } from '@app/hooks/registration/useExistingCommitment'
+import {
+  FALLBACK_MIN_COMMITMENT_AGE_SECONDS,
+  useMinCommitmentAge,
+} from '@app/hooks/registration/useMinCommitmentAge'
 import { useSimulateRegistration } from '@app/hooks/registration/useSimulateRegistration'
 import { useDurationCountdown } from '@app/hooks/time/useDurationCountdown'
 import useRegistrationParams from '@app/hooks/useRegistrationParams'
@@ -256,14 +260,32 @@ const Transactions = ({ registrationData, name, callback, onStart }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canRegisterOverride])
 
+  // `minCommitmentAge` is the on-chain wait between commit and register
+  // (registering earlier reverts with `CommitmentTooNew`). Fall back to 60s
+  // while loading/unavailable.
+  const { data: minCommitmentAge } = useMinCommitmentAge()
+  const minCommitmentAgeSeconds =
+    minCommitmentAge !== undefined ? Number(minCommitmentAge) : FALLBACK_MIN_COMMITMENT_AGE_SECONDS
+  const minCommitmentAgeMs = minCommitmentAgeSeconds * 1000
+
   const commitTimestamp = match({ commitStage: commitTx?.stage, canRegisterOverride })
-    .with({ canRegisterOverride: true }, () => Date.now() - 70_000)
+    // 10s safety margin past the minimum age so the fabricated timestamp is
+    // unambiguously "old enough"
+    .with({ canRegisterOverride: true }, () => Date.now() - (minCommitmentAgeMs + 10_000))
     .with({ commitStage: 'complete' }, () => commitTx?.finaliseTime)
     .otherwise(() => undefined)
 
   const [commitComplete, setCommitComplete] = useState(
-    !!commitTimestamp && commitTimestamp + 60000 < Date.now(),
+    !!commitTimestamp && commitTimestamp + minCommitmentAgeMs < Date.now(),
   )
+
+  // Re-evaluate when the on-chain min age loads (or the commit timestamp
+  // changes): the initial state above may have been computed with the
+  // fallback value.
+  useEffect(() => {
+    if (!commitTimestamp) return
+    setCommitComplete(commitTimestamp + minCommitmentAgeMs < Date.now())
+  }, [commitTimestamp, minCommitmentAgeMs])
 
   const commitCouldBeFound =
     !commitTx?.stage || commitTx.stage === 'confirm' || commitTx.stage === 'failed'
@@ -453,7 +475,7 @@ const Transactions = ({ registrationData, name, callback, onStart }: Props) => {
           complete={commitComplete}
         >
           <CountdownCircle
-            countdownSeconds={60}
+            countdownSeconds={minCommitmentAgeSeconds}
             disabled={match(transactionState)
               .with('commitReady', 'commitSent', 'commitFailed', () => true)
               .otherwise(() => false)}
