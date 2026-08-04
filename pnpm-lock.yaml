@@ -152,8 +152,8 @@ importers:
         specifier: 1.0.1
         version: 1.0.1(patch_hash=b597d2dae9a4a8d52bd7729b3a106b767b262d1014e17b17537bdac1edf9468b)
       '@ensdomains/ensjs':
-        specifier: github:electroneum/ensjs#main&path:/packages/ensjs
-        version: '@etn-sc/ensjs@https://codeload.github.com/electroneum/ensjs/tar.gz/523016a1f6e7ad254f7c5da5a1d86e228fce02f2#path:/packages/ensjs(typescript@5.7.3)(viem@2.37.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.75))(zod@3.25.75)'
+        specifier: npm:@etn-sc/ensjs@4.4.1
+        version: '@etn-sc/ensjs@4.4.1(typescript@5.7.3)(viem@2.37.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.75))(zod@3.25.75)'
       '@ensdomains/thorin':
         specifier: 1.0.0-beta.28
         version: 1.0.0-beta.28(patch_hash=4beb816d4e6523d088f2e7e88a3539fb543bb7401dfb2c3f0c61461d8f819369)(@vanilla-extract/css@1.15.5(babel-plugin-macros@3.1.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1820,9 +1820,8 @@ packages:
   '@ethersproject/wordlists@5.7.0':
     resolution: {integrity: sha512-S2TFNJNfHWVHNE6cNDjbVlZ6MgE17MIxMbMg2zv3wn+3XSJGosL1m9ZVv3GXCf/2ymSsQ+hRI5IzoMJTG6aoVA==}
 
-  '@etn-sc/ensjs@https://codeload.github.com/electroneum/ensjs/tar.gz/523016a1f6e7ad254f7c5da5a1d86e228fce02f2#path:/packages/ensjs':
-    resolution: {path: /packages/ensjs, tarball: https://codeload.github.com/electroneum/ensjs/tar.gz/523016a1f6e7ad254f7c5da5a1d86e228fce02f2}
-    version: 4.3.1
+  '@etn-sc/ensjs@4.4.1':
+    resolution: {integrity: sha512-SbQnNbJVgl+Cp7uEHlVOEZXBnq041zUr38PBEeopFKM/vdbdwakCaX7Cn6KUTGWms41x88hg0b2zCBCzT3DfQQ==}
     engines: {node: '>=22'}
     peerDependencies:
       viem: ^2.35.0
@@ -10553,7 +10552,7 @@ snapshots:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
 
-  '@etn-sc/ensjs@https://codeload.github.com/electroneum/ensjs/tar.gz/523016a1f6e7ad254f7c5da5a1d86e228fce02f2#path:/packages/ensjs(typescript@5.7.3)(viem@2.37.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.75))(zod@3.25.75)':
+  '@etn-sc/ensjs@4.4.1(typescript@5.7.3)(viem@2.37.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.75))(zod@3.25.75)':
     dependencies:
       '@adraffy/ens-normalize': 1.10.1
       '@ensdomains/address-encoder': 1.1.4
