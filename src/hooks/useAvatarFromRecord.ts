@@ -27,7 +27,7 @@ const makeApiURL = (address: string) => {
   return undefined
 }
 
-const getAvatarSrc = async (record: string) => {
+export const getAvatarSrc = async (record: string) => {
   try {
     const protocol = record.match(SUPPORTED_PROTOCOL_REGEX)?.[1]
     if (!protocol) return
