@@ -37,13 +37,13 @@ mockUseParentBasicName.mockImplementation(() => {
 
 describe('Token', () => {
   describe('tokenids', () => {
-    it('should not show tokenid section for unwrapped non .eth 2ld', () => {
-      const name = 'sub.nick.eth'
+    it('should not show tokenid section for unwrapped non .etn 2ld', () => {
+      const name = 'sub.nick.etn'
       render(<Token {...({ name, isWrapped: false } as any)} />)
       expect(screen.queryByTestId('token-ids')).not.toBeInTheDocument()
     })
-    it('should show correct decimal and hex for unwrapped .eth 2ld', () => {
-      const name = 'nick.eth'
+    it('should show correct decimal and hex for unwrapped .etn 2ld', () => {
+      const name = 'nick.etn'
       const label = 'nick'
       const labelHash = labelhash(label)
       const tokenId = BigInt(labelHash).toString(10)
@@ -52,8 +52,8 @@ describe('Token', () => {
       expect(screen.getByText(labelHash)).toBeVisible()
       expect(screen.getByText(tokenId)).toBeVisible()
     })
-    it('should show correct decimal and hex for wrapped .eth 2ld name', () => {
-      const name = 'nick.eth'
+    it('should show correct decimal and hex for wrapped .etn 2ld name', () => {
+      const name = 'nick.etn'
       const hexId = namehash(name)
       const decId = BigInt(hexId).toString(10)
 
@@ -70,7 +70,7 @@ describe('Token', () => {
       expect(screen.getByText(decId)).toBeVisible()
     })
     it('should show correct decimal and hex for wrapped other name', () => {
-      const name = 'sub.nick.eth'
+      const name = 'sub.nick.etn'
       const hexId = namehash(name)
       const decId = BigInt(hexId).toString(10)
 
@@ -88,13 +88,13 @@ describe('Token', () => {
     })
   })
   describe('etherscan link', () => {
-    it('should not show any link for unwrapped non .eth 2ld', () => {
-      const name = 'sub.nick.eth'
+    it('should not show any link for unwrapped non .etn 2ld', () => {
+      const name = 'sub.nick.etn'
       render(<Token {...({ name, isWrapped: false } as any)} />)
       expect(screen.queryByTestId('etherscan-nft-link')).not.toBeInTheDocument()
     })
-    it('should show correct link for unwrapped .eth 2ld', () => {
-      const name = 'nick.eth'
+    it('should show correct link for unwrapped .etn 2ld', () => {
+      const name = 'nick.etn'
       const label = 'nick'
       const labelHash = labelhash(label)
       const tokenId = BigInt(labelHash).toString(10)
@@ -102,11 +102,11 @@ describe('Token', () => {
       render(<Token {...({ name, isWrapped: false } as any)} />)
       expect(screen.getByTestId('etherscan-nft-link')).toHaveAttribute(
         'href',
-        `https://blockexplorer.electroneum.com/nft/unwrapped/${tokenId}`,
+        `https://blockexplorer.electroneum.com/token/unwrapped/instance/${tokenId}`,
       )
     })
-    it('should show correct link for wrapped .eth 2ld', () => {
-      const name = 'nick.eth'
+    it('should show correct link for wrapped .etn 2ld', () => {
+      const name = 'nick.etn'
       const hexId = namehash(name)
       const decId = BigInt(hexId).toString(10)
 
@@ -121,11 +121,11 @@ describe('Token', () => {
       )
       expect(screen.getByTestId('etherscan-nft-link')).toHaveAttribute(
         'href',
-        `https://blockexplorer.electroneum.com/nft/wrapped/${decId}`,
+        `https://blockexplorer.electroneum.com/token/wrapped/instance/${decId}`,
       )
     })
     it('should show correct link for wrapped other', () => {
-      const name = 'sub.nick.eth'
+      const name = 'sub.nick.etn'
       const hexId = namehash(name)
       const decId = BigInt(hexId).toString(10)
 
@@ -140,7 +140,7 @@ describe('Token', () => {
       )
       expect(screen.getByTestId('etherscan-nft-link')).toHaveAttribute(
         'href',
-        `https://blockexplorer.electroneum.com/nft/wrapped/${decId}`,
+        `https://blockexplorer.electroneum.com/token/wrapped/instance/${decId}`,
       )
     })
   })

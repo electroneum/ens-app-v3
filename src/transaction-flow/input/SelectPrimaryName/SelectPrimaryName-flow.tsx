@@ -150,10 +150,11 @@ const SelectPrimaryName = ({ data: { address }, dispatch, onDismiss }: Props) =>
     pageSize: DEFAULT_PAGE_SIZE,
   })
 
-  // Filter out the primary name's data
+  // Filter out the primary name's data and nameless subgraph rows
+  // (e.g. reverse-registrar infrastructure nodes)
   const filteredNamesPages =
     namesData?.pages?.map((page: Name[]) =>
-      page.filter((name: Name) => name?.name !== currentPrimary?.data),
+      page.filter((name: Name) => !!name?.name && name.name !== currentPrimary?.data),
     ) || []
 
   const selectedName = useWatch({

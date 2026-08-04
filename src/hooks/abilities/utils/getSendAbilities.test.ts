@@ -43,8 +43,8 @@ type MockData = {
 
 const ownerAddress = '0x123'
 const account = createAccounts().getAddress('user')
-const name = 'name.eth'
-const subname = 'sub.nick.eth'
+const name = 'name.etn'
+const subname = 'sub.nick.etn'
 
 const partialUserStates = {
   unwrappedNameOwner: {
@@ -879,7 +879,7 @@ describe('getSendAbilities', () => {
 
 const mockGetSendAbilitiesConfig = {
   'eth-unwrapped-2ld:owner': {
-    name: 'name.eth',
+    name: 'name.etn',
     basicNameType: 'eth-unwrapped-2ld:owner',
     parentBasicNameType: 'eth',
   },

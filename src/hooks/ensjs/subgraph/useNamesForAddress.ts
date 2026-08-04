@@ -86,7 +86,12 @@ export const useNamesForAddress = <TParams extends UseNamesForAddressParameters>
   const [unfilteredPages, setUnfilteredPages] = useState<GetNamesForAddressReturnType>([])
 
   const infiniteData = useMemo(
-    () => (data?.pages ? data?.pages.reduce((acc, page) => [...acc, ...page], []) : []),
+    () =>
+      data?.pages
+        ? // the etn-subgraph can return domains with a null name (e.g. the
+          // reverse-registrar infrastructure nodes) — they can't be rendered
+          data?.pages.reduce((acc, page) => [...acc, ...page], []).filter((domain) => domain.name)
+        : [],
     [data?.pages],
   )
 

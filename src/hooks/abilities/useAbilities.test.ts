@@ -42,7 +42,7 @@ mockUseContractAddress.mockImplementation(makeMockUseContractAddress)
 
 describe('useAbilities', () => {
   describe('basic abilities', () => {
-    const name = 'nick.eth'
+    const name = 'nick.etn'
     const ownerAddress = '0x123'
     const account = ownerAddress
 

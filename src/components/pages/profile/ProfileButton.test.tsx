@@ -58,10 +58,10 @@ mockUsePrimaryName.mockImplementation(({ address, enabled }) => {
   return {
     data: enabled
       ? {
-          // eslint-disable-next-line no-nested-ternary
-          name: isNoPrimary ? undefined : 'primary.eth',
-          beautifiedName: isNoPrimary ? undefined : 'primary.eth',
-        }
+        // eslint-disable-next-line no-nested-ternary
+        name: isNoPrimary ? undefined : 'primary.eth',
+        beautifiedName: isNoPrimary ? undefined : 'primary.eth',
+      }
       : undefined,
     isLoading: false,
   }
@@ -227,7 +227,7 @@ describe('<AddressProfileButton/>', () => {
       const viewBlockExplorerBtn = screen.getAllByText((content, element) => {
         return (
           element?.tagName?.toLowerCase() === 'button' &&
-          content?.toLowerCase() === 'view on electroneum explorer'
+          content?.toLowerCase() === 'view on explorer'
         )
       })
 

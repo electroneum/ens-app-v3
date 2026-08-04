@@ -25,7 +25,7 @@ describe('RoleRow', () => {
   it('should render', () => {
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[]}
@@ -38,7 +38,7 @@ describe('RoleRow', () => {
   it('should display role tags', () => {
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={['manager', 'owner']}
         actions={[]}
@@ -53,7 +53,7 @@ describe('RoleRow', () => {
   it('should display tooltip when hovering role tags', async () => {
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={['manager', 'owner']}
         actions={[]}
@@ -71,7 +71,7 @@ describe('RoleRow', () => {
   it('should display dropdown with option to view and copy address', async () => {
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[]}
@@ -89,10 +89,10 @@ describe('RoleRow', () => {
   })
 
   it('should display view name and copy name if usePrimary returns a name', async () => {
-    mockUsePrimary.mockReturnValueOnce({ data: { name: 'test.eth' } })
+    mockUsePrimary.mockReturnValueOnce({ data: { name: 'test.etn' } })
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[]}
@@ -113,7 +113,7 @@ describe('RoleRow', () => {
     mockUsePrimary.mockReturnValueOnce({ data: undefined })
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[]}
@@ -132,10 +132,10 @@ describe('RoleRow', () => {
   })
 
   it('should display etherscn  name and copy name if usePrimary returns a name', async () => {
-    mockUsePrimary.mockReturnValueOnce({ data: { name: 'test.eth' } })
+    mockUsePrimary.mockReturnValueOnce({ data: { name: 'test.etn' } })
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[]}
@@ -156,7 +156,7 @@ describe('RoleRow', () => {
     mockUsePrimary.mockReturnValueOnce({ data: undefined })
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[]}
@@ -175,10 +175,10 @@ describe('RoleRow', () => {
   })
 
   it('should display view on etherscan if usePrimary returns name and name is 2LDEth', async () => {
-    mockUsePrimary.mockReturnValueOnce({ data: { name: 'test.eth' } })
+    mockUsePrimary.mockReturnValueOnce({ data: { name: 'test.etn' } })
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[]}
@@ -196,10 +196,10 @@ describe('RoleRow', () => {
   })
 
   it('should display view on etherscan if usePrimary returns subaname and name is wrapped', async () => {
-    mockUsePrimary.mockReturnValueOnce({ data: { name: 'sub.test.eth' } })
+    mockUsePrimary.mockReturnValueOnce({ data: { name: 'sub.test.etn' } })
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[]}
@@ -217,10 +217,10 @@ describe('RoleRow', () => {
   })
 
   it('should display edit roles option if action type `edit-roles`', async () => {
-    mockUsePrimary.mockReturnValueOnce({ data: { name: 'sub.test.eth' } })
+    mockUsePrimary.mockReturnValueOnce({ data: { name: 'sub.test.etn' } })
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={[]}
         actions={[{ label: 'action.editRoles', type: 'edit-roles' } as any]}
@@ -240,7 +240,7 @@ describe('RoleRow', () => {
   it('should display sync manager option if roles includes `manager` and action includes type `sync-manager`', async () => {
     render(
       <RoleRow
-        name="test.eth"
+        name="test.etn"
         address="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         roles={['manager']}
         actions={[{ label: 'action.syncManager', type: 'sync-manager' } as any]}

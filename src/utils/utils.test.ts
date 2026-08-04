@@ -190,16 +190,16 @@ describe('checkDNSName', () => {
     const result = checkDNSName(name as any)
     expect(result).toEqual(false)
   })
-  it('should return false when name is a .eth name', () => {
-    const name = 'test.eth'
+  it('should return false when name is a .etn name', () => {
+    const name = 'test.etn'
     const result = checkDNSName(name)
     expect(result).toEqual(false)
   })
 })
 
 describe('checkETH2LDFromName', () => {
-  it('should return true when name is a .eth name', () => {
-    const name = 'test.eth'
+  it('should return true when name is a .etn name', () => {
+    const name = 'test.etn'
     const result = checkETH2LDFromName(name)
     expect(result).toEqual(true)
   })
@@ -208,17 +208,29 @@ describe('checkETH2LDFromName', () => {
     const result = checkETH2LDFromName(name)
     expect(result).toEqual(false)
   })
+  it('should return false when name is null', () => {
+    const result = checkETH2LDFromName(null)
+    expect(result).toEqual(false)
+  })
+  it('should return false when name is undefined', () => {
+    const result = checkETH2LDFromName(undefined)
+    expect(result).toEqual(false)
+  })
 })
 
 describe('checkSubname', () => {
   it('should return true when name has more than 2 labels', () => {
-    const name = 'sub.test.eth'
+    const name = 'sub.test.etn'
     const result = checkSubname(name)
     expect(result).toEqual(true)
   })
   it('should return false when name has 2 labels', () => {
-    const name = 'test.eth'
+    const name = 'test.etn'
     const result = checkSubname(name)
+    expect(result).toEqual(false)
+  })
+  it('should return false when name is null', () => {
+    const result = checkSubname(null)
     expect(result).toEqual(false)
   })
 })
@@ -261,8 +273,8 @@ describe('getLabelFromName', () => {
 })
 
 describe('validateExpiry', () => {
-  it('should return expiry when name is 2ld .eth', () => {
-    const name = 'test.eth'
+  it('should return expiry when name is 2ld .etn', () => {
+    const name = 'test.etn'
     const expiry = new Date()
     const result = validateExpiry({ name, expiry, fuses: {} as any })
     expect(result).toEqual(expiry)

@@ -88,7 +88,7 @@ export const useDnsSecEnabled = <TParams extends UseDnsSecEnabledParameters>({
   const preparedOptions = prepareQueryOptions({
     queryKey: initialOptions.queryKey,
     queryFn: initialOptions.queryFn,
-    enabled: enabled && !!params.name && params.name !== 'eth' && params.name !== '[root]',
+    enabled: enabled && !!params.name && params.name !== 'etn' && params.name !== '[root]',
     gcTime,
     retry: 2,
     staleTime,

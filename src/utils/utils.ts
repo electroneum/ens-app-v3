@@ -103,25 +103,26 @@ export const isBrowser = !!(
 export const checkDNSName = (name: string): boolean => {
   const labels = name?.split('.')
 
-  return !!labels && labels[labels.length - 1] !== 'eth'
+  return !!labels && labels[labels.length - 1] !== 'etn'
 }
 
-export const checkETH2LDFromName = (name: string): name is Eth2ldName => {
-  const labels = name.split('.')
-  if (labels.length !== 2) return false
-  if (labels[1] !== 'eth') return false
-  return true
-}
-
-export const checkDNS2LDFromName = (name?: string) => {
+export const checkETH2LDFromName = (name?: string | null): name is Eth2ldName => {
   const labels = name?.split('.')
   if (!labels) return false
   if (labels.length !== 2) return false
-  if (labels[1] === 'eth') return false
+  if (labels[1] !== 'etn') return false
   return true
 }
 
-export const checkSubname = (name: string) => name.split('.').length > 2
+export const checkDNS2LDFromName = (name?: string | null) => {
+  const labels = name?.split('.')
+  if (!labels) return false
+  if (labels.length !== 2) return false
+  if (labels[1] === 'etn') return false
+  return true
+}
+
+export const checkSubname = (name?: string | null) => !!name && name.split('.').length > 2
 
 export const isLabelTooLong = (label: string) => {
   const bytes = toBytes(label)

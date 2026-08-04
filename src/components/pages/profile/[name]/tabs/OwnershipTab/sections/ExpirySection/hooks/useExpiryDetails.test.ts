@@ -48,7 +48,7 @@ describe('useExpiryDetails', () => {
         })
         const { result } = renderHook(() =>
           useExpiryDetails({
-            name: 'test.eth',
+            name: 'test.etn',
             details: {
               expiryDate: new Date(3255803954000),
               isLoading: false,
@@ -87,7 +87,7 @@ describe('useExpiryDetails', () => {
 
         const { result } = renderHook(() =>
           useExpiryDetails({
-            name: 'sub.test.eth',
+            name: 'sub.test.etn',
             details: {
               wrapperData: {
                 expiry: { date: new Date(3255803954000) },
@@ -124,7 +124,7 @@ describe('useExpiryDetails', () => {
 
           const { result } = renderHook(() =>
             useExpiryDetails({
-              name: 'sub.test.eth',
+              name: 'sub.test.etn',
               details: {
                 expiryDate: new Date(3255803954000),
                 isLoading: false,

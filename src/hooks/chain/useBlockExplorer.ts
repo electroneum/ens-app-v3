@@ -39,7 +39,8 @@ export const useBlockExplorer = (): UseBlockExplorerReturnType => {
 
     const buildNftUrl = (contractAddress: string, tokenId: string): string | undefined => {
       if (!blockExplorer) return undefined
-      return `${blockExplorer.url}/nft/${contractAddress}/${tokenId}`
+      // Blockscout NFT instance route (Etherscan-style /nft/... 404s on the Electroneum explorer)
+      return `${blockExplorer.url}/token/${contractAddress}/instance/${tokenId}`
     }
 
     return {

@@ -10,7 +10,7 @@ export const electroneumMainnet = {
     },
   },
   blockExplorers: {
-    default: { name: 'Electroneum Explorer', url: 'https://blockexplorer.electroneum.com' },
+    default: { name: 'Explorer', url: 'https://blockexplorer.electroneum.com' },
   },
   formatters: undefined,
 } as const satisfies Chain
