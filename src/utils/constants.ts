@@ -4,12 +4,12 @@ export const GRACE_PERIOD = 90 * 24 * 60 * 60 * 1000
 
 export const FAUCET_WORKER_URL = 'https://ens-faucet.ens-cf.workers.dev'
 
-export const WC_PROJECT_ID = '9b14144d470af1e03ab9d88aaa127332'
+// Electroneum's WalletConnect project (overridable via env)
+export const WC_PROJECT_ID =
+  process.env.NEXT_PUBLIC_WC_PROJECT_ID || 'e8b39cfa38197aaacbb414e39c83c2e0'
 
 // 102% of price as buffer for fluctuations
 export const CURRENCY_FLUCTUATION_BUFFER_PERCENTAGE = 102n
-
-export const OG_IMAGE_URL = 'https://ens-og-image.ens-cf.workers.dev'
 
 export const IS_DEV_ENVIRONMENT =
   process.env.NEXT_PUBLIC_ENSJS_DEBUG ||
@@ -25,7 +25,7 @@ export const ENS_LINKS = {
   //  DISCOURSE: 'https://discuss.ens.domains',
   TELEGRAM: 'https://t.me/electroneum',
   GITHUB: 'https://github.com/electroneum',
-  EMAIL: 'mailto:support@ens.domains',
+  EMAIL: 'mailto:support@electroneum.com',
   HOMEPAGE: 'https://ens.electroneum.com/',
   YOUTUBE: 'https://www.youtube.com/electroneum',
 }

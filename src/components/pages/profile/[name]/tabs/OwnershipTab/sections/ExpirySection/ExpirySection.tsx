@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -8,7 +7,6 @@ import { cacheableComponentStyles } from '@app/components/@atoms/CacheableCompon
 import { useCalendarOptions } from '@app/hooks/useCalendarOptions'
 import { useNameDetails } from '@app/hooks/useNameDetails'
 
-import { EarnifiDialog } from '../../../MoreTab/Miscellaneous/EarnifiDialog'
 import { ExpiryPanel } from './components/ExpiryPanel'
 import { useExpiryActions } from './hooks/useExpiryActions'
 import { useExpiryDetails } from './hooks/useExpiryDetails'
@@ -91,19 +89,12 @@ export const ExpirySection = ({ name, details }: Props) => {
   })
   const { options: calendarOptions, makeEvent } = useCalendarOptions(`Renew ${name}`)
 
-  const [showEarnifiDialog, setShowEarnifiDialog] = useState(false)
-
   if (!expiry.data || expiry.data?.length === 0) return null
 
   const isOutOfGracePeriod = expiry.data.find((d) => d.type === 'grace-period')?.date! < new Date()
 
   return (
     <>
-      <EarnifiDialog
-        name={name}
-        open={showEarnifiDialog}
-        onDismiss={() => setShowEarnifiDialog(false)}
-      />
       <StyledCard $isCached={expiry.isCachedData}>
         <Container>
           <Header>
@@ -125,14 +116,6 @@ export const ExpirySection = ({ name, details }: Props) => {
                           keepMenuOnTop
                           width={220}
                           items={[
-                            // Put this back once the reminders are working again
-                            // {
-                            //   value: 'earnifi',
-                            //   label: t('tabs.more.misc.reminderOptions.bankless'),
-                            //   onClick: () => {
-                            //     setShowEarnifiDialog(true)
-                            //   },
-                            // },
                             ...calendarOptions.map((option) => ({
                               label: t(option.label, { ns: 'profile' }),
                               onClick: () =>

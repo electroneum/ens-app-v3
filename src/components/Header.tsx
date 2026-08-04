@@ -6,7 +6,7 @@ import { useAccount } from 'wagmi'
 
 import { useRecentTransactions } from '@app/hooks/transactions/useRecentTransactions'
 import { useInitial } from '@app/hooks/useInitial'
-import { legacyFavouritesRoute, routes } from '@app/routes'
+import { routes } from '@app/routes'
 import { useBreakpoint } from '@app/utils/BreakpointProvider'
 
 import ElectroneumFull from '../assets/electroneum-logo-inline-inverse2.svg'
@@ -147,11 +147,7 @@ export const Header = () => {
 
   let RouteItems: ReactNode
 
-  let routesNoSearchWithFavourites = routesNoSearch
-
-  if (globalThis?.localStorage?.getItem('ensFavourites')) {
-    routesNoSearchWithFavourites = [...routesNoSearchWithFavourites, legacyFavouritesRoute]
-  }
+  const routesNoSearchWithFavourites = routesNoSearch
 
   if (!isInitial && isConnected) {
     RouteItems = routesNoSearchWithFavourites.map((route) => (

@@ -17,7 +17,6 @@ import { useProtectedRoute } from '@app/hooks/useProtectedRoute'
 import { useQueryParameterState } from '@app/hooks/useQueryParameterState'
 import { useRouterWithHistory } from '@app/hooks/useRouterWithHistory'
 import { Content, ContentWarning } from '@app/layouts/Content'
-import { OG_IMAGE_URL } from '@app/utils/constants'
 import { shouldRedirect } from '@app/utils/shouldRedirect'
 import { formatFullExpiry, makeEtherscanLink } from '@app/utils/utils'
 
@@ -223,7 +222,8 @@ const ProfileContent = ({ isSelf, isLoading: parentIsLoading, name }: Props) => 
     return undefined
   }, [error])
 
-  const ogImageUrl = `${OG_IMAGE_URL}/name/${normalisedName || name}`
+  // ENS's OG-image worker renders Ethereum-mainnet cards; use the static app icon
+  const ogImageUrl = '/android-chrome-512x512.png'
 
   const chainName = useChainName()
 

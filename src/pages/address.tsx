@@ -13,7 +13,6 @@ import { useChainName } from '@app/hooks/chain/useChainName'
 import { usePrimaryProfile } from '@app/hooks/usePrimaryProfile'
 import { Content } from '@app/layouts/Content'
 import { ContentGrid } from '@app/layouts/ContentGrid'
-import { OG_IMAGE_URL } from '@app/utils/constants'
 import { makeEtherscanLink, shortenAddress } from '@app/utils/utils'
 
 import { useAccountSafely } from '../hooks/account/useAccountSafely'
@@ -49,7 +48,8 @@ const Page = () => {
   const shortenedAddress = shortenAddress(address)
   const titleContent = t('meta.title', { address: shortenedAddress })
   const descriptionContent = t('meta.description', { address })
-  const ogImageUrl = `${OG_IMAGE_URL}/address/${address}`
+  // ENS's OG-image worker renders Ethereum-mainnet cards; use the static app icon
+  const ogImageUrl = '/android-chrome-512x512.png'
 
   const chainName = useChainName()
 

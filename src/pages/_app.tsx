@@ -37,7 +37,8 @@ import i18n from '../i18n'
 
 import '../styles.css'
 
-const INTERCOM_ID = process.env.NEXT_PUBLIC_INTERCOM_ID || 're9q5yti'
+// No fallback — the previous default was ENS Labs' Intercom workspace
+const INTERCOM_ID = process.env.NEXT_PUBLIC_INTERCOM_ID || ''
 
 const anim = keyframes`
   0% {
@@ -173,7 +174,7 @@ const AppWithThorin = ({ Component, pageProps }: Omit<AppPropsWithLayout, 'route
         <TransactionStoreProvider>
           <ThemeProvider theme={themeWithCSSVars}>
             <BreakpointProvider queries={breakpoints}>
-              <IntercomProvider appId={INTERCOM_ID}>
+              <IntercomProvider appId={INTERCOM_ID} shouldInitialize={!!INTERCOM_ID}>
                 <GlobalStyle />
                 <SyncProvider>
                   <TransactionFlowProvider>

@@ -5,10 +5,9 @@ import { Button, Dialog } from '@ensdomains/thorin'
 import { CenteredTypography } from '../components/CenteredTypography'
 
 type Props = {
-  name: string
   onCancel?: () => void
 }
-export const MigrateRegistryView = ({ name, onCancel }: Props) => {
+export const MigrateRegistryView = ({ onCancel }: Props) => {
   const { t } = useTranslation('transactionFlow')
   return (
     <>
@@ -34,7 +33,7 @@ export const MigrateRegistryView = ({ name, onCancel }: Props) => {
         trailing={
           <Button
             as="a"
-            href={`https://legacy.ens.domains/name/${name}`}
+            href="https://support.electroneum.com"
             target="_blank"
             data-testid="warning-overlay-next-button"
           >

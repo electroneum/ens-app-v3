@@ -11,7 +11,7 @@ import { usePrimaryName } from '@app/hooks/ensjs/public/usePrimaryName'
 import useHasPendingTransactions from '@app/hooks/transactions/useHasPendingTransactions'
 import { useEnsAvatar } from '@app/hooks/useEnsAvatar'
 import { useZorb } from '@app/hooks/useZorb'
-import { getDestination, getRoute, legacyFavouritesRoute } from '@app/routes'
+import { getDestination, getRoute } from '@app/routes'
 import { createUrlObject } from '@app/utils/urlObject'
 
 import { DisconnectButton, RouteItem } from './@atoms/RouteItem/RouteItem'
@@ -261,9 +261,6 @@ export const TabBar = () => {
             {address && (
               <>
                 <RouteItem route={getRoute('names')} />
-                {globalThis?.localStorage?.getItem('ensFavourites') && (
-                  <RouteItem route={legacyFavouritesRoute} />
-                )}
                 <TabBarProfile
                   address={address}
                   isOpen={isOpen}

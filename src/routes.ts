@@ -13,18 +13,7 @@ import {
   PersonSVG,
 } from '@ensdomains/thorin'
 
-export type PublicRoute =
-  | 'search'
-  | 'governance'
-  | 'blog'
-  | 'developers'
-  | 'support'
-  | 'bounty'
-  | 'terms'
-  | 'privacy'
-  | 'oldApp'
-  | 'ipfsApp'
-  | 'feedback'
+export type PublicRoute = 'search' | 'blog' | 'developers' | 'support' | 'terms' | 'privacy'
 export type ConnectedRoute = 'names' | 'profile' | 'favourites' | 'settings'
 export type AnyRoute = PublicRoute | ConnectedRoute | 'unknown'
 
@@ -101,90 +90,40 @@ export const routes: RouteItemObj[] = [
   },
   {
     name: 'support',
-    href: 'https://support.ens.domains',
+    href: 'https://support.electroneum.com',
     label: 'navigation.support',
     disabled: false,
     connected: false,
   },
   {
-    name: 'feedback',
-    href: 'https://enslabs.notion.site/20d7a8b1f0ed81feb54dfa19917e6acb?pvs=105',
-    label: 'navigation.feedback',
-    disabled: false,
-    connected: false,
-    onlyDropdown: true,
-  },
-  {
-    name: 'governance',
-    href: 'https://ensdao.org/',
-    label: 'navigation.governance',
-    disabled: false,
-    connected: false,
-  },
-  {
     name: 'blog',
-    href: 'https://blog.ens.domains',
+    href: 'https://blog.electroneum.com/',
     label: 'navigation.blog',
     disabled: false,
     connected: false,
   },
   {
     name: 'developers',
-    href: 'https://docs.ens.domains/',
+    href: 'https://developer.electroneum.com/',
     label: 'navigation.developers',
     disabled: false,
     connected: false,
   },
   {
-    name: 'bounty',
-    href: 'https://docs.ens.domains/bugs#-bug-bounty-program',
-    label: 'navigation.bounty',
-    disabled: false,
-    connected: false,
-  },
-  {
     name: 'terms',
-    href: 'https://ens.domains/legal/terms-of-use',
+    href: 'https://electroneum.com/terms-and-conditions/',
     label: 'navigation.terms',
     disabled: false,
     connected: false,
   },
   {
     name: 'privacy',
-    href: 'https://ens.domains/legal/privacy-policy',
+    href: 'https://electroneum.com/privacy-and-cookies-policy/',
     label: 'navigation.privacy',
     disabled: false,
     connected: false,
   },
-  {
-    name: 'oldApp',
-    href: 'https://legacy.ens.domains',
-    label: 'navigation.oldApp',
-    disabled: false,
-    connected: false,
-    onlyDropdown: true,
-  },
-  {
-    name: 'ipfsApp',
-    href: 'https://app.ens.eth.limo/',
-    label: 'navigation.ipfsApp',
-    disabled: false,
-    connected: false,
-    onlyDropdown: true,
-  },
 ]
-
-export const legacyFavouritesRoute: RouteItemObj = {
-  name: 'favourites',
-  href: '/legacyfavourites',
-  label: 'navigation.favourites',
-  disabled: false,
-  connected: false,
-  icon: {
-    inactive: HeartSVG,
-    active: HeartActiveSVG,
-  },
-}
 
 export const getRoute = (name: PublicRoute | ConnectedRoute): RouteItemObj =>
   routes.find((route) => route.name === name) as RouteItemObj

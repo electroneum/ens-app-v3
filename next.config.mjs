@@ -40,7 +40,10 @@ const nextConfig = {
   // change to true once infinite loop is fixed
   swcMinify: true,
   images: {
-    domains: ['metadata.ens.domains'],
+    // allow the configured metadata service host (no default — see metadataUrl.ts)
+    domains: process.env.NEXT_PUBLIC_METADATA_ENDPOINT
+      ? [new URL(process.env.NEXT_PUBLIC_METADATA_ENDPOINT).hostname]
+      : [],
   },
   async headers() {
     // keep this in case we need to debug Safe in the future
@@ -78,10 +81,6 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      {
-        source: '/legacyFavourites',
-        destination: '/legacyfavourites',
-      },
       {
         source: '/my/profile',
         destination: '/profile?connected=true',

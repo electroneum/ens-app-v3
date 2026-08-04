@@ -15,7 +15,7 @@ import { transports } from './wagmi'
 
 const prodParaApiKey = process.env.NEXT_PUBLIC_PARA_API_KEY_PROD
 
-const APP_NAME = 'ENS'
+const APP_NAME = 'Electroneum ENS'
 const PARA_ENV: Environment = prodParaApiKey ? Environment.PROD : Environment.BETA
 const PARA_API_KEY = prodParaApiKey || 'de88c0d78a98dd9a3b11897893997b06' // NOSONAR
 
@@ -38,7 +38,7 @@ const paraConstructorOpts: ConstructorOpts = {
 export const paraClient = new ParaWeb(PARA_ENV, PARA_API_KEY, paraConstructorOpts)
 
 export const paraModalProps = {
-  appName: 'ENS Manager App',
+  appName: 'Electroneum ENS Manager',
   oAuthMethods: [OAuthMethod.GOOGLE, OAuthMethod.DISCORD, OAuthMethod.APPLE, OAuthMethod.FACEBOOK],
   recoverySecretStepEnabled: true,
 } as const satisfies Partial<ParaModalProps>

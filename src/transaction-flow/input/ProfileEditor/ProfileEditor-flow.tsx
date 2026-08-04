@@ -570,7 +570,7 @@ const ProfileEditor = ({ data = {}, transactions = [], dispatch, onDismiss }: Pr
             }}
           />
         ))
-        .with('migrateRegistry', () => <MigrateRegistryView name={name} onCancel={onDismiss} />)
+        .with('migrateRegistry', () => <MigrateRegistryView onCancel={onDismiss} />)
         .with('invalidResolver', () => (
           <InvalidResolverView onConfirm={() => handleUpdateResolver()} onCancel={onDismiss} />
         ))

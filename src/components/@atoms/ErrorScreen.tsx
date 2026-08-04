@@ -69,7 +69,7 @@ const ErrorScreen = ({ errorType }: { errorType: ErrorType }) => {
           components={{
             HomeLink: <LinkWrapper />,
             // eslint-disable-next-line jsx-a11y/control-has-associated-label, jsx-a11y/anchor-has-content
-            SupportLink: <a href="https://support.ens.domains" />,
+            SupportLink: <a href="https://support.electroneum.com" />,
           }}
         />
       </Typography>

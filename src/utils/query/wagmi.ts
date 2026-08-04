@@ -1,5 +1,3 @@
-import { inAppWalletConnector } from '@thirdweb-dev/wagmi-adapter'
-import { createThirdwebClient, defineChain as thirdwebDefineChain } from 'thirdweb'
 import {
   createClient,
   formatTransactionRequest,
@@ -11,7 +9,7 @@ import {
   type Transport,
 } from 'viem'
 import { createConfig, createStorage, http } from 'wagmi'
-import { localhost, mainnet, sepolia } from 'wagmi/chains'
+import { localhost } from 'wagmi/chains'
 
 import { ccipRequest } from '@ensdomains/ensjs/utils'
 
@@ -20,35 +18,9 @@ import { electroneumMainnet, electroneumTestnet } from '@app/utils/chains/electr
 
 import { isInsideSafe } from '../safe'
 import { getCustomRpcForChain } from './customRpc'
-import { buildChainTransport, drpcUrl, drpcWsUrl } from './transports'
 import { rainbowKitConnectors } from './wallets'
 
 const isLocalProvider = !!process.env.NEXT_PUBLIC_PROVIDER
-
-const thirdwebClientId =
-  process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID || '4e8c81182c3709ee441e30d776223354'
-const unicornFactoryAddress =
-  process.env.NEXT_PUBLIC_NEXT_PUBLIC_UNICORN_FACTORY_ADDRESS ||
-  '0xD771615c873ba5a2149D5312448cE01D677Ee48A'
-
-// Create Thirdweb Client
-const client = createThirdwebClient({
-  clientId: thirdwebClientId,
-})
-
-// Create the Unicorn Wallet Connector (using Thirdweb In-App Wallet)
-// Note: The chain specified here is for the smart account functionality as per Unicorn docs.
-const unicornConnector = inAppWalletConnector({
-  client,
-  smartAccount: {
-    sponsorGas: true, // or false based on your needs / Unicorn requirements
-    chain: thirdwebDefineChain(mainnet.id),
-    factoryAddress: unicornFactoryAddress,
-  },
-})
-
-// Re-exported for backwards compatibility with existing importers/mocks.
-export { drpcUrl, drpcWsUrl }
 
 export const prefix = 'wagmi'
 
@@ -86,7 +58,7 @@ const localStorageWithInvertMiddleware = (): Storage | undefined => {
 
 export const transports = {
   // The localhost provider is a plain http transport pointed at the dev anvil node; custom
-  // RPC overrides only ever apply to the active production chain (mainnet or sepolia).
+  // RPC overrides only ever apply to the active Electroneum chain.
   ...(isLocalProvider
     ? ({
         [localhost.id]: http(process.env.NEXT_PUBLIC_PROVIDER!) as unknown as FallbackTransport,
@@ -95,14 +67,6 @@ export const transports = {
         // this is a hack to make the types happy, dont remove pls
         [localhost.id]: HttpTransport
       })),
-  [mainnet.id]: buildChainTransport({
-    chainName: 'mainnet',
-    customRpc: getCustomRpcForChain(mainnet.id),
-  }),
-  [sepolia.id]: buildChainTransport({
-    chainName: 'sepolia',
-    customRpc: getCustomRpcForChain(sepolia.id),
-  }),
   [electroneumTestnet.id]: http(
     getCustomRpcForChain(electroneumTestnet.id)?.url ?? process.env.NEXT_PUBLIC_ETN_TESTNET_RPC_URL,
   ),
@@ -157,11 +121,9 @@ const chains = getChainsFromUrl().map((c) => ({
   },
 })) as unknown as readonly [SupportedChain, ...SupportedChain[]]
 
-const combinedConnectors = [unicornConnector, ...rainbowKitConnectors]
-
 const wagmiConfig_ = createConfig({
   syncConnectedChain: false,
-  connectors: combinedConnectors,
+  connectors: rainbowKitConnectors,
   ssr: true,
   multiInjectedProviderDiscovery: !isInsideSafe(),
   storage: createStorage({ storage: localStorageWithInvertMiddleware(), key: prefix }),

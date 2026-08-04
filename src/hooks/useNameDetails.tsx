@@ -59,14 +59,7 @@ export const useNameDetails = ({ name, subgraphEnabled = true }: UseNameDetailsP
     }
     if (profile && !profile.isMigrated && typeof profile.isMigrated === 'boolean') {
       return {
-        content: (
-          <>
-            {t('errors.migrationNotAvailable')}
-            <a href={`https://legacy.ens.domains/name/${normalisedName}`}>
-              {t('errors.migrationNotAvailableLink')}
-            </a>
-          </>
-        ),
+        content: <>{t('errors.migrationNotAvailable')}</>,
       }
     }
     if (registrationStatus === 'invalid') {
