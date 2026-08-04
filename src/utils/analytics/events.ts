@@ -5,9 +5,7 @@ import type {
   DnsImportType,
   DnsStep,
 } from '@app/components/pages/import/[name]/useDnsImportReducer'
-import {
-  RegistrationStep
-} from '@app/components/pages/profile/[name]/registration/types'
+import { RegistrationStep } from '@app/components/pages/profile/[name]/registration/types'
 import { ProfileRecord } from '@app/constants/profileRecordOptions'
 
 export type EventDefs = {

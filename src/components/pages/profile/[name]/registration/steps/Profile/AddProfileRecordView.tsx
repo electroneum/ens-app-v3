@@ -333,8 +333,9 @@ export const AddProfileRecordView = ({ control, onAdd, onClose, showDismiss }: P
                               ),
                             }
                           : option.group === 'address' && item.key === 'eth'
-                            ? { label: 'ETN' }
-                            : {})}                        selected={isOptionSelected(item)}
+                          ? { label: 'ETN' }
+                          : {})}
+                        selected={isOptionSelected(item)}
                         disabled={isOptionDisabled(item)}
                         onClick={() => handleToggleOption(item)}
                       />

@@ -10,10 +10,11 @@ import { ProfileRecord, ProfileRecordGroup } from '@app/constants/profileRecordO
 import { supportedAddresses } from '@app/constants/supportedAddresses'
 import { AvatarEditorType } from '@app/types'
 import { normalizeCoinAddress } from '@app/utils/coin'
-import { validateUrl } from '@app/validators/validateUrl'
 import { validateAccount } from '@app/validators/validateAccount'
 import { validateCryptoAddress } from '@app/validators/validateAddress'
 import { validateContentHash } from '@app/validators/validateContentHash'
+import { validateUrl } from '@app/validators/validateUrl'
+
 import { ContentHashProvider } from '../utils/contenthash'
 import { validateAbi } from '../validators/validateAbi'
 

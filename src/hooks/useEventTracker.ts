@@ -36,10 +36,7 @@ type DefaultEvent = {
     | 'dns_claim_wallet_opened'
   customProperties?: never
 }
-export type TrackEventParameters =
-  | SearchSelectEvent
-  | DefaultEvent
-  | DNSImportTypeSelectedEvent
+export type TrackEventParameters = SearchSelectEvent | DefaultEvent | DNSImportTypeSelectedEvent
 export const useEventTracker = () => {
   const chain = useChainName()
   const trackEvent = (props: TrackEventParameters) => {

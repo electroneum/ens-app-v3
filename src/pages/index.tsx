@@ -110,7 +110,6 @@ export default function Page() {
             </Typography>
           </SubtitleWrapper>
           <SearchInput />
-
         </Stack>
       </Container>
     </>

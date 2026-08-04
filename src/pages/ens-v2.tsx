@@ -118,7 +118,7 @@ const Main = styled.main(
   `,
 ) */
 
-//const AnnouncementBanner = styled.div(
+// const AnnouncementBanner = styled.div(
 //  ({ theme }) => css`
 //    width: 312px;
 //    height: 182px;
@@ -132,7 +132,7 @@ const Main = styled.main(
 //      }
 //    }
 //  `,
-//)
+// )
 
 /* const TopNav = styled.div(
   ({ theme }) => css`
@@ -204,23 +204,23 @@ const CardHeader = styled.h3(
 //   </AnnouncementBanner>
 // )
 
-//const AnnouncementSlideTemp = ({
+// const AnnouncementSlideTemp = ({
 //  title,
 //  text,
 //  href = '#',
-//}: {
+// }: {
 //  title: string
 //  text: string
 //  href?: string
-//}) => (
+// }) => (
 //  <AnnouncementBanner>
 //    <Banner as="a" alert="info" target="_blank" rel="noopener noreferrer" href={href} title={title}>
 //      {text}
 //    </Banner>
 //  </AnnouncementBanner>
-//)
+// )
 
-//const AnnouncementContainer = styled.div(
+// const AnnouncementContainer = styled.div(
 //  ({ theme }) => css`
 //    display: flex;
 //    align-items: center;
@@ -228,7 +228,7 @@ const CardHeader = styled.h3(
 //    gap: ${theme.space['4']};
 //    flex-flow: row wrap;
 //  `,
-//)
+// )
 
 const SlideshowContainer = styled.div(
   ({ theme }) => css`
@@ -311,10 +311,10 @@ export default function ENSv2() {
           {t('accessible.multichain.text')}
         </Card>
       </GridOneToThree>
-        <Typography as="h3" fontVariant="headingThree">
-          {t('announcement.title')}
-        </Typography>
-        {/* <Carousel>
+      <Typography as="h3" fontVariant="headingThree">
+        {t('announcement.title')}
+      </Typography>
+      {/* <Carousel>
           <AnnouncementSlide
             title={t('announcement.l2.title')}
             text={t('announcement.l2.caption')}

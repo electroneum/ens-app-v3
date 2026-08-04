@@ -6,14 +6,13 @@ import type { Eth2ldName } from '@ensdomains/ensjs/dist/types'
 import type { GetPriceReturnType } from '@ensdomains/ensjs/public'
 import type { DecodedFuses } from '@ensdomains/ensjs/utils'
 
+import { electroneumWithEns } from '@app/constants/chains'
 import { KNOWN_RESOLVER_DATA } from '@app/constants/resolverAddressData'
 import type { ConnectorClientWithEns } from '@app/types'
 
 import { CURRENCY_FLUCTUATION_BUFFER_PERCENTAGE } from './constants'
 import { calculateDatesDiff } from './date'
 import { ONE_YEAR } from './time'
-
-import { electroneumWithEns } from '@app/constants/chains'
 
 export * from './time'
 

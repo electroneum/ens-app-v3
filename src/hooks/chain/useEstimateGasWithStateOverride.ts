@@ -166,7 +166,7 @@ const estimateIndividualGas = async <TName extends TransactionName>({
   connectorClient,
   client,
 }: { name: TName; stateOverride?: UserStateOverrides } & TransactionParameters<TName>) => {
-const generatedRequest = await createTransactionRequest({
+  const generatedRequest = await createTransactionRequest({
     client,
     connectorClient,
     data,
@@ -208,7 +208,7 @@ const generatedRequest = await createTransactionRequest({
     ]),
   )
 
-try {
+  try {
     const gas = await client.request<{
       Method: 'eth_estimateGas'
       Parameters:

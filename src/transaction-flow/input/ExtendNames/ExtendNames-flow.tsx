@@ -366,7 +366,7 @@ const ExtendNames = ({
       <Dialog.Content data-testid="extend-names-modal">
         {match([view, isBaseDataLoading])
           .with([P._, true], () => <SearchViewLoadingView />)
-.with(['disabled', false], () => (
+          .with(['disabled', false], () => (
             <DisabledContainer>
               <Banner alert="warning" title={t('input.extendNames.disabled.title')}>
                 {t('input.extendNames.disabled.banner')}
