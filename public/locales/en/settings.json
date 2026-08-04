@@ -21,12 +21,12 @@
     },
     "rpc": {
       "title": "Custom RPC endpoint",
-      "description": "By default the app uses an ENS-operated RPC endpoint. You can point it at your own JSON-RPC endpoint instead. This is stored on this device only and applies to the network this app serves.",
+      "description": "By default the app uses its configured Electroneum RPC endpoint. You can point it at your own JSON-RPC endpoint instead. This is stored on this device only and applies to the network this app serves.",
       "label": "RPC URL",
       "placeholder": "https://your-node.example",
       "exclusive": {
         "title": "Use only my RPC endpoint",
-        "description": "Disable the ENS-operated fallback so all requests go to your endpoint.",
+        "description": "Disable the default Electroneum RPC fallback so all requests go to your endpoint.",
         "warning": "With no fallback, the app may stop working if your endpoint goes down or blocks browser requests."
       },
       "action": {

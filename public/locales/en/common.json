@@ -214,13 +214,13 @@
       "migrateProfile": "Migrate profile",
       "migrateProfileWithReset": "Migrate profile",
       "migrateProfileWithSync": "Migrate and update profile",
-      "migrateProfileWithEthAddress": "Migrate and update ETH address",
+      "migrateProfileWithEthAddress": "Migrate and update ETN address",
       "wrapName": "Wrap name",
       "updateResolver": "Update resolver",
       "updateProfile": "Update profile",
       "setPrimaryName": "Set primary name",
       "resetPrimaryName": "Remove primary name",
-      "updateEthAddress": "Update ETH address",
+      "updateEthAddress": "Update ETN address",
       "testSendName": "Send name",
       "burnFuses": "Burn permissions",
       "createSubname": "Create subname",
@@ -253,13 +253,13 @@
       "migrateProfile": "Set existing records on new resolver",
       "migrateProfileWithReset": "Set existing records on new resolver",
       "migrateProfileWithSync": "Set existing records on new resolver",
-      "migrateProfileWithEthAddress": "Set existing records and eth address on new resolver",
+      "migrateProfileWithEthAddress": "Set existing records and ETN address on new resolver",
       "wrapName": "Wrap the name",
       "updateResolver": "Change resolver to",
       "updateProfile": "Update records on existing resolver",
       "setPrimaryName": "Set the primary name for your address",
-      "updateEthAddress": "Update ETH address to this address",
-      "updateEthAddressOnLatestResolver": "Update ETH address on latest resolver",
+      "updateEthAddress": "Update ETN address to this address",
+      "updateEthAddressOnLatestResolver": "Update ETN address on latest resolver",
       "testSendName": "Set the controller and registrant of the name",
       "createSubname": "Create a new subname on the name",
       "burnFuses": "Burn the chosen permissions until name expiry",
@@ -442,16 +442,6 @@
     "default": "We could't verify your account. Please return to Dentity and try again."
   },
   "networkNotifications": {
-    "Ethereum": {
-      "title": "Switch to Ethereum?",
-      "description": "You've selected Ethereum (mainnet) in your wallet.",
-      "action": "Go to app.ens.domains"
-    },
-    "Sepolia": {
-      "title": "Switch to Sepolia?",
-      "description": "You've selected Sepolia (testnet) in your wallet.",
-      "action": "Go to sepolia.app.ens.domains"
-    },
     "Electroneum": {
       "title": "Switch to Electroneum?",
       "description": "You've selected Electroneum (mainnet) in your wallet.",

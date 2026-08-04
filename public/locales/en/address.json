@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "{{address}} on ENS",
-    "description": "All names for {{address}} on the Ethereum Name Service"
+    "description": "All names for {{address}} on Electroneum ENS"
   },
   "addressDetails": "Address Details",
   "nameCount": "{{count}} names",

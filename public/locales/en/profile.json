@@ -37,7 +37,7 @@
         "setAsPrimaryName": {
           "label": "Set as primary name",
           "title": "Set your primary name",
-          "description": "To set your primary name to this name, the ETH address must match this address."
+          "description": "To set your primary name to this name, the ETN address must match this address."
         },
         "deleteSubname": {
           "label": "Delete subname"
@@ -277,7 +277,7 @@
         "outdated": "Outdated",
         "wildcard": "Wildcard",
         "version": "Version",
-        "etherscan": "Etherscan"
+        "etherscan": "Block Explorer"
       },
       "fuses": {
         "label": "Fuses",
@@ -297,7 +297,7 @@
           "CANNOT_UNWRAP": "Can unwrap",
           "PARENT_CANNOT_CONTROL": "Parent can control",
           "CAN_EXTEND_EXPIRY": "Cannot extend expiry",
-          "IS_DOT_ETH": "Is not .eth"
+          "IS_DOT_ETH": "Is not .etn"
         }
       },
       "ownership": {
@@ -340,19 +340,12 @@
       "misc": {
         "registered": "Registered",
         "expires": "Expires",
-        "bankless": {
-          "title": "Bankless Reminders",
-          "enterEmail": "Receive <a>Bankless</a> Reminders through Email, PUSH, XMTP, Blockscan Chat, and Mailchain.",
-          "emailConfirmation": "You're almost done. Please check your email to confirm your subscription.",
-          "submitError": "Submission failed. Please try again."
-        },
         "reminderOptions": {
           "google": "Google calendar",
           "outlook": "Outlook calendar",
           "office365": "Office 365 calendar",
           "yahoo": "Yahoo calendar",
-          "ical": "iCal download (.ics)",
-          "bankless": "Bankless Reminders"
+          "ical": "iCal download (.ics)"
         }
       }
     }
@@ -368,7 +361,7 @@
       "makeOwnerDescription": "The owner can send to a new owner and change the manager",
       "makeManager": "Make manager",
       "makeManagerDescription": "The manager can change and set records.",
-      "inputPlaceholder": "Enter an Ethereum address or ENS name",
+      "inputPlaceholder": "Enter an ETN address or ENS name",
       "transferSubname": "Transfer Name",
       "transferController": "Transfer Controller"
     },
