@@ -6,7 +6,7 @@ export const electroneumMainnet = {
   nativeCurrency: { name: 'Electroneum', symbol: 'ETN', decimals: 18 },
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_ETN_MAINNET_RPC_URL || 'https://rpc.ankr.electroneum.com'],
+      http: [process.env.NEXT_PUBLIC_ETN_MAINNET_RPC_URL || 'https://rpc.ankr.com/electroneum'],
     },
   },
   blockExplorers: {
