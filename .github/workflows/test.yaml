@@ -42,46 +42,6 @@ jobs:
           name: stateless-build
           path: stateless-build.tar
 
-  build-stateful-sepolia:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-
-      - name: Build stateful sepolia and export
-        run: |
-          export NEXT_PUBLIC_CHAIN_NAME=sepolia
-          pnpm build && pnpm export
-
-      - name: Tar stateful sepolia files
-        run: tar -cvf stateful-sepolia-build.tar out
-
-      - name: Upload stateful sepolia
-        uses: actions/upload-artifact@v4
-        with:
-          name: stateful-sepolia-build
-          path: stateful-sepolia-build.tar
-
-  build-stateful-mainnet:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-
-      - name: Build stateful mainnet and export
-        run: |
-          export NEXT_PUBLIC_CHAIN_NAME=mainnet
-          pnpm build && pnpm export
-
-      - name: Tar stateful mainnet files
-        run: tar -cvf stateful-mainnet-build.tar out
-
-      - name: Upload stateful mainnet
-        uses: actions/upload-artifact@v4
-        with:
-          name: stateful-mainnet-build
-          path: stateful-mainnet-build.tar
-
   stateless:
     name: stateless (${{matrix.shard}})
     needs: build-stateless
@@ -153,87 +113,6 @@ jobs:
           path: playwright-report/
           retention-days: 30
           overwrite: true
-
-  stateful-sepolia:
-    name: stateful-sepolia (${{matrix.shard}})
-    needs: build-stateful-sepolia
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        shard: [1, 2, 3]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-
-      - name: Install Playwright
-        run: pnpm exec playwright install --with-deps chromium
-
-      - run: pnpm rebuild -r
-
-      - name: Download sepolia build
-        id: download
-        uses: actions/download-artifact@v4
-        with:
-          name: stateful-sepolia-build
-
-      - name: Untar sepolia files
-        run: tar -xvf stateful-sepolia-build.tar
-
-      - name: Run sepolia tests
-        run: |
-          parallel --lb --halt now,success=1,fail=1 ::: \
-          "pnpm wrangle" \
-          "pnpm wait-on http://127.0.0.1:8788 && npx playwright test --shard=${{matrix.shard}}/${{strategy.job-total}} --project=stateful --grep-invert='@mainnet'"
-        env:
-          SECRET_WORDS: ${{ secrets.SECRET_WORDS }}
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: stateful-sepolia-report-${{matrix.shard}}
-          path: playwright-report/
-          retention-days: 30
-
-  stateful-mainnet:
-    name: stateful-mainnet (${{matrix.shard}})
-    needs: build-stateful-mainnet
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        shard: [1, 2, 3]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-
-      - name: Install Playwright
-        run: pnpm exec playwright install --with-deps chromium
-
-      - run: |
-          export NEXT_PUBLIC_CHAIN_NAME=mainnet
-          pnpm rebuild -r
-
-      - name: Download mainnet build
-        id: download
-        uses: actions/download-artifact@v4
-        with:
-          name: stateful-mainnet-build
-
-      - name: Untar mainnet files
-        run: tar -xvf stateful-mainnet-build.tar
-
-      - name: Run mainnet tests
-        run: |
-          parallel --lb --halt now,success=1,fail=1 ::: \
-          "pnpm dev:mainnet" \
-          "pnpm wait-on http://127.0.0.1:3000 && CHAIN=mainnet npx playwright test --shard=${{matrix.shard}}/${{strategy.job-total}} --project=stateful --grep='@mainnet'"
-        env:
-          SECRET_WORDS: ${{ secrets.SECRET_WORDS }}
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: stateful-mainnet-report-${{matrix.shard}}
-          path: playwright-report/
-          retention-days: 30
+# The upstream stateful jobs (sepolia/mainnet builds + e2e against live
+# Ethereum networks with an ENS Labs funded wallet) were removed: they target
+# networks this fork doesn't use and require secrets this repo doesn't have.
