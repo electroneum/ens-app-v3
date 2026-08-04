@@ -320,26 +320,30 @@ export const AddProfileRecordView = ({ control, onAdd, onClose, showDismiss }: P
                     {t(`steps.profile.options.groups.${option.group}.label`)}
                   </GroupLabel>
                   <OptionsGrid>
-                    {option.items.map((item) => (
-                      <OptionButton
-                        data-testid={`profile-record-option-${item.key}`}
-                        group={option.group}
-                        key={item.key}
-                        item={item.key}
-                        {...(showLabel
-                          ? {
-                              label: t(
-                                `steps.profile.options.groups.${option.group}.items.${item.key}`,
-                              ),
-                            }
-                          : option.group === 'address' && item.key === 'eth'
-                          ? { label: 'ETN' }
-                          : {})}
-                        selected={isOptionSelected(item)}
-                        disabled={isOptionDisabled(item)}
-                        onClick={() => handleToggleOption(item)}
-                      />
-                    ))}
+                    {option.items.map((item) => {
+                      let labelProps: { label?: string } = {}
+                      if (showLabel) {
+                        labelProps = {
+                          label: t(
+                            `steps.profile.options.groups.${option.group}.items.${item.key}`,
+                          ),
+                        }
+                      } else if (option.group === 'address' && item.key === 'eth') {
+                        labelProps = { label: 'ETN' }
+                      }
+                      return (
+                        <OptionButton
+                          data-testid={`profile-record-option-${item.key}`}
+                          group={option.group}
+                          key={item.key}
+                          item={item.key}
+                          {...labelProps}
+                          selected={isOptionSelected(item)}
+                          disabled={isOptionDisabled(item)}
+                          onClick={() => handleToggleOption(item)}
+                        />
+                      )
+                    })}
                     {option.group === 'other' && (
                       <OptionButton
                         group="custom"

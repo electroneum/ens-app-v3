@@ -5,13 +5,13 @@ import { useAccount, useChainId } from 'wagmi'
 import { Button, Toast } from '@ensdomains/thorin'
 
 import { getSupportedChainById } from '@app/constants/chains'
+import { electroneumMainnet, electroneumTestnet } from '@app/utils/chains/electroneumChains'
 
 import { shouldOpenModal } from './utils'
 
-const appLinks = {
-  Localhost: '',
-  Electroneum: 'ens.electroneum.com',
-  'Electroneum Testnet': 'ens.electroneum.com',
+const appLinks: Record<number, string> = {
+  [electroneumMainnet.id]: 'ens.electroneum.com',
+  [electroneumTestnet.id]: 'ens.electroneum.com',
 }
 
 export const NetworkNotifications = () => {
@@ -26,8 +26,9 @@ export const NetworkNotifications = () => {
     setOpen(shouldOpenModal(connectedChainId, accountChainId))
   }, [connectedChainId, accountChainId])
 
-  const accountChainName = getSupportedChainById(accountChainId)?.name
-  if (!accountChainName) return null
+  const accountChain = getSupportedChainById(accountChainId)
+  if (!accountChain) return null
+  const accountChainName = accountChain.name
 
   return (
     <Toast
@@ -37,7 +38,7 @@ export const NetworkNotifications = () => {
       variant="desktop"
       onClose={() => setOpen(false)}
     >
-      <Button size="small" as="a" href={`https://${appLinks[accountChainName]}`}>
+      <Button size="small" as="a" href={`https://${appLinks[accountChain.id] ?? ''}`}>
         {t(`networkNotifications.${accountChainName}.action`)}
       </Button>
     </Toast>

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { usePreviousDistinct } from 'react-use'
 import styled, { css } from 'styled-components'
 import { match, P } from 'ts-pattern'

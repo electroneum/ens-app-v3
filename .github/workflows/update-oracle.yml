@@ -1,8 +1,8 @@
 name: Update ETN/USD Oracle
 
+# Scheduled runs are disabled until the ORACLE_ADDRESS / ORACLE_OWNER_PRIVATE_KEY /
+# ETN_RPC_URL secrets are configured on the repo. Manual dispatch remains available.
 on:
-  schedule:
-    - cron: '0 * * * *' # every hour
   workflow_dispatch:
     inputs:
       dry_run:
