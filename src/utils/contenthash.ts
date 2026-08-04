@@ -19,25 +19,18 @@ type GetContentHashLinkParameters = {
   decodedContentHash: DecodedContentHash
 }
 
-export const getContentHashLink = ({
-  name,
-  chainId,
-  decodedContentHash,
-}: GetContentHashLinkParameters) => {
+// name/chainId kept in the signature for call-site compatibility — the
+// eth.limo gateway branch that used them was Ethereum-mainnet-only
+export const getContentHashLink = ({ decodedContentHash }: GetContentHashLinkParameters) => {
   const protocol = decodedContentHash.protocolType
   const hash = decodedContentHash.decoded
 
-  const useEthLink =
-    name.endsWith('.eth') && chainId === 1 && (protocol === 'ipfs' || protocol === 'ipns')
-  if (useEthLink) {
-    return `https://${name}.limo`
-  }
-
   if (protocol === 'ipfs') {
-    return `https://${hash}.ipfs.cf-ipfs.com` // using ipfs's secured origin gateway
+    // subdomain-style secured origin gateway (cf-ipfs.com was shut down in 2024)
+    return `https://${hash}.ipfs.dweb.link`
   }
   if (protocol === 'ipns') {
-    return `https://ipfs.euc.li/ipns/${hash}`
+    return `https://${hash}.ipns.dweb.link`
   }
   if (protocol === 'bzz') {
     return `https://gateway.ethswarm.org/bzz/${hash}`
@@ -45,12 +38,10 @@ export const getContentHashLink = ({
   if (protocol === 'onion' || protocol === 'onion3') {
     return `http://${hash}.onion`
   }
-  if (protocol === 'sia') {
-    return `https://siasky.net/${hash}`
-  }
   if (protocol === 'ar') {
     return `https://arweave.net/${hash}`
   }
+  // sia/skynet gateways are defunct; no usable public link
   return null
 }
 

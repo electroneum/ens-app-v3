@@ -113,7 +113,9 @@ type Props = {
 
 const AvatarButton = ({
   validated,
-  disabledUpload,
+  // uploads need an avatar-upload service; the upstream default (euc.li)
+  // doesn't serve Electroneum, so hide the option unless one is configured
+  disabledUpload = !process.env.NEXT_PUBLIC_AVUP_ENDPOINT,
   dirty,
   error,
   src,
@@ -166,11 +168,17 @@ const AvatarButton = ({
           <LegacyDropdown
             items={
               [
-                {
-                  label: t('input.profileEditor.tabs.avatar.dropdown.selectNFT'),
-                  color: 'text',
-                  onClick: handleSelectOption('nft'),
-                },
+                // the NFT picker needs an NFT indexer for the active chain;
+                // none exists for Electroneum unless one is configured
+                ...(process.env.NEXT_PUBLIC_NFT_WORKER_URL
+                  ? [
+                      {
+                        label: t('input.profileEditor.tabs.avatar.dropdown.selectNFT'),
+                        color: 'text',
+                        onClick: handleSelectOption('nft'),
+                      },
+                    ]
+                  : []),
                 ...(disabledUpload
                   ? []
                   : [

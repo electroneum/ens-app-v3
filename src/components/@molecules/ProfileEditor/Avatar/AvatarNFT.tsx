@@ -70,7 +70,9 @@ async function getNfts({
   owner: string
   pageKey: string
 }) {
-  const baseURL = `https://ens-nft-worker.ens-cf.workers.dev/v1/${network}/getNfts/`
+  // No default: the ENS NFT worker doesn't index Electroneum. The picker is
+  // hidden in AvatarButton unless this endpoint is configured.
+  const baseURL = `${process.env.NEXT_PUBLIC_NFT_WORKER_URL}/v1/${network}/getNfts/`
 
   const urlParams = new URLSearchParams()
 

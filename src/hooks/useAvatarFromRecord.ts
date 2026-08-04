@@ -19,6 +19,9 @@ const makeApiURL = (address: string) => {
   const contractAddress = match?.[3]
   const tokenId = match?.[4]
   const network = chainIdToNetwork(chainId)
+  // no NFT metadata indexer exists for other chains (incl. Electroneum) —
+  // without this guard the URL would be built with an empty network segment
+  if (!network) return undefined
   if (tokenType && contractAddress && tokenId)
     return `https://eth-${network}.alchemyapi.io/nft/v2/${alchemyKey}/getNFTMetadata/?contractAddress=${contractAddress}&tokenId=${tokenId}&tokenType=${tokenType}&refreshCache=false`
   return undefined
@@ -31,7 +34,8 @@ const getAvatarSrc = async (record: string) => {
 
     if (protocol === 'ipfs') {
       const { decoded } = getProtocolType(record)!
-      return `https://cloudflare-ipfs.com/ipfs/${decoded}`
+      // cloudflare-ipfs.com was shut down in 2024
+      return `https://ipfs.io/ipfs/${decoded}`
     }
 
     if (protocol === 'ar') {

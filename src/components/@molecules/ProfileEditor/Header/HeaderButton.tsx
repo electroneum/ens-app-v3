@@ -154,7 +154,9 @@ type Props = {
 
 const HeaderButton = ({
   validated,
-  disabledUpload,
+  // uploads need an avatar-upload service; the upstream default (euc.li)
+  // doesn't serve Electroneum, so hide the option unless one is configured
+  disabledUpload = !process.env.NEXT_PUBLIC_AVUP_ENDPOINT,
   dirty,
   error,
   src,

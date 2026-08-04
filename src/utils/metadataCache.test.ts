@@ -9,6 +9,23 @@ import {
   setCacheBustExpiry,
 } from './metadataCache'
 
+// createMetaDataUrl returns null unless NEXT_PUBLIC_METADATA_ENDPOINT is
+// configured; pin a base URL here so the cache-bust logic stays testable
+vi.mock('@app/utils/metadataUrl', () => ({
+  createMetaDataUrl: ({
+    name,
+    chainName,
+    mediaKey = 'avatar',
+  }: {
+    name?: string
+    chainName: string
+    mediaKey?: 'avatar' | 'header'
+  }) =>
+    name && chainName && mediaKey
+      ? `https://metadata.ens.domains/${chainName}/${mediaKey}/${name}`
+      : null,
+}))
+
 describe('metadataCache', () => {
   beforeEach(() => {
     clearCacheBustExpiries()
