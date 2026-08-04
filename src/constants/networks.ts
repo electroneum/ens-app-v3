@@ -111,12 +111,6 @@ export const networks = match(network)
     },
     ...testnetNetworks,
   ])
-  .otherwise(() => [
-    defaultNetwork,
-    {
-      name: 'eth',
-      chainId: mainnet.id,
-      coinType: 60,
-    },
-    ...mainnetNetworks,
-  ])
+  // Electroneum (and localhost): the network-specific primary-name lists are an
+  // ENS-mainnet L2 concept — never advertise Ethereum L2 coin types here.
+  .otherwise(() => [defaultNetwork])

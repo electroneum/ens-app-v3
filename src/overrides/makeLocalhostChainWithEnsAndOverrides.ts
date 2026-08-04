@@ -18,12 +18,19 @@ export const makeLocalhostChainWithEnsAndOverrides = <const T extends Chain>(
     ...chainWithEns,
     contracts: {
       ...chainWithEns.contracts,
-      ensBulkRenewal: {
-        address: deploymentAddresses.WrappedStaticBulkRenewal as Address,
-      },
-      wrappedRenewalWithReferrer: {
-        address: deploymentAddresses.UniversalRegistrarRenewalWithReferrer as Address,
-      },
+      // Only define contracts whose addresses are actually deployed, so that
+      // getChainContractAddress throws instead of returning undefined (which
+      // would otherwise end up as a `to: undefined` contract-creation tx).
+      ...(deploymentAddresses.WrappedStaticBulkRenewal && {
+        ensBulkRenewal: {
+          address: deploymentAddresses.WrappedStaticBulkRenewal as Address,
+        },
+      }),
+      ...(deploymentAddresses.UniversalRegistrarRenewalWithReferrer && {
+        wrappedRenewalWithReferrer: {
+          address: deploymentAddresses.UniversalRegistrarRenewalWithReferrer as Address,
+        },
+      }),
     },
   } as LocalhostChainWithEnsAndContracts<T, AdditionalContracts>
 }

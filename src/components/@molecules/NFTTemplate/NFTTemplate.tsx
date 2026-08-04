@@ -14,7 +14,12 @@ const bgProps = { width: '270', height: '270' }
 
 const getEllipsis = (str: string) => {
   const len = str.length
-  return `${str.substring(0, MAX_CHAR - 7)}...${str.substring(len - 7, len - 4)}.eth`
+  const tld = str.split('.').pop() ?? 'etn'
+  const suffixLen = tld.length + 1 // ".etn"
+  return `${str.substring(0, MAX_CHAR - 7)}...${str.substring(
+    len - suffixLen - 3,
+    len - suffixLen,
+  )}.${tld}`
 }
 
 const getFontSize = (str: string) => {

@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 import { getAddress } from 'viem'
+import { useChainId } from 'wagmi'
 
 import { truncateFormat } from '@ensdomains/ensjs/utils'
 
+import { getChainSupportsNameWrapping } from '@app/constants/chains'
 import { getRegistrationStatus } from '@app/utils/registrationStatus'
 import { isLabelTooLong, yearsToSeconds } from '@app/utils/utils'
 
@@ -33,6 +35,7 @@ export const useBasicName = ({
   enabled = true,
   subgraphEnabled = true,
 }: UseBasicNameOptions) => {
+  const chainId = useChainId()
   const validation = useValidate({ input: name!, enabled: enabled && !!name })
 
   const { name: _normalisedName, isValid, isShort, isETH, is2LD } = validation
@@ -135,6 +138,7 @@ export const useBasicName = ({
   const canBeWrapped = useMemo(
     () =>
       !!(
+        getChainSupportsNameWrapping(chainId) &&
         nameWrapperAddress &&
         !isWrapped &&
         normalisedName?.endsWith('.etn') &&
@@ -142,7 +146,7 @@ export const useBasicName = ({
         !!registrationStatus &&
         ['registered', 'imported', 'owned'].includes(registrationStatus)
       ),
-    [nameWrapperAddress, isWrapped, normalisedName, registrationStatus],
+    [chainId, nameWrapperAddress, isWrapped, normalisedName, registrationStatus],
   )
 
   const { data: subgraphRegistrant } = useSubgraphRegistrant({

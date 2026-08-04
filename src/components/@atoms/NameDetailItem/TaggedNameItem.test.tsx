@@ -31,8 +31,8 @@ const renderHelper = ({
 }) =>
   render(
     <TaggedNameItem
-      name={eth ? 'name.eth' : 'name'}
-      truncatedName={eth ? 'name.eth' : 'name'}
+      name={eth ? 'name.etn' : 'name'}
+      truncatedName={eth ? 'name.etn' : 'name'}
       relation={{
         owner: controller,
         registrant: registrant,
@@ -47,7 +47,7 @@ mockNameDetailItem.mockImplementation(mockComponent as any)
 
 describe('TaggedNameItem', () => {
   describe('unwrapped', () => {
-    describe('.eth', () => {
+    describe('.etn', () => {
       it('should show all tags as disabled by default', () => {
         const { getByTestId } = renderHelper({ eth: true })
         expect(getByTestId('tag-name.manager-false')).toBeInTheDocument()
@@ -83,7 +83,7 @@ describe('TaggedNameItem', () => {
     })
   })
   describe('wrapped', () => {
-    describe('.eth', () => {
+    describe('.etn', () => {
       it('should only show owner tag, disabled by default', () => {
         const { getByTestId, queryByText } = renderHelper({
           eth: true,

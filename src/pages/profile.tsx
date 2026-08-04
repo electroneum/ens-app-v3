@@ -1,7 +1,8 @@
 import type { Hex } from 'viem'
-import { useAccount } from 'wagmi'
+import { useAccount, useChainId } from 'wagmi'
 
 import ProfileContent from '@app/components/pages/profile/[name]/Profile'
+import { getChainSupportsDnsImport } from '@app/constants/chains'
 import { hasValidPrimaryName } from '@app/hooks/ensjs/public/primaryNameUtils'
 import { usePrimaryName } from '@app/hooks/ensjs/public/usePrimaryName'
 import { useInitial } from '@app/hooks/useInitial'
@@ -11,6 +12,7 @@ import { checkDNS2LDFromName } from '@app/utils/utils'
 
 export default function Page() {
   const router = useRouterWithHistory()
+  const chainId = useChainId()
   const _name = router.query.name as string
   const isSelf = router.query.connected === 'true'
   const isViewingExpired = router.query.expired === 'true'
@@ -53,7 +55,13 @@ export default function Page() {
   }
 
   const isDns = checkDNS2LDFromName(name)
-  if (isDns && registrationStatus === 'notImported' && !isBasicLoading && !isDnsOwnerLoading) {
+  if (
+    isDns &&
+    registrationStatus === 'notImported' &&
+    !isBasicLoading &&
+    !isDnsOwnerLoading &&
+    getChainSupportsDnsImport(chainId)
+  ) {
     router.push(`/import/${name}`)
     return null
   }

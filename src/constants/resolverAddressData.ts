@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Address } from 'viem'
 
-import { deploymentAddresses } from './chains'
+import { deploymentAddresses, electroneumDeploymentAddresses, electroneumWithEns } from './chains'
 import { RESOLVER_INTERFACE_IDS, ResolverInterfaceId } from './resolverInterfaceIds'
 
 export type KnownResolverItem = {
@@ -219,6 +219,34 @@ export const KNOWN_RESOLVER_DATA: KnownResolverData = {
       ],
     },
   ],
+  // Active Electroneum network — the canonical PublicResolver from the same
+  // ens-contracts revision as the local devnet's 'latest' entry below. Without
+  // this entry every resolver is classified 'custom' and users get perpetual
+  // resolver-migration prompts.
+  ...(electroneumDeploymentAddresses.PublicResolver
+    ? {
+        [String(electroneumWithEns.id)]: [
+          {
+            address: electroneumDeploymentAddresses.PublicResolver as Address,
+            deployer: 'Electroneum',
+            tag: 'latest' as const,
+            isNameWrapperAware: true,
+            supportsDefaultCoinType: true,
+            supportedInterfaces: [
+              RESOLVER_INTERFACE_IDS.AddressResolver,
+              RESOLVER_INTERFACE_IDS.MultiCoinAddressResolver,
+              RESOLVER_INTERFACE_IDS.NameResolver,
+              RESOLVER_INTERFACE_IDS.AbiResolver,
+              RESOLVER_INTERFACE_IDS.TextResolver,
+              RESOLVER_INTERFACE_IDS.ContentHashResolver,
+              RESOLVER_INTERFACE_IDS.DnsRecordResolver,
+              RESOLVER_INTERFACE_IDS.InterfaceResolver,
+              RESOLVER_INTERFACE_IDS.VersionableResolver,
+            ],
+          },
+        ],
+      }
+    : {}),
   ...(process.env.NEXT_PUBLIC_ETH_NODE === 'anvil'
     ? {
         '1337': [

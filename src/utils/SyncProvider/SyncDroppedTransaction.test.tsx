@@ -27,7 +27,7 @@ vi.mock('@app/hooks/transactions/TransactionStoreContext')
 const ADDRESS = '0x1234567890abcdef'
 
 export const handlers = [
-  http.get(getAccountHistoryEndpoint(ADDRESS, 1), () => {
+  http.get(getAccountHistoryEndpoint(ADDRESS, 52014), () => {
     return HttpResponse.json([{ hash: '0xabc123', input: 'input', timeStamp: '1', nonce: 0 }], {
       status: 200,
     })
@@ -44,7 +44,7 @@ const mockUseRecentTransactions = mockFunction(useRecentTransactions)
 const mockUseTransactionStore = mockFunction(useTransactionStore)
 
 describe('SyncDroppedTransaction', () => {
-  const mockClient = { chain: { id: 1 } }
+  const mockClient = { chain: { id: 52014 } }
   const mockAddress = '0x1234567890abcdef'
   const mockTransactions = [{ hash: '0xabc123' as const }, { hash: '0xdef456' as const }]
   const mockStore = { test: 'store' }
@@ -71,20 +71,20 @@ describe('SyncDroppedTransaction', () => {
 })
 
 describe('getAccountHistoryEndpoint', () => {
-  it('returns the correct endpoint for mainnet', () => {
+  it('returns the correct endpoint for electroneum mainnet', () => {
     const address = '0x1234567890123456789012345678901234567890'
-    const chainId = 1
+    const chainId = 52014
     const expectedEndpoint =
-      'https://etherscan-api.ens-cf.workers.dev/accountHistory?address=0x1234567890123456789012345678901234567890'
+      'https://blockexplorer.electroneum.com/api?module=account&action=txlist&address=0x1234567890123456789012345678901234567890&sort=desc'
 
     expect(getAccountHistoryEndpoint(address, chainId)).toEqual(expectedEndpoint)
   })
 
-  it('returns the correct endpoint for goerli', () => {
+  it('returns the correct endpoint for electroneum testnet', () => {
     const address = '0x1234567890123456789012345678901234567890'
-    const chainId = 5
+    const chainId = 5201420
     const expectedEndpoint =
-      'https://etherscan-api-goerli.ens-cf.workers.dev/accountHistory?address=0x1234567890123456789012345678901234567890'
+      'https://testnet-blockexplorer.electroneum.com/api?module=account&action=txlist&address=0x1234567890123456789012345678901234567890&sort=desc'
 
     expect(getAccountHistoryEndpoint(address, chainId)).toEqual(expectedEndpoint)
   })
@@ -112,7 +112,7 @@ describe('findDroppedTransactions', () => {
 
   describe('searchingTransactions', () => {
     it('should exit early if there is no connected account', async () => {
-      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
+      const mockClient = { chain: { id: 52014 } } as unknown as ClientWithEns
       const mockTransactions: any[] = []
       const mockAddress = undefined
       const mockStore = undefined
@@ -138,7 +138,7 @@ describe('findDroppedTransactions', () => {
 
       const mockAddress = '0x1234567890abcdef'
       const mockStore = {} as any
-      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
+      const mockClient = { chain: { id: 52014 } } as unknown as ClientWithEns
 
       const result = await findDroppedTransactions(mockClient, {
         address: mockAddress,
@@ -158,7 +158,7 @@ describe('findDroppedTransactions', () => {
       ] as any
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { foundMinedTransaction: vi.fn() } as any
-      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
+      const mockClient = { chain: { id: 52014 } } as unknown as ClientWithEns
 
       await findDroppedTransactions(mockClient, {
         address: mockAddress,
@@ -169,7 +169,7 @@ describe('findDroppedTransactions', () => {
     })
     it('should error if there is more than one transaction that could be a replacement', async () => {
       server.use(
-        http.get(getAccountHistoryEndpoint(ADDRESS, 1), () => {
+        http.get(getAccountHistoryEndpoint(ADDRESS, 52014), () => {
           return HttpResponse.json(
             [
               {
@@ -196,7 +196,7 @@ describe('findDroppedTransactions', () => {
       ] as any
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { setReplacedTransaction: vi.fn() } as any
-      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
+      const mockClient = { chain: { id: 52014 } } as unknown as ClientWithEns
 
       await findDroppedTransactions(mockClient, {
         address: mockAddress,
@@ -215,7 +215,7 @@ describe('findDroppedTransactions', () => {
       ] as any
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { setReplacedTransaction: vi.fn() } as any
-      const mockClient = { chain: { id: 1 } } as unknown as ClientWithEns
+      const mockClient = { chain: { id: 52014 } } as unknown as ClientWithEns
 
       await findDroppedTransactions(mockClient, {
         address: mockAddress,
@@ -235,7 +235,7 @@ describe('findDroppedTransactions', () => {
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { foundTransaction: vi.fn() } as any
       const mockClient = {
-        chain: { id: 1 },
+        chain: { id: 52014 },
       } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve({}))
 
@@ -257,7 +257,7 @@ describe('findDroppedTransactions', () => {
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { setFailedTransaction: vi.fn() } as any
       const mockClient = {
-        chain: { id: 1 },
+        chain: { id: 52014 },
       } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
 
@@ -279,7 +279,7 @@ describe('findDroppedTransactions', () => {
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { updateRetries: vi.fn() } as any
       const mockClient = {
-        chain: { id: 1 },
+        chain: { id: 52014 },
       } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
 
@@ -306,7 +306,7 @@ describe('findDroppedTransactions', () => {
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { setReplacedTransactionByNonce: vi.fn() } as any
       const mockClient = {
-        chain: { id: 1 },
+        chain: { id: 52014 },
       } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
       mockGetTransactionCount.mockImplementation(() => Promise.resolve(1))
@@ -335,7 +335,7 @@ describe('findDroppedTransactions', () => {
         setFailedTransaction: vi.fn(),
       } as any
       const mockClient = {
-        chain: { id: 1 },
+        chain: { id: 52014 },
       } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
       mockGetTransactionCount.mockImplementation(() => Promise.resolve(3))
@@ -362,7 +362,7 @@ describe('findDroppedTransactions', () => {
       const mockAddress = '0x1234567890abcdef'
       const mockStore = { setFailedTransaction: vi.fn() } as any
       const mockClient = {
-        chain: { id: 1 },
+        chain: { id: 52014 },
       } as unknown as ClientWithEns
       mockGetTransaction.mockImplementation(() => Promise.resolve(null))
       mockGetTransactionCount.mockImplementation(() => Promise.resolve(1))
@@ -389,7 +389,7 @@ describe('findDroppedTransactions', () => {
     const mockAddress = '0x1234567890abcdef'
     const mockStore = { setFailedTransaction: vi.fn() } as any
     const mockClient = {
-      chain: { id: 1 },
+      chain: { id: 52014 },
     } as unknown as ClientWithEns
     mockGetTransaction.mockImplementation(() => Promise.resolve(null))
     mockGetTransactionCount.mockImplementation(() => Promise.resolve(1))

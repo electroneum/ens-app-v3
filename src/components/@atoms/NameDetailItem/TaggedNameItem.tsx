@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { NameWithRelation } from '@ensdomains/ensjs/subgraph'
 import { Tag } from '@ensdomains/thorin'
 
-import { validateExpiry } from '@app/utils/utils'
+import { checkETH2LDFromName, validateExpiry } from '@app/utils/utils'
 
 import { NameDetailItem } from './NameDetailItem'
 
@@ -49,7 +49,7 @@ export const TaggedNameItem = ({
   }) => {
   const { t } = useTranslation('common')
 
-  const isNativeEthName = /\.eth$/.test(name!) && name!.split('.').length === 2
+  const isNativeEthName = checkETH2LDFromName(name)
 
   const tags = (() => {
     if (notOwned) return [[false, 'name.notOwned']] as const

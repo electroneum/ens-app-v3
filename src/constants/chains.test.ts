@@ -94,26 +94,12 @@ describe('chains', () => {
     })
 
     describe('hostname-based detection', () => {
-      it('should return mainnet for test.app.ens.domains', () => {
-        // @ts-ignore
-        global.window.location = createMockLocation('test.app.ens.domains')
-        const result = getNetworkFromUrl()
-        expect(result).toBe('mainnet')
-      })
-
-      it('should return sepolia for preview URLs ending with ens-app-v3.pages.dev', () => {
-        // @ts-ignore
-        global.window.location = createMockLocation('abc.ens-app-v3.pages.dev')
-        const result = getNetworkFromUrl()
-        expect(result).toBe('sepolia')
-      })
-
       it('should return localhost for localhost with local provider', async () => {
         // Set up environment before importing
         process.env.NEXT_PUBLIC_PROVIDER = 'http://localhost:8545'
         // @ts-ignore
         global.window.location = createMockLocation('localhost')
-        
+
         // Re-import the module to pick up the new environment variable
         vi.resetModules()
         const { getNetworkFromUrl: getNetworkFromUrlFresh } = await import('./chains')
@@ -121,59 +107,45 @@ describe('chains', () => {
         expect(result).toBe('localhost')
       })
 
-      it('should return sepolia for localhost without local provider', async () => {
+      it('should return electroneum for localhost without local provider', async () => {
         delete process.env.NEXT_PUBLIC_PROVIDER
         // @ts-ignore
         global.window.location = createMockLocation('localhost')
-        
+
         // Re-import the module to pick up the cleared environment variable
         vi.resetModules()
         const { getNetworkFromUrl: getNetworkFromUrlFresh } = await import('./chains')
         const result = getNetworkFromUrlFresh()
-        expect(result).toBe('sepolia')
+        expect(result).toBe('electroneum')
       })
 
       it('should return localhost for 127.0.0.1 with local provider', async () => {
         process.env.NEXT_PUBLIC_PROVIDER = 'http://localhost:8545'
         // @ts-ignore
         global.window.location = createMockLocation('127.0.0.1')
-        
+
         vi.resetModules()
         const { getNetworkFromUrl: getNetworkFromUrlFresh } = await import('./chains')
         const result = getNetworkFromUrlFresh()
         expect(result).toBe('localhost')
       })
 
-      it('should return sepolia for 127.0.0.1 without local provider', async () => {
+      it('should return electroneum for 127.0.0.1 without local provider', async () => {
         delete process.env.NEXT_PUBLIC_PROVIDER
         // @ts-ignore
         global.window.location = createMockLocation('127.0.0.1')
-        
+
         vi.resetModules()
         const { getNetworkFromUrl: getNetworkFromUrlFresh } = await import('./chains')
         const result = getNetworkFromUrlFresh()
-        expect(result).toBe('sepolia')
+        expect(result).toBe('electroneum')
       })
 
-      it('should return sepolia for sepolia subdomain', () => {
-        // @ts-ignore
-        global.window.location = createMockLocation('sepolia.ens.domains')
-        const result = getNetworkFromUrl()
-        expect(result).toBe('sepolia')
-      })
-
-      it('should return mainnet for app.ens.domains', () => {
-        // @ts-ignore
-        global.window.location = createMockLocation('app.ens.domains')
-        const result = getNetworkFromUrl()
-        expect(result).toBe('mainnet')
-      })
-
-      it('should return mainnet for unknown hostname', () => {
+      it('should return electroneum for any other hostname', () => {
         // @ts-ignore
         global.window.location = createMockLocation('unknown.example.com')
         const result = getNetworkFromUrl()
-        expect(result).toBe('mainnet')
+        expect(result).toBe('electroneum')
       })
     })
   })

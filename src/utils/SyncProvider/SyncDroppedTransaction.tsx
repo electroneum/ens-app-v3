@@ -18,12 +18,11 @@ const TRANSACTION_SEARCH_INTERVAL = 10000
 
 export const getAccountHistoryEndpoint = (address: string, chainId: number) => {
   switch (chainId) {
-    case 1:
-      return `https://etherscan-api.ens-cf.workers.dev/accountHistory?address=${address}`
-    case 5:
-      return `https://etherscan-api-goerli.ens-cf.workers.dev/accountHistory?address=${address}`
-    case 11155111:
-      return `https://etherscan-api-sepolia.ens-cf.workers.dev/accountHistory?address=${address}`
+    // Blockscout's Etherscan-compatible API (returns { status, message, result })
+    case 52014:
+      return `https://blockexplorer.electroneum.com/api?module=account&action=txlist&address=${address}&sort=desc`
+    case 5201420:
+      return `https://testnet-blockexplorer.electroneum.com/api?module=account&action=txlist&address=${address}&sort=desc`
     default:
       return ''
   }
@@ -90,10 +89,13 @@ export const findDroppedTransactions = async (
         return { ok: false } as const
       })
     : ({ ok: false } as const)
-  const etherscanJson: EtherscanMinedData[] = etherscanResponse.ok
-    ? await etherscanResponse.json()
-    : []
-  const accountTransactionHistory = Array.isArray(etherscanJson) ? etherscanJson : []
+  const etherscanJson: EtherscanMinedData[] | { result?: EtherscanMinedData[] } =
+    etherscanResponse.ok ? await etherscanResponse.json() : []
+  // The ENS workers return a bare array; Blockscout's Etherscan-compatible API
+  // wraps the list in { status, message, result }
+  const accountTransactionHistory = Array.isArray(etherscanJson)
+    ? etherscanJson
+    : etherscanJson?.result ?? []
 
   // Skip if etherscan api fails or returns no history
   if (accountTransactionHistory.length === 0) return

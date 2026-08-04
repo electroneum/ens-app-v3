@@ -269,7 +269,8 @@ export const makeMockUseBasicName = (type: MockUseBasicNameType) => {
         ...BaseBasicName,
         normalisedName: 'name.etn',
         truncatedName: 'name.etn',
-        canBeWrapped: true,
+        // wrapping is disabled on Electroneum (no wrapper-aware renewal contract)
+        canBeWrapped: false,
         pccExpired: false,
         registrationStatus: 'registered' as const,
         isCachedData: false,
@@ -348,7 +349,8 @@ export const makeMockUseBasicName = (type: MockUseBasicNameType) => {
       registrationStatus: 'owned' as const,
       isWrapped: false,
       pccExpired: false,
-      canBeWrapped: true,
+      // wrapping is disabled on Electroneum (no wrapper-aware renewal contract)
+      canBeWrapped: false,
       isLoading: false,
       isCachedData: false,
     }))

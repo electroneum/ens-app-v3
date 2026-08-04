@@ -23,7 +23,7 @@ import {
 } from '@ensdomains/ensjs/public'
 import { BackdropSurface, Portal, Typography } from '@ensdomains/thorin'
 
-import { SupportedChain } from '@app/constants/chains'
+import { getChainSupportsDnsImport, SupportedChain } from '@app/constants/chains'
 import {
   UseAddressRecordQueryKey,
   UseAddressRecordReturnType,
@@ -506,8 +506,17 @@ const formatDnsText = ({ name, isETH }: { name: string; isETH: boolean | undefin
   return name
 }
 const addDnsDropdownItem =
-  ({ name, isETH }: { name: string; isETH: boolean | undefined }) =>
+  ({
+    name,
+    isETH,
+    dnsImportSupported,
+  }: {
+    name: string
+    isETH: boolean | undefined
+    dnsImportSupported: boolean
+  }) =>
   (dropdownItems: SearchItem[]): SearchItem[] => {
+    if (!dnsImportSupported) return dropdownItems
     const formattedDnsName = formatDnsText({ name, isETH })
     if (!formattedDnsName) return dropdownItems
     return [
@@ -547,6 +556,8 @@ const useBuildDropdownItems = (inputVal: string, history: HistoryItem[]) => {
   const { t } = useTranslation('common')
 
   const inputIsAddress = useMemo(() => isAddress(inputVal), [inputVal])
+  const chainId = useChainId()
+  const dnsImportSupported = getChainSupportsDnsImport(chainId)
 
   const { isValid, isETH, name } = useValidate({
     input: inputVal,
@@ -557,14 +568,14 @@ const useBuildDropdownItems = (inputVal: string, history: HistoryItem[]) => {
       thread(
         [],
         addEthDropdownItem({ name, isETH }),
-        addDnsDropdownItem({ name, isETH }),
+        addDnsDropdownItem({ name, isETH, dnsImportSupported }),
         addAddressItem({ name, inputIsAddress }),
         addTldDropdownItem({ name }),
         addHistoryDropdownItems({ name, history }),
         addErrorDropdownItem({ name, isValid }),
         addInfoDropdownItem({ t }),
       ),
-    [inputIsAddress, name, isETH, isValid, history, t],
+    [inputIsAddress, name, isETH, isValid, history, t, dnsImportSupported],
   )
 }
 

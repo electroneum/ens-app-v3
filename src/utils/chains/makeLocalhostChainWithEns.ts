@@ -4,6 +4,15 @@ import { ChainWithEns } from '@ensdomains/ensjs/contracts'
 
 import type { Register } from '@app/local-contracts'
 
+// Build a contract entry only when the deployment address exists. Omitting the
+// key entirely makes viem's getChainContractAddress throw a visible
+// ChainDoesNotSupportContract error instead of silently returning undefined,
+// which would otherwise surface as a `to: undefined` contract-creation tx.
+const contractEntry = <TKey extends string>(key: TKey, address: string | undefined) =>
+  (address ? { [key]: { address: address as Address } } : {}) as {
+    [K in TKey]: { address: Address }
+  }
+
 export const makeLocalhostChainWithEns = <T extends Chain>(
   localhost: T,
   deploymentAddresses_: Register['deploymentAddresses'],
@@ -19,62 +28,37 @@ export const makeLocalhostChainWithEns = <T extends Chain>(
     },
     contracts: {
       ...localhost.contracts,
-      ensRegistry: {
-        address: deploymentAddresses_.ENSRegistry as Address,
-      },
-      ensUniversalResolver: {
-        address: deploymentAddresses_.UniversalResolver as Address,
-      },
-      multicall3: {
-        address: deploymentAddresses_.Multicall as Address,
-      },
-      ensBaseRegistrarImplementation: {
-        address: deploymentAddresses_.BaseRegistrarImplementation as Address,
-      },
-      ensDnsRegistrar: {
-        address: deploymentAddresses_.DNSRegistrar as Address,
-      },
-      ensEthRegistrarController: {
-        address: deploymentAddresses_.ETHRegistrarController as Address,
-      },
-      ensNameWrapper: {
-        address: deploymentAddresses_.NameWrapper as Address,
-      },
-      ensPublicResolver: {
-        address: deploymentAddresses_.PublicResolver as Address,
-      },
-      ensReverseRegistrar: {
-        address: deploymentAddresses_.ReverseRegistrar as Address,
-      },
-      ensBulkRenewal: {
-        address: deploymentAddresses_.WrappedStaticBulkRenewal as Address,
-      },
-      ensDnssecImpl: {
-        address: deploymentAddresses_.DNSSECImpl as Address,
-      },
-      legacyEthRegistrarController: {
-        address: deploymentAddresses_.LegacyETHRegistrarController as Address,
-      },
-      legacyPublicResolver: {
-        address: deploymentAddresses_.LegacyPublicResolver as Address,
-      },
-      wrappedEthRegistrarController: {
-        address: deploymentAddresses_.WrappedEthRegistrarController as Address,
-      },
-      wrappedPublicResolver: {
-        address: deploymentAddresses_.NameWrapperPublicResolver as Address,
-      },
-      ensDefaultReverseRegistrar: {
-        address: deploymentAddresses_.DefaultReverseRegistrar as Address,
-      },
-      wrappedBulkRenewal: {
-        address: deploymentAddresses_.WrappedStaticBulkRenewal as Address,
-      },
+      ...contractEntry('ensRegistry', deploymentAddresses_.ENSRegistry),
+      ...contractEntry('ensUniversalResolver', deploymentAddresses_.UniversalResolver),
+      ...contractEntry('multicall3', deploymentAddresses_.Multicall),
+      ...contractEntry(
+        'ensBaseRegistrarImplementation',
+        deploymentAddresses_.BaseRegistrarImplementation,
+      ),
+      ...contractEntry('ensDnsRegistrar', deploymentAddresses_.DNSRegistrar),
+      ...contractEntry('ensEthRegistrarController', deploymentAddresses_.ETHRegistrarController),
+      ...contractEntry('ensNameWrapper', deploymentAddresses_.NameWrapper),
+      ...contractEntry('ensPublicResolver', deploymentAddresses_.PublicResolver),
+      ...contractEntry('ensReverseRegistrar', deploymentAddresses_.ReverseRegistrar),
+      ...contractEntry('ensBulkRenewal', deploymentAddresses_.WrappedStaticBulkRenewal),
+      ...contractEntry('ensDnssecImpl', deploymentAddresses_.DNSSECImpl),
+      ...contractEntry(
+        'legacyEthRegistrarController',
+        deploymentAddresses_.LegacyETHRegistrarController,
+      ),
+      ...contractEntry('legacyPublicResolver', deploymentAddresses_.LegacyPublicResolver),
+      ...contractEntry(
+        'wrappedEthRegistrarController',
+        deploymentAddresses_.WrappedEthRegistrarController,
+      ),
+      ...contractEntry('wrappedPublicResolver', deploymentAddresses_.NameWrapperPublicResolver),
+      ...contractEntry('ensDefaultReverseRegistrar', deploymentAddresses_.DefaultReverseRegistrar),
+      ...contractEntry('wrappedBulkRenewal', deploymentAddresses_.WrappedStaticBulkRenewal),
     },
     subgraphs: {
       ens: {
         url: subgraphUrl ?? 'http://localhost:42069/subgraph',
       },
     },
-  }
+  } as ChainWithEns<T>
 }
