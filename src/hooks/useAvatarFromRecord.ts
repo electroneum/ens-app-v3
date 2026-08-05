@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 
 import { getProtocolType } from '@ensdomains/ensjs/utils'
 
+import { getBlockscoutNftImage } from '@app/utils/blockscoutNfts'
+
 const SUPPORTED_PROTOCOL_REGEX = /^(http|https|ar|ipfs|eip155):/
+
+const EIP155_REGEX = /^eip155:(\d+)\/(erc1155|erc721):(.*)\/(.*)$/
 
 const chainIdToNetwork = (chainId?: string) => {
   if (chainId === '1') return 'mainnet'
@@ -13,14 +17,12 @@ const chainIdToNetwork = (chainId?: string) => {
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_KEY || 'no-key'
 const makeApiURL = (address: string) => {
-  const match = address.match(/^eip155:(\d+)\/(erc1155|erc721):(.*)\/(.*)$/)
+  const match = address.match(EIP155_REGEX)
   const chainId = match?.[1]
   const tokenType = match?.[2]
   const contractAddress = match?.[3]
   const tokenId = match?.[4]
   const network = chainIdToNetwork(chainId)
-  // no NFT metadata indexer exists for other chains (incl. Electroneum) —
-  // without this guard the URL would be built with an empty network segment
   if (!network) return undefined
   if (tokenType && contractAddress && tokenId)
     return `https://eth-${network}.alchemyapi.io/nft/v2/${alchemyKey}/getNFTMetadata/?contractAddress=${contractAddress}&tokenId=${tokenId}&tokenType=${tokenType}&refreshCache=false`
@@ -44,6 +46,22 @@ export const getAvatarSrc = async (record: string) => {
     }
 
     if (protocol === 'eip155') {
+      const match = record.match(EIP155_REGEX)
+      const chainId = match?.[1]
+      const contractAddress = match?.[3]
+      const tokenId = match?.[4]
+
+      // Electroneum chains resolve NFT images via Blockscout
+      if (contractAddress && tokenId) {
+        const blockscoutImage = await getBlockscoutNftImage({
+          chainId: Number(chainId),
+          contractAddress,
+          tokenId,
+        })
+        if (blockscoutImage) return blockscoutImage
+      }
+
+      // Ethereum networks fall back to Alchemy's NFT metadata API
       const apiUrl = makeApiURL(record)
       if (!apiUrl) return
       const resp = await fetch(apiUrl, {

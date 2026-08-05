@@ -131,6 +131,27 @@ const mapBlockscoutNft = (item: BlockscoutNftItem): OwnedNFT | null => {
   }
 }
 
+// Resolves a single NFT's image for eip155 avatar records (decimal tokenId).
+export async function getBlockscoutNftImage({
+  chainId,
+  contractAddress,
+  tokenId,
+}: {
+  chainId: number | undefined
+  contractAddress: string
+  tokenId: string
+}): Promise<string | undefined> {
+  const base = getBlockscoutNftApiBase(chainId)
+  if (!base) return undefined
+
+  const res = await fetch(`${base}/tokens/${contractAddress}/instances/${tokenId}`, {
+    method: 'GET',
+    redirect: 'follow',
+  })
+  const data = (await res.json()) as Pick<BlockscoutNftItem, 'image_url'>
+  return data.image_url ?? undefined
+}
+
 // pageKey carries Blockscout's next_page_params through the picker's opaque
 // Alchemy-style cursor: JSON-encoded on the way out, decoded into query
 // params on the next request.
