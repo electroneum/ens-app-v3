@@ -74,11 +74,8 @@ export type RenewNamesDataReturnType = {
 }
 
 const getWrappedRenewalAddress = (chain: ChainWithEns): `0x${string}` | undefined =>
-  (
-    chain.contracts as Partial<
-      Record<'wrappedRenewalWithReferrer', { address: `0x${string}` }>
-    >
-  ).wrappedRenewalWithReferrer?.address
+  (chain.contracts as Partial<Record<'wrappedRenewalWithReferrer', { address: `0x${string}` }>>)
+    .wrappedRenewalWithReferrer?.address
 
 export const makeFunctionData = <TChain extends ChainWithEns, TAccount extends Account | undefined>(
   wallet: ClientWithAccount<Transport, TChain, TAccount>,
@@ -108,8 +105,7 @@ export const makeFunctionData = <TChain extends ChainWithEns, TAccount extends A
     }
   }
 
-  const wrappedRenewalAddress =
-    wrappedRenewalContract ?? getWrappedRenewalAddress(wallet.chain)
+  const wrappedRenewalAddress = wrappedRenewalContract ?? getWrappedRenewalAddress(wallet.chain)
 
   return {
     to:
