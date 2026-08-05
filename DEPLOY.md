@@ -42,6 +42,19 @@ over `.env.production`; an unpassed arg is absent from the build environment
 and cannot shadow the committed default. In Coolify, mark such variables as
 "Build Variable" so they reach the image build.
 
+## Runtime RPC override (no rebuild)
+
+As an ops escape hatch, `NEXT_PUBLIC_ETN_MAINNET_RPC_URL` can ALSO be set as
+a plain runtime env var on the container: `docker-entrypoint.sh` rewrites the
+baked RPC URL across the compiled bundles at startup. Restart the container
+after changing it. Caveat: browsers that already cached the immutable
+`/_next/static` chunks keep the old RPC until a real rebuild rotates the
+chunk hashes — use it for incidents, and follow up with a rebuild.
+
+(The companion ens-metadata-service reads its RPC from the `NODE_PROVIDER_URL`
+env var at request time, so there a plain env change + restart is always
+enough.)
+
 ## Notes
 
 - `next.config.mjs#generateBuildId` runs `git rev-parse HEAD`, so the build

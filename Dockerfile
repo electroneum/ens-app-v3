@@ -30,6 +30,11 @@ ARG NEXT_PUBLIC_INTERCOM_ID
 
 RUN NODE_OPTIONS=--max-old-space-size=6144 pnpm build
 
+# Record the RPC URL that actually got baked (build arg wins over
+# .env.production) so the runtime entrypoint can substitute it if overridden.
+RUN echo "${NEXT_PUBLIC_ETN_MAINNET_RPC_URL:-$(grep '^NEXT_PUBLIC_ETN_MAINNET_RPC_URL=' .env.production | cut -d= -f2-)}" \
+      > .next/standalone/.baked-rpc-url
+
 # Runtime stage
 FROM node:20.13.1-bookworm-slim
 
@@ -41,6 +46,7 @@ ENV NODE_ENV=production \
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
+COPY --chmod=755 docker-entrypoint.sh /app/docker-entrypoint.sh
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

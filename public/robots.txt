@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://app.ens.domains/sitemap.xml
+Sitemap: https://ens.electroneum.com/sitemap.xml
