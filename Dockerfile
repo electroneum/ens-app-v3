@@ -19,6 +19,9 @@ COPY . .
 # (process.env takes precedence over .env files in Next.js). Declared via
 # ARG only — an arg that isn't passed stays absent from the build env, so it
 # cannot shadow the .env.production default with an empty string.
+ARG NEXT_PUBLIC_CHAIN_NAME
+ARG NEXT_PUBLIC_ETN_NETWORK
+ARG NEXT_PUBLIC_ETN_MAINNET_DEPLOYMENT_ADDRESSES
 ARG NEXT_PUBLIC_METADATA_ENDPOINT
 ARG NEXT_PUBLIC_ETN_MAINNET_RPC_URL
 ARG NEXT_PUBLIC_ETN_MAINNET_SUBGRAPH_URL
