@@ -1,11 +1,13 @@
 import { ComponentProps, Dispatch, SetStateAction, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
+import { useChainId } from 'wagmi'
 
 import { Avatar, Button, Dropdown, Input, Typography } from '@ensdomains/thorin'
 import { DropdownItem } from '@ensdomains/thorin/dist/types/components/molecules/Dropdown/Dropdown'
 
 import { LegacyDropdown } from '@app/components/@molecules/LegacyDropdown/LegacyDropdown'
+import { getBlockscoutNftApiBase } from '@app/utils/blockscoutNfts'
 
 const IndicatorContainer = styled.button<{
   $error?: boolean
@@ -129,6 +131,11 @@ const AvatarButton = ({
 }: Props) => {
   const { t } = useTranslation('transactionFlow')
 
+  // the NFT picker reads holdings from the chain's Blockscout NFT index;
+  // hidden on chains without a known Blockscout instance (e.g. localhost)
+  const chainId = useChainId()
+  const nftPickerAvailable = !!getBlockscoutNftApiBase(chainId)
+
   const fileInputRef = useRef<HTMLInputElement>(null)
   const handleSelectOption = (value: AvatarClickType | 'remove') => () => {
     if (value === 'remove') {
@@ -168,9 +175,7 @@ const AvatarButton = ({
           <LegacyDropdown
             items={
               [
-                // the NFT picker needs an NFT indexer for the active chain;
-                // none exists for Electroneum unless one is configured
-                ...(process.env.NEXT_PUBLIC_NFT_WORKER_URL
+                ...(nftPickerAvailable
                   ? [
                       {
                         label: t('input.profileEditor.tabs.avatar.dropdown.selectNFT'),

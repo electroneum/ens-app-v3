@@ -3,7 +3,7 @@ import { keepPreviousData } from '@tanstack/react-query'
 import { ReactNode, useCallback, useState } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 import styled, { css, DefaultTheme, keyframes } from 'styled-components'
-import { useAccount, useClient } from 'wagmi'
+import { useAccount, useChainId, useClient } from 'wagmi'
 
 import {
   AlertSVG,
@@ -15,105 +15,44 @@ import {
 } from '@ensdomains/thorin'
 
 import { SpinnerRow } from '@app/components/@molecules/ScrollBoxWithSpinner'
-import { useChainName } from '@app/hooks/chain/useChainName'
 import { useNameDetails } from '@app/hooks/useNameDetails'
+import { getNftsFromBlockscout, OwnedNFT } from '@app/utils/blockscoutNfts'
 import { getSupportedChainContractAddress } from '@app/utils/getSupportedChainContractAddress'
 import { useInfiniteQuery } from '@app/utils/query/useInfiniteQuery'
 
 import { DialogInput } from '../../DialogComponentVariants/DialogInput'
 
-type OwnedNFT = {
-  contract: {
-    address: string
-  }
-  id: {
-    tokenId: string
-    tokenMetadata: {
-      tokenType: 'ERC721' | 'ERC1155'
-    }
-  }
-  balance: string
-  title: string
-  description: string
-  tokenUri: {
-    raw: string
-    gateway: string
-  }
-  media: {
-    raw: string
-    gateway: string
-    thumbnail?: string
-    format?: string
-  }[]
-  metadata: {
-    image: string
-    external_url: string
-    background_color: string
-    name: string
-    description: string
-    attributes: string
-  }
-}
-
-type NFTResponse = {
-  ownedNfts: OwnedNFT[]
-  pageKey: string
-  totalCount: number
-}
-
-async function getNfts({
-  network,
-  owner,
-  pageKey,
-}: {
-  network: string
-  owner: string
-  pageKey: string
-}) {
-  // No default: the ENS NFT worker doesn't index Electroneum. The picker is
-  // hidden in AvatarButton unless this endpoint is configured.
-  const baseURL = `${process.env.NEXT_PUBLIC_NFT_WORKER_URL}/v1/${network}/getNfts/`
-
-  const urlParams = new URLSearchParams()
-
-  urlParams.append('owner', owner)
-  urlParams.append('filters[]', 'SPAM')
-
-  if (pageKey) {
-    urlParams.append('pageKey', pageKey)
-  }
-
-  const res = await fetch(`${baseURL}?${urlParams.toString()}`, {
-    method: 'GET',
-    redirect: 'follow',
-  })
-
-  return (await res.json()) as NFTResponse
-}
-
-function useNtfs(chain: string, address: string) {
+function useNtfs(chainId: number, address: string) {
   const client = useClient()
 
   return useInfiniteQuery({
-    queryKey: [chain, address, 'NFTs'],
+    queryKey: [chainId, address, 'NFTs'],
     queryFn: async ({ pageParam }) => {
-      const response = await getNfts({ network: chain, owner: address, pageKey: pageParam })
+      const response = await getNftsFromBlockscout({
+        chainId,
+        owner: address,
+        pageKey: pageParam,
+      })
+
+      // ENS name tokens are excluded: names get their imagery from the
+      // metadata service, not the picker
+      const ensContractAddresses = [
+        getSupportedChainContractAddress({
+          client,
+          contract: 'ensBaseRegistrarImplementation',
+        }),
+        getSupportedChainContractAddress({
+          client,
+          contract: 'ensNameWrapper',
+        }),
+      ].map((address_) => address_.toLowerCase())
 
       return {
         ...response,
         ownedNfts: response.ownedNfts.filter(
           (nft) =>
             (nft.media?.[0]?.thumbnail || nft.media?.[0]?.gateway) &&
-            nft.contract.address !==
-              getSupportedChainContractAddress({
-                client,
-                contract: 'ensBaseRegistrarImplementation',
-              }) &&
-            nft.contract.address !==
-              getSupportedChainContractAddress({
-                client,
-                contract: 'ensNameWrapper',
-              }),
+            !ensContractAddresses.includes(nft.contract.address.toLowerCase()),
         ),
       }
     },
@@ -363,7 +302,7 @@ export const AvatarNFT = ({
 }) => {
   const { t } = useTranslation('transactionFlow')
 
-  const chain = useChainName()
+  const chainId = useChainId()
   const { address: _address } = useAccount()
   const address = _address!
 
@@ -373,7 +312,7 @@ export const AvatarNFT = ({
   const [selectedAddress, setSelectedAddress] = useState<string>(address)
   const [selectedNFT, setSelectedNFT] = useState<number | null>(null)
 
-  const { data: NFTPages, fetchNextPage, isLoading } = useNtfs(chain, selectedAddress)
+  const { data: NFTPages, fetchNextPage, isLoading } = useNtfs(chainId, selectedAddress)
 
   const NFTs = (NFTPages?.pages ?? [])
     .reduce((prev, curr) => [...prev, ...curr.ownedNfts], [] as OwnedNFT[])
@@ -393,7 +332,7 @@ export const AvatarNFT = ({
     const nftReference = NFTs?.[selectedNFT]!
 
     const handleConfirm = () => {
-      const string = `eip155:1/${nftReference.id.tokenMetadata.tokenType.toLowerCase()}:${
+      const string = `eip155:${chainId}/${nftReference.id.tokenMetadata.tokenType.toLowerCase()}:${
         nftReference.contract.address
       }/${BigInt(nftReference.id.tokenId).toString()}`
       handleSubmit('nft', string, nftReference.media[0].gateway)

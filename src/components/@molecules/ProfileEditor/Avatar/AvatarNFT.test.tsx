@@ -4,7 +4,7 @@ import { fireEvent, mockFunction, render, screen, userEvent, waitFor } from '@ap
 import * as ReactQuery from '@tanstack/react-query'
 import React from 'react'
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest'
-import { useAccount, useClient } from 'wagmi'
+import { useAccount, useChainId, useClient } from 'wagmi'
 
 import * as UseInfiniteQuery from '@app/utils/query/useInfiniteQuery'
 
@@ -15,11 +15,9 @@ vi.mock('wagmi')
 vi.mock('@app/hooks/chain/useCurrentBlockTimestamp', () => ({
   default: () => new Date(),
 }))
-vi.mock('@app/hooks/chain/useChainName', () => ({
-  useChainName: () => 'mainnet',
-}))
 
 const mockUseClient = mockFunction(useClient)
+const mockUseChainId = mockFunction(useChainId)
 const mockUseAccount = mockFunction(useAccount)
 
 const mockHandleSubmit = vi.fn()
@@ -33,46 +31,32 @@ const props = {
   handleCancel: mockHandleCancel,
 }
 
+// Blockscout /api/v2/addresses/{owner}/nft item shape
 const generateNFT = (withMedia: boolean, contractAddress?: string) => (_: any, i: number) => ({
-  contract: {
-    address: contractAddress || `0x${i.toString(16)}`,
-  },
-  id: {
-    tokenId: String(i),
-    tokenMetadata: {
-      tokenType: Math.random() > 0.5 && i > 1 ? 'ERC721' : 'ERC1155',
-    },
-  },
-  balance: '1',
-  title: `NFT ${i}`,
-  description: `NFT ${i} description`,
-  tokenUri: {
-    raw: 'https://localhost/test-uri-raw.png',
-    gateway: 'https://localhost/test-uri-gateway.png',
-  },
-  media: withMedia
-    ? [
-        {
-          raw: 'https://localhost/test-media-raw.png',
-          gateway: 'https://localhost/test-media-gateway.png',
-          thumbnail: 'https://localhost/test-media-thumbnail.png',
-        },
-      ]
-    : [],
+  id: String(i),
+  token_type: Math.random() > 0.5 && i > 1 ? 'ERC-721' : 'ERC-1155',
+  value: '1',
+  image_url: withMedia ? 'https://localhost/test-media-gateway.png' : null,
+  media_url: withMedia ? 'ipfs://test-media-raw' : null,
+  external_app_url: null,
   metadata: {
-    image: 'https://localhost/test-meta-image.png',
-    external_url: 'https://localhost/',
-    background_color: '#000000',
     name: `NFT ${i}`,
     description: `NFT ${i} description`,
-    attributes: '{"test": "test"}',
+    image: withMedia ? 'ipfs://test-media-raw' : null,
+  },
+  thumbnails: withMedia ? { '250x250': 'https://localhost/test-media-thumbnail.png' } : null,
+  token: {
+    address: contractAddress || `0x${i.toString(16)}`,
+    name: 'Test Collection',
+    symbol: 'TEST',
+    type: 'ERC-721',
   },
 })
 
 let mockFetch = vi.fn().mockImplementation(() =>
   Promise.resolve({
-    ownedNfts: Array.from({ length: 5 }, generateNFT(true)),
-    totalCount: 5,
+    items: Array.from({ length: 5 }, generateNFT(true)),
+    next_page_params: null,
   }),
 )
 // @ts-ignore
@@ -82,9 +66,10 @@ beforeEach(() => {
   mockFetch.mockClear()
   mockFetch = vi.fn()
   mockUseAccount.mockReturnValue({ address: `0x${Date.now()}` })
+  mockUseChainId.mockReturnValue(52014)
   mockUseClient.mockReturnValue({
     chain: {
-      id: 1,
+      id: 52014,
       contracts: {
         ensBaseRegistrarImplementation: { address: '0xensBaseRegistrarImplementation' },
         ensNameWrapper: { address: '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85' },
@@ -105,8 +90,8 @@ describe('<AvatarNFT />', () => {
   it('should show detail on click', async () => {
     mockFetch.mockImplementation(() =>
       Promise.resolve({
-        ownedNfts: Array.from({ length: 5 }, generateNFT(true)),
-        totalCount: 5,
+        items: Array.from({ length: 5 }, generateNFT(true)),
+        next_page_params: null,
       }),
     )
     render(<AvatarNFT {...props} />)
@@ -122,8 +107,8 @@ describe('<AvatarNFT />', () => {
   it('should correctly call submit callback', async () => {
     mockFetch.mockImplementation(() =>
       Promise.resolve({
-        ownedNfts: Array.from({ length: 5 }, generateNFT(true)),
-        totalCount: 5,
+        items: Array.from({ length: 5 }, generateNFT(true)),
+        next_page_params: null,
       }),
     )
     render(<AvatarNFT {...props} />)
@@ -137,7 +122,7 @@ describe('<AvatarNFT />', () => {
     await waitFor(() =>
       expect(mockHandleSubmit).toHaveBeenCalledWith(
         'nft',
-        'eip155:1/erc1155:0x0/0',
+        'eip155:52014/erc1155:0x0/0',
         'https://localhost/test-media-gateway.png',
       ),
     )
@@ -145,8 +130,8 @@ describe('<AvatarNFT />', () => {
   it('should display all NFTs', async () => {
     mockFetch.mockImplementation(() =>
       Promise.resolve({
-        ownedNfts: Array.from({ length: 5 }, generateNFT(true)),
-        totalCount: 5,
+        items: Array.from({ length: 5 }, generateNFT(true)),
+        next_page_params: null,
       }),
     )
     render(<AvatarNFT {...props} />)
@@ -162,11 +147,11 @@ describe('<AvatarNFT />', () => {
   it('should not display ENS NFTs', async () => {
     mockFetch.mockImplementationOnce(() =>
       Promise.resolve({
-        ownedNfts: Array.from(
+        items: Array.from(
           { length: 5 },
           generateNFT(true, '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85'),
         ),
-        totalCount: 5,
+        next_page_params: null,
       }),
     )
 
@@ -182,8 +167,8 @@ describe('<AvatarNFT />', () => {
   it('should not display NFTs with no media', async () => {
     mockFetch.mockImplementationOnce(() =>
       Promise.resolve({
-        ownedNfts: Array.from({ length: 5 }, generateNFT(false)),
-        totalCount: 5,
+        items: Array.from({ length: 5 }, generateNFT(false)),
+        next_page_params: null,
       }),
     )
     render(<AvatarNFT {...props} />)
@@ -197,16 +182,14 @@ describe('<AvatarNFT />', () => {
     mockFetch
       .mockImplementationOnce(() =>
         Promise.resolve({
-          ownedNfts: Array.from({ length: 5 }, generateNFT(true)),
-          totalCount: 5,
-          pageKey: 'test123',
+          items: Array.from({ length: 5 }, generateNFT(true)),
+          next_page_params: { token_id: 'test123' },
         }),
       )
       .mockImplementation(() =>
         Promise.resolve({
-          ownedNfts: Array.from({ length: 5 }, generateNFT(true)),
-          totalCount: 5,
-          pageKey: 'test456',
+          items: Array.from({ length: 5 }, generateNFT(true)),
+          next_page_params: { token_id: 'test456' },
         }),
       )
     vi.mock('@ensdomains/thorin', async (importActual) => ({
@@ -238,19 +221,19 @@ describe('<AvatarNFT />', () => {
     }
     const { queryFn } = options as { queryFn: ReactQuery.QueryFunction }
     const mockContext = {
-      pageParam: 'test123',
+      pageParam: JSON.stringify({ token_id: 'test123' }),
     }
     await queryFn(mockContext as any)
     await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(3))
     // @ts-ignore
-    expect(fetch.mock.lastCall[0]).toMatch(/pageKey=test123/)
+    expect(fetch.mock.lastCall[0]).toMatch(/token_id=test123/)
   })
   it('show not load more data on page load trigger if no more pages', async () => {
     mockUseAccount.mockReturnValue({ address: '0x123' })
     mockFetch.mockImplementation(() =>
       Promise.resolve({
-        ownedNfts: Array.from({ length: 5 }, generateNFT(true)),
-        totalCount: 5,
+        items: Array.from({ length: 5 }, generateNFT(true)),
+        next_page_params: null,
       }),
     )
 
@@ -278,14 +261,14 @@ describe('<AvatarNFT />', () => {
     mockFetch
       .mockImplementationOnce(() =>
         Promise.resolve({
-          ownedNfts: Array.from({ length: 5 }, generateNFT(true)),
-          totalCount: 5,
+          items: Array.from({ length: 5 }, generateNFT(true)),
+          next_page_params: null,
         }),
       )
       .mockImplementation(() =>
         Promise.resolve({
-          ownedNfts: [],
-          totalCount: 0,
+          items: [],
+          next_page_params: null,
         }),
       )
 
