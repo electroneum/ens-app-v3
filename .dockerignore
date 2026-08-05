@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+# local env files must not leak into the image; .env.production (committed
+# production config) is intentionally NOT ignored
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
+Dockerfile
+.dockerignore

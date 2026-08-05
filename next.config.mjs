@@ -22,6 +22,9 @@ const babelIncludeRegexes = [
  * @type {import('next').NextConfig}
  * */
 const nextConfig = {
+  // trace server deps into .next/standalone so the Docker runtime image
+  // doesn't need the full node_modules tree
+  output: 'standalone',
   transpilePackages: [
     '@getpara/rainbowkit',
     '@getpara/rainbowkit-wallet',
