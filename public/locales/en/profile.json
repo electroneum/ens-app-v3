@@ -317,7 +317,7 @@
         "decimal": "decimal",
         "wrapper": "wrapper",
         "nameWrapper": "Name Wrapper",
-        "unwrappedText": " Wrapping your name gives it new features and functionality, however some functionality on your name will change. Please make sure you understand these changes before wrapping your name.",
+        "unwrappedText": " Wrapping upgrades your name to a new token format with extra features: an NFT image, permission fuses, and trustless subnames. In short: wrap if you want those features — keep your name unwrapped if you only need it to point to your address. After wrapping, the Name Wrapper contract holds your name on your behalf, so tools that read ownership directly will show the wrapper as the owner. Wrapping is reversible at any time unless you burn the CANNOT_UNWRAP fuse — and burned fuses are permanent, so never burn a fuse you don't fully understand.",
         "wrapName": "Wrap Name",
         "unwrap": "Unwrap Name",
         "unwrapWarning": "This name has revoked the permissions needed for this action.",
