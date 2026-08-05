@@ -31,6 +31,10 @@ ARG NEXT_PUBLIC_POSTHOG_KEY
 ARG NEXT_PUBLIC_POSTHOG_HOST
 ARG NEXT_PUBLIC_INTERCOM_ID
 
+# Commit SHA for generateBuildId — Coolify/CI contexts have no .git;
+# builders that provide SOURCE_COMMIT get a stable, meaningful build id
+ARG SOURCE_COMMIT
+
 RUN NODE_OPTIONS=--max-old-space-size=6144 pnpm build
 
 # Record the RPC URL that actually got baked (build arg wins over

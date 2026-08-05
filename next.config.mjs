@@ -131,8 +131,18 @@ const nextConfig = {
     ]
   },
   generateBuildId: () => {
-    const hash = execSync('git rev-parse HEAD').toString().trim()
-    return hash
+    // Prefer the commit SHA. In CI/Coolify builds the context has no .git,
+    // but the builder passes SOURCE_COMMIT; final fallback (null) lets Next
+    // generate a random id — buildId only labels the deploy and busts the
+    // persisted react-query cache (CONFIG_BUILD_ID), so random is safe.
+    if (process.env.SOURCE_COMMIT) return process.env.SOURCE_COMMIT
+    try {
+      return execSync('git rev-parse HEAD', { stdio: ['ignore', 'pipe', 'ignore'] })
+        .toString()
+        .trim()
+    } catch {
+      return null
+    }
   },
   webpack: (config, options) => {
     for (const rule of config.module.rules) {
