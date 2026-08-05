@@ -5,19 +5,24 @@ import { getChainContractAddress } from '@ensdomains/ensjs/contracts'
 import { EMPTY_BYTES32 } from '@ensdomains/ensjs/utils'
 
 /**
- * Override for ENS.js renewNames matching the Electroneum deployment:
- * - Single renewals go through ETHRegistrarController.renew(label, duration, referrer).
- * - Bulk renewals go through StaticBulkRenewal.renewAll(names, duration, referrer)
- *   (exposed as the `ensBulkRenewal` chain contract).
+ * Override for ENS.js renewNames matching the Electroneum deployment.
  *
- * There is intentionally no wrapped-name branch: the Electroneum NameWrapper has
- * no controller wired on-chain, so no contract can sync wrapper expiry on renewal.
- * Wrapping is disabled in the app until that exists; if it is added, route wrapped
- * renewals through the wrapper-aware contract here (the `hasWrapped` parameter is
- * kept in the type for that purpose).
+ * When the chain has a `wrappedRenewalWithReferrer` contract configured (the
+ * UniversalRegistrarRenewalWithReferrer deployment), single renewals go
+ * through it: it routes via NameWrapper.renew, which keeps wrapper expiry in
+ * sync for wrapped names and is a wrapper no-op for unwrapped ones — so it is
+ * the single safe renewal path for ALL names, and no wrapped-name branching
+ * is needed. Bulk renewals go through `ensBulkRenewal`, which on Electroneum
+ * mainnet is the same contract (its renewAll is wrapper-safe in the same way).
+ *
+ * When `wrappedRenewalWithReferrer` is absent (eg. testnet, where wrapping is
+ * gated off via getChainSupportsNameWrapping), single renewals fall back to
+ * ETHRegistrarController.renew(label, duration, referrer) — safe there because
+ * no name can be wrapped.
  */
 
-// Deployed ETHRegistrarController and StaticBulkRenewal both take a referrer
+// UniversalRegistrarRenewalWithReferrer.renew and ETHRegistrarController.renew
+// share this signature
 const singleNameRenewalAbi = [
   {
     inputs: [
@@ -55,7 +60,8 @@ export type RenewNamesDataParameters = {
   referrer?: Hex
   /** Value of all renewals */
   value: bigint
-  /** Whether the name(s) are wrapped — currently unused, see file header */
+  /** Whether the name(s) are wrapped — informational; routing does not branch
+   * on it because the wrapper-aware renewal path is safe for all names */
   hasWrapped?: boolean
   /** Contract address for wrapped name renewals (optional override) */
   wrappedRenewalContract?: `0x${string}`
@@ -67,9 +73,22 @@ export type RenewNamesDataReturnType = {
   value: bigint
 }
 
+const getWrappedRenewalAddress = (chain: ChainWithEns): `0x${string}` | undefined =>
+  (
+    chain.contracts as Partial<
+      Record<'wrappedRenewalWithReferrer', { address: `0x${string}` }>
+    >
+  ).wrappedRenewalWithReferrer?.address
+
 export const makeFunctionData = <TChain extends ChainWithEns, TAccount extends Account | undefined>(
   wallet: ClientWithAccount<Transport, TChain, TAccount>,
-  { nameOrNames, duration, referrer = EMPTY_BYTES32, value }: RenewNamesDataParameters,
+  {
+    nameOrNames,
+    duration,
+    referrer = EMPTY_BYTES32,
+    value,
+    wrappedRenewalContract,
+  }: RenewNamesDataParameters,
 ): RenewNamesDataReturnType => {
   const names = Array.isArray(nameOrNames) ? nameOrNames : [nameOrNames]
   const labels = names.map((name) => name.split('.')[0])
@@ -89,11 +108,16 @@ export const makeFunctionData = <TChain extends ChainWithEns, TAccount extends A
     }
   }
 
+  const wrappedRenewalAddress =
+    wrappedRenewalContract ?? getWrappedRenewalAddress(wallet.chain)
+
   return {
-    to: getChainContractAddress({
-      client: wallet,
-      contract: 'ensEthRegistrarController',
-    }),
+    to:
+      wrappedRenewalAddress ??
+      getChainContractAddress({
+        client: wallet,
+        contract: 'ensEthRegistrarController',
+      }),
     data: encodeFunctionData({
       abi: singleNameRenewalAbi,
       functionName: 'renew',
