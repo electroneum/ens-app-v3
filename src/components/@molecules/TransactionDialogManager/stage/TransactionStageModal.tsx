@@ -314,10 +314,14 @@ const getPreTransactionError = ({
     .with({ stage: P.union('complete', 'sent') }, () => null)
     .with({ err: P.nullish }, () => null)
     .with({ err: P.not(P.instanceOf(BaseError)) }, ({ err }) => {
-      return {
-        message: 'message' in err! ? err.message : 'transaction.error.unknown',
-        type: 'unknown' as const,
-      }
+      // wallet providers throw non-viem error shapes; still try to map them
+      const readableError = getReadableError(err)
+      return (
+        readableError || {
+          message: 'message' in err! ? err.message : 'transaction.error.unknown',
+          type: 'unknown' as const,
+        }
+      )
     })
     .otherwise(({ err }) => {
       const readableError = getReadableError(err)
